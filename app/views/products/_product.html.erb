@@ -1,12 +1,4 @@
-<div id="<%= dom_id product %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Title:</strong>
-    <%= product.title %>
-  </p>
-
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Description:</strong>
-    <%= product.description %>
-  </p>
-
+<div id="<%= dom_id product %>" class="product-card mb-4">
+  <h2 class="text-3xl font-bold mb-2"><%= link_to product.title, product_path(product) %></h2>
+  <p class="text-gray-700"><%= product.description %></p>
 </div>
