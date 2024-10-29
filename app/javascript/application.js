@@ -2,4 +2,4 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 
-document.addEventListener('turbo:click', () => { console.log("turbo click event!") })
+// document.addEventListener('turbo:click', () => { console.log("turbo click event!") })
