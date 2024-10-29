@@ -11,3 +11,7 @@
 }
 
 */
+
+.turbo-progress-bar {
+  background: theme('colors.primary.500');
+}
