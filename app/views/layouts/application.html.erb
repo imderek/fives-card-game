@@ -20,8 +20,10 @@
 
   <body>
     <main class="container mx-auto mt-28 px-5 flex">
+      <%= render 'shared/flash' %>
       <%= yield %>
     </main>
-  <%= turbo_frame_tag "modal" %>
+
+    <%= turbo_frame_tag "modal" %>
   </body>
 </html>
