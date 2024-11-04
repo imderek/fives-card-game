@@ -7,18 +7,18 @@ export default class extends Controller {
 
   connect() {
     console.log('Menu controller connected')
+    // this.closeMenu()
   }
 
   openMenu() {
-    this.menuTarget.classList.remove('hidden');
+    // Remove classes that hide the menu
+    this.menuTarget.classList.remove('opacity-0', 'pointer-events-none');
+    this.menuTarget.classList.add('opacity-100');
   }
 
   closeMenu() {
-    // Delay to allow smooth transition and to avoid closing when moving between button and menu
-    setTimeout(() => {
-      if (!this.menuTarget.matches(":hover") && !this.element.querySelector('#mega-menu-dropdown-button').matches(":hover")) {
-        this.menuTarget.classList.add('hidden');
-      }
-    }, 50); // Adjust delay if needed
+    // Add classes to hide the menu with a transition
+    this.menuTarget.classList.remove('opacity-100');
+    this.menuTarget.classList.add('opacity-0', 'pointer-events-none');
   }
 }
