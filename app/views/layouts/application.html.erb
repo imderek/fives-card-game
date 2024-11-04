@@ -44,9 +44,9 @@
             <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
             <div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']" class="absolute inset-x-0 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-black md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between">
                 <div class="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0">
-                    <a href="<%= dashboard_path %>" class="px-2.5 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2">Home</a>
-                    <a href="<%= products_path %>" class="px-2.5 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2">Products</a>
-                    <a href="#" class="px-2.5 py-2 text-black transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2">Contact</a>
+                    <%= link_to "Home", dashboard_path, class: "px-2.5 py-2 text-black border-b-2 transition-colors duration-300 transform dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2 #{current_page?(dashboard_path) ? 'border-primary-500' : 'border-transparent'}" %>
+                    <%= link_to "Products", products_path, class: "px-2.5 py-2 text-black border-b-2 transition-colors duration-300 transform dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2 #{request.fullpath.start_with?('/products') ? 'border-primary-500' : 'border-transparent'}" %>
+                    <%= link_to "Contact", "#", class: "px-2.5 py-2 text-black border-b-2 border-transparent transition-colors duration-300 transform dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2" %>
                 </div>
 
                 <div class="flex items-center mt-4 lg:mt-0">
