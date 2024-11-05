@@ -1,9 +1,9 @@
 <nav data-controller="navbar" class="bg-white border-gray-200 dark:bg-gray-900">
-    <div class="flex flex-wrap max-w-screen-xl mx-auto p-4">
+    <div class="flex flex-wrap justify-between md:order-1 max-w-screen-xl mx-auto p-4">
         <%= link_to "https://flowbite.com", class: "mr-16 flex items-center space-x-3 rtl:space-x-reverse" do %>
             <h3 class="text-3xl font-semibold">MPC</h3>
         <% end %>
-        <div class="flex items-center md:order-2 space-x-1 md:space-x-2 rtl:space-x-reverse">
+        <div class="md:hidden flex items-center md:order-4 space-x-1 md:space-x-2 rtl:space-x-reverse">
             <button data-collapse-toggle="mega-menu" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mega-menu" aria-expanded="false">
                 <span class="sr-only">Open main menu</span>
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
@@ -11,6 +11,7 @@
                 </svg>
             </button>
         </div>
+
         <div id="mega-menu" class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
             <ul class="flex flex-col mt-4 font-medium md:flex-row md:mt-0 md:space-x-8 rtl:space-x-reverse">
                 <li>
@@ -77,6 +78,22 @@
                     <%= link_to "Contact", "#", class: "block py-2 px-3 text-gray-900 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-primary-600 md:p-0 md:py-2 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 md:dark:hover:bg-transparent dark:border-gray-700" %>
                 </li>
             </ul>
+        </div>
+
+        <div class="flex items-center mt-4 lg:mt-0 md:order-2">
+            <button class="hidden mx-4 text-gray-600 transition-colors duration-300 transform lg:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none" aria-label="show notifications">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 17H20L18.5951 15.5951C18.2141 15.2141 18 14.6973 18 14.1585V11C18 8.38757 16.3304 6.16509 14 5.34142V5C14 3.89543 13.1046 3 12 3C10.8954 3 10 3.89543 10 5V5.34142C7.66962 6.16509 6 8.38757 6 11V14.1585C6 14.6973 5.78595 15.2141 5.40493 15.5951L4 17H9M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M15 17H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+
+            <button type="button" class="flex items-center focus:outline-none" aria-label="toggle profile dropdown">
+                <div class="w-8 h-8 overflow-hidden border-2 border-black rounded-full">
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" class="object-cover w-full h-full" alt="avatar">
+                </div>
+
+                <h3 class="mx-2 text-black dark:text-gray-200 hidden md:block">Khatab wedaa</h3>
+            </button>
         </div>
     </div>
 </nav>
