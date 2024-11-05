@@ -3,10 +3,14 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="navbar"
 export default class extends Controller {
-  static targets = ["menu"]
+  static targets = ["menu", "navItem"]
 
   connect() {
     console.log('Menu controller connected')
+    // console.log(this.navItemTarget.offsetLeft)
+    // console.log(this.menuTarget.offsetLeft)
+    // this.menuTarget.style.left = this.navItemTarget.offsetLeft + 'px';
+    this.menuTarget.style.marginLeft = '-15.5px'
     // this.closeMenu()
   }
 
