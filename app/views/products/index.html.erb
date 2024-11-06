@@ -1,15 +1,14 @@
 <div class="w-full">
   <% content_for :title, "Products" %>
 
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="font-bold text-2xl mb-8">Search Results</h1>
-    <%= link_to "New product", new_product_path, class: "rounded-lg py-3 px-5 bg-primary-500 text-white block font-medium" %>
+  <div class="flex justify-between items-center mb-5">
+    <h1 class="font-bold text-2xl">Search Results</h1>
+    <%#= link_to "New product", new_product_path, class: "rounded-lg py-3 px-5 bg-primary-500 text-white block font-medium" %>
   </div>
-  <div id="products" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+  
+  <div id="products" class="grid grid-cols-1 auto-cols-max lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-10 mb-5">
     <% @products.each do |product| %>
-      <div class="">
-        <%= render product, show_full_details: false %>
-      </div>
+      <%= render product, show_full_details: false %>
     <% end %>
   </div>
 </div>

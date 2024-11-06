@@ -1,6 +1,6 @@
-<div id="<%= dom_id product %>" class="product-card">
+<div id="<%= dom_id product %>" class="product-card w-full">
   <% if local_assigns[:show_full_details] %>
-    <!-- Full product details for show view -->
+    <!-- for show view -->
     <div class="flex">
       <div class="flex flex-col">
         <p class="text-gray-600 mb-4"><%= product.description %></p>
@@ -8,19 +8,35 @@
       </div>
     </div>
   <% else %>
-    <!-- Simplified product details for index view -->
-    <div class="flex">
-      <%= link_to product_path(product), class: "bg-gray-200 w-16 h-24 flex items-center justify-center mr-4 min-w-[96px] flex-shrink-0" do %>
-        <span class="text-gray-500 text-xs">Image</span>
-      <% end %>
-      <div class="flex flex-col overflow-hidden">
-        <h3 class="text-lg font-semibold">
-          <%= link_to product_path(product), class: "hover:underline line-clamp-1" do %>
-            <%= product.title %>
+    <!-- for index view -->
+    <div class="w-full bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+          <%= link_to product_path(product), class: "block" do %>
+            <%# <img src="https://placehold.co/600x600" alt="Product" class="w-full h-48 object-cover rounded-t-xl" /> %>
+            <%# <div class="h-48 object-cover rounded-t-xl bg-gray-200"></div> %>
+            <div class="flex items-center justify-center w-full h-48 bg-gray-200 rounded dark:bg-gray-700">
+                <svg class="w-full h-10 text-white dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                    <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
+                </svg>
+            </div>
+            <div class="px-4 py-3">
+                <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
+                <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
+                <div class="flex items-center">
+                    <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
+                    <del>
+                        <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
+                    </del>
+                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                            <path
+                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                        </svg></div>
+                </div>
+            </div>
           <% end %>
-        </h3>
-        <p class="text-primary-600"><%= product.brand.name %></p>
-      </div>
+        </a>
     </div>
   <% end %>
 </div>
