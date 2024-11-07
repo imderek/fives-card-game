@@ -10,12 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_14_140648) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_07_152602) do
   create_table "brands", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "product_options", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "variant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_options_on_product_id"
+    t.index ["variant_id"], name: "index_product_options_on_variant_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -27,5 +36,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_140648) do
     t.index ["brand_id"], name: "index_products_on_brand_id"
   end
 
+  create_table "variants", force: :cascade do |t|
+    t.string "name"
+    t.string "option_type"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "product_options", "products"
+  add_foreign_key "product_options", "variants"
   add_foreign_key "products", "brands"
 end

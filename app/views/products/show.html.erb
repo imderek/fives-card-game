@@ -77,13 +77,17 @@
         <div class="mt-4 pt-4 mb-6 border-t">
           <h3 class="text-lg font-semibold mb-2">Color</h3>
           <div class="flex space-x-2">
-            <button class="w-8 h-8 bg-pink-900 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-900"></button>
+            <%# <button class="w-8 h-8 bg-pink-900 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-900"></button>
             <button class="w-8 h-8 bg-red-700 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700"></button>
             <button class="w-8 h-8 bg-red-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"></button>
             <button class="w-8 h-8 bg-red-400 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400"></button>
             <button class="w-8 h-8 bg-pink-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"></button>
             <button class="w-8 h-8 bg-rose-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500"></button>
-            <button class="w-8 h-8 bg-rose-200 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-200"></button>
+            <button class="w-8 h-8 bg-rose-200 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-200"></button> %>
+
+            <% @product.variants.each do |variant| %>
+              <button style="background-color: #<%= variant.value %>; --tw-ring-color: #<%= variant.value %>;" class="w-8 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2"></button>
+            <% end %>
           </div>
         </div>
 
