@@ -1,5 +1,7 @@
 # This file contains seed data for products and brands in the beauty industry.
 # The data can be loaded with the bin/rails db:seed command.
+ProductOption.delete_all
+Variant.delete_all
 Product.destroy_all
 Brand.destroy_all
 
@@ -81,10 +83,6 @@ products = [
 
 products.each { |product| Product.create!(product) }
 
-# Clear existing data related to options and variants
-ProductOption.delete_all
-Variant.delete_all
-
 # Define available color options without the "#" symbol
 colors = [
   { name: "Color", option_type: "color", value: "ec4899" },  # pink-500
@@ -93,7 +91,11 @@ colors = [
   { name: "Color", option_type: "color", value: "fbcfe8" },  # pink-300
   { name: "Color", option_type: "color", value: "e11d48" },  # rose-600
   { name: "Color", option_type: "color", value: "fecaca" },  # red-200
-  { name: "Color", option_type: "color", value: "f9a8d4" }   # pink-200
+  { name: "Color", option_type: "color", value: "f9a8d4" },  # pink-200
+  { name: "Color", option_type: "color", value: "94a3b8" },  # slate-400
+  { name: "Color", option_type: "color", value: "64748b" },  # slate-500
+  { name: "Color", option_type: "color", value: "67e8f9" },  # cyan-300
+  { name: "Color", option_type: "color", value: "7dd3fc" }   # sky-300
 ]
 
 # Create color variants
@@ -101,8 +103,8 @@ color_variants = colors.map { |color| Variant.create!(color) }
 
 # Ensure that all the products exist before adding product options
 Product.find_each do |product|
-  # Select up to 6 random colors for each product
-  selected_colors = color_variants.sample(rand(1..6))  # Select between 1 and 6 colors
+  # Select between 4 and 8 random colors for each product
+  selected_colors = color_variants.sample(rand(4..8))
 
   selected_colors.each do |color|
     # Create the product option for each selected color variant
@@ -110,6 +112,6 @@ Product.find_each do |product|
   end
 end
 
-puts "Unique color options added to each product with hex codes (without #)!"
+puts "Each product now has between 4 and 8 unique color options with hex codes (without #)!"
 
 puts "Done!"

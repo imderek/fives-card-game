@@ -86,7 +86,7 @@
             <button class="w-8 h-8 bg-rose-200 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-200"></button> %>
 
             <% @product.variants.each do |variant| %>
-              <button style="background-color: #<%= variant.value %>; --tw-ring-color: #<%= variant.value %>;" class="w-8 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2"></button>
+              <button style="background-color: #<%= variant.value %>;" class="w-8 h-8 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"></button>
             <% end %>
           </div>
         </div>
