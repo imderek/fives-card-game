@@ -1,8 +1,8 @@
-<nav data-controller="navbar" class="mb-16 bg-white border-gray-200 dark:bg-gray-900">
+<nav data-controller="navbar" class="mb-10 bg-white border-gray-200 dark:bg-gray-900">
     <div class="flex flex-wrap justify-between md:order-1 max-w-screen-xl mx-auto py-4">
         <!-- Logo Link -->
         <%= link_to dashboard_path, class: "mr-16 flex items-center space-x-3 rtl:space-x-reverse" do %>
-            <h3 class="text-3xl font-semibold">elephnt</h3>
+            <h3 class="text-2xl font-semibold">elephnt</h3>
         <% end %>
 
         <!-- Mobile Menu Button -->
@@ -24,7 +24,7 @@
                 </li>
                 <!-- Products Dropdown -->
                 <li>
-                    <%= link_to products_path, id: "mega-menu-dropdown-button", data: { navbar_target: "navItem", action: "mouseenter->navbar#openMenu mouseleave->navbar#closeMenu" }, class: "#{request.fullpath.start_with?('/products') ? 'border-primary-500' : 'border-transparent'} flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 md:p-1 md:py-2 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 md:dark:hover:bg-transparent dark:border-gray-700 border-b-2" do %>
+                    <%= link_to products_path, id: "mega-menu-dropdown-button", data: { navbar_target: "navItem" }, class: "#{request.fullpath.start_with?('/products') ? 'border-primary-500' : 'border-transparent'} flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 md:p-1 md:py-2 dark:text-white md:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 md:dark:hover:bg-transparent dark:border-gray-700 border-b-2" do %>
                         Deals
                     <% end %>
                 </li>

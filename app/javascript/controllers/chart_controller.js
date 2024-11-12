@@ -3,8 +3,10 @@ import ApexCharts from "apexcharts"
 
 // Connects to data-controller="chart"
 export default class extends Controller {
+  disconnect() {
+    console.log('disconnected')
+  }
   connect() {
-
     const options = {
       chart: {
         height: "60%",
@@ -33,14 +35,22 @@ export default class extends Controller {
           gradientToColors: ["#1C64F2"],
         },
       },
+      markers: {
+        size: 5,
+        strokeColors: '#ffffff',
+        hover: {
+          size: undefined,
+          sizeOffset: 3
+        }
+      },
       dataLabels: {
         enabled: false,
       },
       stroke: {
-        width: 6,
+        width: 4,
       },
       grid: {
-        show: false,
+        show: true,
         strokeDashArray: 4,
         padding: {
           left: 2,
@@ -56,9 +66,9 @@ export default class extends Controller {
         },
       ],
       xaxis: {
-        categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
+        categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
         labels: {
-          show: false,
+          show: true,
         },
         axisBorder: {
           show: false,
