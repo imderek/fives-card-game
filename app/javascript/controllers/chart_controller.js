@@ -1,15 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
 import ApexCharts from "apexcharts"
+// const colors = require('tailwindcss/colors')
 
 // Connects to data-controller="chart"
 export default class extends Controller {
   disconnect() {
     console.log('disconnected')
   }
+
   connect() {
     const options = {
       chart: {
-        height: "60%",
+        height: "70%",
         maxWidth: "100%",
         type: "area",
         fontFamily: "Inter, sans-serif",
