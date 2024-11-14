@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  monthly_recurring_revenue: 9.99
+  annual_recurring_revenue: 9.99
+  lifetime_value: 9.99
+  churn_rate: 9.99
+  subscription_length_months: 1
+  billing_contact_email: MyString
+
+two:
+  name: MyString
+  monthly_recurring_revenue: 9.99
+  annual_recurring_revenue: 9.99
+  lifetime_value: 9.99
+  churn_rate: 9.99
+  subscription_length_months: 1
+  billing_contact_email: MyString
