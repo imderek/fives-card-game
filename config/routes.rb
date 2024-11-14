@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "home/show"
   devise_for :users
   get "dashboard", to: "dashboards#show"
   resources :products
@@ -13,5 +14,5 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "dashboards#show"
+  root "home#show"
 end
