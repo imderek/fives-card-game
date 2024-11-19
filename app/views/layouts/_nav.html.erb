@@ -20,21 +20,30 @@
             <ul class="flex flex-col mt-4 md:flex-row md:mt-0 md:space-x-8 rtl:space-x-reverse">
                 <!-- Home Link -->
                 <li>
-                    <%= link_to "Dashboard", dashboard_path, class: "#{current_page?(dashboard_path) ? 'border-primary-500 text-white' : 'border-transparent'} block py-2 px-3 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 md:p-0 md:py-2 md:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 md:dark:hover:bg-transparent border-b-2", aria: { current: "page" } %>
+                    <%= link_to "Dashboard", dashboard_path, 
+                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 #{current_page?(dashboard_path) ? 'border-primary-500 text-white' : 'border-transparent text-gray-400'}" %>
                 </li>
-                <!-- Products Dropdown -->
+
+                <!-- Deals Link -->
                 <li>
-                    <%= link_to products_path, id: "mega-menu-dropdown-button", data: { navbar_target: "navItem" }, class: "#{request.fullpath.start_with?('/products') ? 'border-primary-400' : 'border-transparent text-gray-400'} flex items-center justify-between w-full py-2 px-3 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 md:p-1 md:py-2 md:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 md:dark:hover:bg-transparent border-b-2" do %>
+                    <%= link_to deals_path,
+                        id: "mega-menu-dropdown-button",
+                        data: { navbar_target: "navItem" },
+                        class: "flex items-center justify-between w-full py-2 px-3 border-b-2 md:w-auto md:p-1 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 #{request.fullpath.start_with?('/deals') ? 'border-primary-500 text-white' : 'border-transparent text-gray-400'}" do %>
                         Deals
                     <% end %>
                 </li>
-                <!-- Team Link -->
+
+                <!-- Projections Link -->
                 <li>
-                    <%= link_to "Projections", "#", class: "text-gray-400 block py-2 px-3 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-primary-600 md:p-0 md:py-2 md:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 md:dark:hover:bg-transparent dark:border-gray-700" %>
+                    <%= link_to "Projections", "#",
+                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 border-transparent text-gray-400" %>
                 </li>
-                <!-- Contact Link -->
+
+                <!-- Team Members Link -->
                 <li>
-                    <%= link_to "Team Members", "#", class: "text-gray-400 block py-2 px-3 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-primary-600 md:p-0 md:py-2 md:dark:hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500 md:dark:hover:bg-transparent dark:border-gray-700" %>
+                    <%= link_to "Team Members", "#",
+                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 border-transparent text-gray-400" %>
                 </li>
             </ul>
         </div>
