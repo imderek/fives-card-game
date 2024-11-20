@@ -1,5 +1,9 @@
-<div class="w-full py-10">
-  <div class="max-w-screen-xl mx-auto px-0 gap-5 mb-8">
+<%= turbo_frame_tag "drawer" do %>
+  <!-- drawer init and show -->
+  <div data-drawer-target="turbo-drawer" data-drawer-show="turbo-drawer" aria-controls="turbo-drawer"></div>
+
+  <!-- drawer component -->
+  <div id="turbo-drawer" data-controller="drawer" class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label">
     <div class="w-full bg-white rounded-lg">
       <%= link_to deals_path, class: "mb-6 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-primary-700" do %>
         <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -28,4 +32,4 @@
       </div>
     </div>
   </div>
-</div>
+<% end %>

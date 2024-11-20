@@ -1,3 +1,19 @@
+<!-- Drawer Component -->
+<!-- drawer init and show -->
+<div data-drawer-target="dealDrawer" data-drawer-show="dealDrawer" aria-controls="dealDrawer"></div>
+
+<div id="dealDrawer" class="-translate-x-full fixed z-40 inset-0 overflow-y-auto w-80" tabindex="-1" aria-labelledby="drawer-label">
+  <div class="relative w-screen max-w-md p-4 bg-white h-full shadow-lg">
+    <button type="button" class="absolute top-2 right-2" data-drawer-hide="dealDrawer" aria-label="Close">
+      Close
+    </button>
+    <h5 id="drawer-label" class="text-lg font-medium text-gray-900">Deal Details</h5>
+    <div id="dealContent" class="mt-4" data-deals-target="dealContent">
+      <!-- Deal details will be dynamically loaded here -->
+    </div>
+  </div>
+</div>
+
 <!-- fullscreen container -->
 <div class="w-full py-10">
   <!-- inner container -->
@@ -42,7 +58,7 @@
       </div>
 
       <!-- Table -->
-      <div id="deals" class="flex-1 relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div data-controller="deals" id="deals" class="flex-1 relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
@@ -56,7 +72,7 @@
           <tbody>
             <% @deals.each do |deal| %>
               <tr class="bg-white border-b hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><%= link_to deal.name, deal, class: "hover:text-primary-600" %></td>
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><%= link_to deal.name, deal, data: { action: "click->deals#showDeal" }, class: "hover:text-primary-600" %></td>
                 <td class="px-6 py-4">
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium <%= case deal.status.downcase
                     when 'negotiating' then 'bg-orange-100 text-orange-700'
@@ -71,7 +87,7 @@
                 <td class="px-6 py-4"><span class="line-clamp-1"><%= deal.description %></span></td>
                 <td class="px-6 py-4"><%= number_to_currency(deal.amount, precision: 0) %></td>
                 <td class="px-6 py-4">
-                  <%= link_to "View", deal, class: "font-medium text-primary-600 hover:underline" %>
+                  <%= link_to "View", deal, data: { turbo_frame: "drawer" }, class: "font-medium text-primary-600 hover:underline" %>
                 </td>
               </tr>
             <% end %>
