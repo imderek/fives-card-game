@@ -21,7 +21,7 @@
                 <!-- Home Link -->
                 <li>
                     <%= link_to "Dashboard", dashboard_path, 
-                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 #{current_page?(dashboard_path) ? 'border-primary-500 text-white' : 'border-transparent text-gray-400'}" %>
+                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-white #{current_page?(dashboard_path) ? 'border-primary-500 text-white' : 'border-transparent text-gray-400'}" %>
                 </li>
 
                 <!-- Deals Link -->
@@ -29,7 +29,7 @@
                     <%= link_to deals_path,
                         id: "mega-menu-dropdown-button",
                         data: { navbar_target: "navItem" },
-                        class: "flex items-center justify-between w-full py-2 px-3 border-b-2 md:w-auto md:p-1 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 #{request.fullpath.start_with?('/deals') ? 'border-primary-500 text-white' : 'border-transparent text-gray-400'}" do %>
+                        class: "flex items-center justify-between w-full py-2 px-3 border-b-2 md:w-auto md:p-1 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-white #{request.fullpath.start_with?('/deals') ? 'border-primary-500 text-white' : 'border-transparent text-gray-400'}" do %>
                         Deals
                     <% end %>
                 </li>
@@ -37,13 +37,13 @@
                 <!-- Projections Link -->
                 <li>
                     <%= link_to "Projections", "#",
-                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 border-transparent text-gray-400" %>
+                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-white border-transparent text-gray-400" %>
                 </li>
 
                 <!-- Team Members Link -->
                 <li>
                     <%= link_to "Team Members", "#",
-                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-primary-600 border-transparent text-gray-400" %>
+                        class: "block py-2 px-3 border-b-2 md:p-0 md:py-2 hover:bg-gray-50 md:hover:bg-transparent md:hover:text-white border-transparent text-gray-400" %>
                 </li>
             </ul>
         </div>

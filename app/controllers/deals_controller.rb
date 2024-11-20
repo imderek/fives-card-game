@@ -1,9 +1,10 @@
 class DealsController < ApplicationController
   before_action :set_deal, only: %i[ show edit update destroy ]
+  
 
   # GET /deals or /deals.json
   def index
-    @deals = Deal.all
+    @deals = Deal.where(organization_id: current_user.organization_id).order(created_at: :desc)
   end
 
   # GET /deals/1 or /deals/1.json
@@ -21,7 +22,7 @@ class DealsController < ApplicationController
 
   # POST /deals or /deals.json
   def create
-    @deal = Deal.new(deal_params)
+    @deal = Deal.new(deal_params.merge(organization_id: current_user.organization_id))
 
     respond_to do |format|
       if @deal.save
@@ -65,6 +66,6 @@ class DealsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def deal_params
-      params.require(:deal).permit(:name, :description, :status, :organization_id)
+      params.require(:deal).permit(:name, :description, :status, :amount, :organization_id)
     end
 end

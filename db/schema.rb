@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_19_162055) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_20_002650) do
   create_table "deals", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_19_162055) do
     t.integer "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "amount", precision: 10, scale: 2
     t.index ["organization_id"], name: "index_deals_on_organization_id"
   end
 
