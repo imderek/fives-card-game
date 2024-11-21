@@ -1,6 +1,6 @@
 class DealsController < ApplicationController
   before_action :set_deal, only: %i[ show edit update destroy ]
-  
+  before_action :authenticate_user!
 
   # GET /deals or /deals.json
   def index
@@ -10,7 +10,7 @@ class DealsController < ApplicationController
   # GET /deals/1 or /deals/1.json
   def show
     respond_to do |format|
-      format.turbo_stream { render partial: "deals/show", formats: [:html], locals: { deal: @deal } }
+      format.turbo_stream { render partial: "deals/deal", formats: [:html], locals: { deal: @deal } }
       format.html { render :show } # Optional fallback for regular HTML requests
     end
   end
@@ -70,6 +70,6 @@ class DealsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def deal_params
-      params.require(:deal).permit(:name, :description, :status, :amount, :organization_id)
+      params.require(:deal).permit(:name, :description, :status, :amount, :organization_id, :close_date)
     end
 end

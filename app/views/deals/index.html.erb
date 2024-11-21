@@ -4,7 +4,7 @@
   <div data-drawer-target="dealDrawer" data-drawer-show="dealDrawer" data-drawer-placement="right" aria-controls="dealDrawer"></div>
 
   <!-- drawer component -->
-  <div id="dealDrawer" class="fixed top-0 right-0 z-40 h-screen p-6 overflow-y-auto transition-transform translate-x-full bg-white w-1/3 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-right-label">
+  <div id="dealDrawer" class="fixed top-0 right-0 z-40 h-screen px-7 py-8 overflow-y-auto transition-transform translate-x-full bg-white w-1/3 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-right-label">
     <div data-deals-target="dealContent" id="dealContent" class="">
       <!-- Deal details will be loaded here -->
     </div>
@@ -68,13 +68,7 @@
               <tr class="bg-white border-b hover:bg-gray-50">
                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><%= link_to deal.name, deal, data: { action: "click->deals#showDeal", deal_id: deal.id }, class: "hover:text-primary-600" %></td>
                 <td class="px-6 py-4">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium <%= case deal.status.downcase
-                    when 'negotiating' then 'bg-orange-100 text-orange-700'
-                    when 'discovery' then 'bg-violet-100 text-violet-800'  
-                    when 'closed' then 'bg-green-100 text-green-800'
-                    when 'closing' then 'bg-blue-100 text-blue-800'
-                    else 'bg-gray-100 text-gray-800'
-                    end %>">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium <%= deal_status_color(deal.status) %>">
                     <%= deal.status.titleize %>
                   </span>
                 </td>

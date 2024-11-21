@@ -1,8 +1,11 @@
 <div id="<%= dom_id deal %>">
-  <h3 class="mb-4 text-2xl font-semibold text-gray-900"><%= deal.name %> 
-    <span class="ml-1 relative top-[-2px] inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium border bg-gray-100 text-gray-800">
-      <%= deal.status.titleize %>
-    </span>
-  </h3>
-  <p class="text-gray-600"><%= deal.description %></p>
+  <h3 class="mb-2 text-2xl font-bold"><%= deal.name %></h3>
+  <div class="inline-block mb-3 px-2.5 py-0.5 rounded-full text-sm font-medium <%= deal_status_color(deal.status) %>">
+    <%= deal.status.titleize %>
+  </div>
+  <h2 class="mb-1 text-lg font-semibold"><%= number_to_currency(deal.amount, precision: 0) %></h2>
+  <p class="mb-1 text-gray-600 text-sm">Opened <%= time_ago_in_words(deal.created_at) %> ago</p>
+  <p class="mb-6 text-gray-600 text-sm">Expected Close: <%= deal.close_date&.strftime("%B %d, %Y") %></p>
+  <h3 class="mb-3 text-lg font-semibold border-t pt-4">About this Deal</h3>
+  <p class="text-gray-600 text-sm"><%= deal.description %></p>
 </div>

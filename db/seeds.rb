@@ -28,38 +28,43 @@ OrganizationMembership.create!([
 Deal.create!([
   { 
     name: "Acme Corporation", 
-    description: "Enterprise deal for 500 seats. Decision maker is CTO Sarah Smith. Currently using competitor product but contract expires in 3 months. Initial discussions indicate strong interest in our premium features. Team has expressed concerns about migration timeline and training requirements that need to be addressed.", 
+    description: "Enterprise deal for 500 seats. Decision maker is CTO Sarah Smith. Currently using competitor product but contract expires in 3 months. Initial discussions indicate strong interest.", 
     status: "negotiating", 
     amount: 100000,
-    organization_id: org.id 
+    organization_id: org.id,
+    close_date: 2.months.from_now
   },
   { 
     name: "TechStart Inc.", 
-    description: "Growing startup needing scalable solution. 50 seats to start with potential growth to 200 within 12 months. Main contact is CEO John Davis. Company is experiencing rapid growth in their development team and needs a solution that can handle their expanding needs. Current tools are becoming bottlenecks in their workflow.", 
+    description: "Growing startup needing scalable solution. 50 seats to start with potential growth to 200 within 12 months. Main contact is CEO John Davis. Company experiencing rapid growth.", 
     status: "discovery", 
     amount: 90000,
-    organization_id: org.id 
+    organization_id: org.id,
+    close_date: 4.months.from_now
   },
   { 
     name: "Global Logistics Ltd", 
-    description: "International shipping company looking to modernize operations. 1000+ potential seats. In late stages of procurement process. Multiple stakeholders across different regions have validated the solution's fit. Technical requirements have been met and security assessment has been completed with positive results.", 
+    description: "International shipping company looking to modernize operations. 1000+ potential seats. In late stages of procurement process. Multiple stakeholders across regions have validated fit.", 
     status: "closing", 
     amount: 65000,
-    organization_id: org.id 
+    organization_id: org.id,
+    close_date: 2.weeks.from_now
   },
   { 
     name: "First National Bank", 
-    description: "Financial institution requiring enterprise security features. POC completed successfully, moving to contract negotiations. Security team has approved all compliance requirements and risk assessments. Integration testing with their existing infrastructure showed excellent results and performance metrics exceeded expectations.", 
+    description: "Financial institution requiring enterprise security features. POC completed successfully. Security team has approved compliance requirements. Integration testing showed excellent results.", 
     status: "negotiating", 
     amount: 200000,
-    organization_id: org.id 
+    organization_id: org.id,
+    close_date: 1.month.from_now
   },
   { 
     name: "Innovate Solutions LLC", 
-    description: "Mid-size consulting firm. 200 seat opportunity. Requires custom integration with existing systems. Initial technical assessment shows moderate complexity for integration work. Their team has legacy systems that need careful consideration during implementation planning and data migration.", 
+    description: "Mid-size consulting firm. 200 seat opportunity. Requires custom integration with existing systems. Initial technical assessment shows moderate complexity.", 
     status: "discovery", 
     amount: 225000,
-    organization_id: org.id 
+    organization_id: org.id,
+    close_date: 6.months.from_now
   }
 ])
 
