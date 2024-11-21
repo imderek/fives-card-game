@@ -53,30 +53,26 @@
 
       <!-- Table -->
       <div id="deals" class="flex-1 relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left text-gray-500">
+        <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" class="px-6 py-3">Deal Name</th>
               <th scope="col" class="px-6 py-3">Status</th>
               <th scope="col" class="px-6 py-3">Description</th>
               <th scope="col" class="px-6 py-3">Amount</th>
-              <th scope="col" class="px-6 py-3"></th>
             </tr>
           </thead>
           <tbody>
             <% @deals.each do |deal| %>
-              <tr class="bg-white border-b hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><%= link_to deal.name, deal, data: { action: "click->deals#showDeal", deal_id: deal.id }, class: "hover:text-primary-600" %></td>
+              <tr class="bg-white border-b hover:bg-gray-50 cursor-pointer" data-action="click->deals#showDeal" data-deal-id="<%= deal.id %>">
+                <td class="px-6 py-4 font-medium whitespace-nowrap"><%= deal.name %></td>
                 <td class="px-6 py-4">
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium <%= deal_status_color(deal.status) %>">
                     <%= deal.status.titleize %>
                   </span>
                 </td>
-                <td class="px-6 py-4"><span class="line-clamp-1"><%= deal.description %></span></td>
+                <td class="px-6 py-4 text-gray-500"><span class="line-clamp-1"><%= deal.description %></span></td>
                 <td class="px-6 py-4"><%= number_to_currency(deal.amount, precision: 0) %></td>
-                <td class="px-6 py-4">
-                  <%#= link_to "View", deal, data: { turbo_frame: "drawer" }, class: "font-medium text-primary-600 hover:underline" %>
-                </td>
               </tr>
             <% end %>
           </tbody>
