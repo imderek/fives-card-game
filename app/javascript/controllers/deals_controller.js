@@ -14,11 +14,21 @@ export default class extends Controller {
 
   async showDeal(event) {
     event.preventDefault();
-    console.log("showDeal");
-    // document.addEventListener('load', () => {
-    this.drawer = FlowbiteInstances.getInstance('Drawer', 'dealDrawer');
-    this.drawer.show();
-    // });
+    const dealId = event.currentTarget.dataset.dealId;
+
+    // Fetch deal details via Turbo stream
+    const response = await fetch(`/deals/${dealId}`, {
+      headers: { Accept: "text/vnd.turbo-stream.html" },
+    });
+
+    if (response.ok) {
+      const html = await response.text();
+      this.dealContentTarget.innerHTML = html;
+      this.drawer = FlowbiteInstances.getInstance('Drawer', 'dealDrawer');
+      this.drawer.show();
+    } else {
+      console.error("Failed to fetch deal details");
+    }
   }
 
   closeDrawer() {

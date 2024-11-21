@@ -9,6 +9,10 @@ class DealsController < ApplicationController
 
   # GET /deals/1 or /deals/1.json
   def show
+    respond_to do |format|
+      format.turbo_stream { render partial: "deals/show", formats: [:html], locals: { deal: @deal } }
+      format.html { render :show } # Optional fallback for regular HTML requests
+    end
   end
 
   # GET /deals/new
