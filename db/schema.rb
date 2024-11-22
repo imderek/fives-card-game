@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_21_180620) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_22_175835) do
   create_table "deals", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -21,6 +21,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_21_180620) do
     t.decimal "amount", precision: 10, scale: 2
     t.date "close_date"
     t.index ["organization_id"], name: "index_deals_on_organization_id"
+  end
+
+  create_table "metrics", force: :cascade do |t|
+    t.string "name"
+    t.decimal "value", precision: 10, scale: 2
+    t.string "unit"
+    t.datetime "period_start"
+    t.datetime "period_end"
+    t.decimal "change_percentage", precision: 5, scale: 2
+    t.integer "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_metrics_on_organization_id"
   end
 
   create_table "organization_memberships", force: :cascade do |t|
@@ -75,6 +88,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_21_180620) do
   end
 
   add_foreign_key "deals", "organizations"
+  add_foreign_key "metrics", "organizations"
   add_foreign_key "organization_memberships", "organizations"
   add_foreign_key "organization_memberships", "users"
   add_foreign_key "subscriptions", "organizations"

@@ -3,9 +3,10 @@
 
 # Reset all tables
 OrganizationMembership.destroy_all
-Organization.destroy_all
 User.destroy_all
 Deal.destroy_all
+Metric.destroy_all
+Organization.destroy_all
 
 # Create organizations
 org = Organization.create!(
@@ -65,6 +66,65 @@ Deal.create!([
     amount: 225000,
     organization_id: org.id,
     close_date: 6.months.from_now
+  }
+])
+
+
+# Create metrics
+Metric.create!([
+  {
+    name: "Total Sales",
+    value: 248700,
+    unit: "currency",
+    period_start: Time.current.beginning_of_month,
+    period_end: Time.current.end_of_month,
+    change_percentage: 3,
+    organization_id: org.id
+  },
+  {
+    name: "Win Rate", 
+    value: 24.7,
+    unit: "percentage",
+    period_start: Time.current.beginning_of_month,
+    period_end: Time.current.end_of_month,
+    change_percentage: 7,
+    organization_id: org.id
+  },
+  {
+    name: "Conversion Rate",
+    value: 29.6,
+    unit: "percentage", 
+    period_start: Time.current.beginning_of_month,
+    period_end: Time.current.end_of_month,
+    change_percentage: 9,
+    organization_id: org.id
+  },
+  {
+    name: "Pipeline Value",
+    value: 843200,
+    unit: "currency",
+    period_start: Time.current.beginning_of_month,
+    period_end: Time.current.end_of_month,
+    change_percentage: 14,
+    organization_id: org.id
+  },
+  {
+    name: "Customer Acquisition Cost",
+    value: 120,
+    unit: "currency",
+    period_start: Time.current.beginning_of_month,
+    period_end: Time.current.end_of_month,
+    change_percentage: -5,
+    organization_id: org.id
+  },
+  {
+    name: "Average Deal Size",
+    value: 32400,
+    unit: "currency",
+    period_start: Time.current.beginning_of_month,
+    period_end: Time.current.end_of_month,
+    change_percentage: 12,
+    organization_id: org.id
   }
 ])
 

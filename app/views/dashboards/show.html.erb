@@ -4,23 +4,23 @@
         <% [
             {
                 title: "Total Sales",
-                figure: "$248.7k",
-                change_percentage: "3%"
+                figure: number_to_currency(@total_sales_metric.value, precision: 0),
+                change_percentage: "#{@total_sales_metric.change_percentage.to_i}%"
             },
             {
                 title: "Win Rate",
-                figure: "24.7%",
-                change_percentage: "7%"
+                figure: "#{@win_rate_metric.value}%",
+                change_percentage: "#{@win_rate_metric.change_percentage.to_i}%"
             },
             {
                 title: "Conversion Rate",
-                figure: "29.6%",
-                change_percentage: "9%"
+                figure: "#{@conversion_rate_metric.value}%",
+                change_percentage: "#{@conversion_rate_metric.change_percentage.to_i}%"
             },
             {
                 title: "Pipeline Value",
-                figure: "$843.2k",
-                change_percentage: "14%"
+                figure: number_to_currency(@pipeline_value_metric.value, precision: 0),
+                change_percentage: "#{@pipeline_value_metric.change_percentage.to_i}%"
             },
         ].each do |obj| %>
             <div class="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-6">
