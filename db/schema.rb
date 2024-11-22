@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_22_182355) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_22_183103) do
+  create_table "contact_deals", force: :cascade do |t|
+    t.integer "contact_id", null: false
+    t.integer "deal_id", null: false
+    t.boolean "primary", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id"], name: "index_contact_deals_on_contact_id"
+    t.index ["deal_id"], name: "index_contact_deals_on_deal_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -99,6 +109,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_182355) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "contact_deals", "contacts"
+  add_foreign_key "contact_deals", "deals"
   add_foreign_key "contacts", "organizations"
   add_foreign_key "deals", "organizations"
   add_foreign_key "metrics", "organizations"
