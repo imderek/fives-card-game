@@ -10,97 +10,27 @@
   <p class="mb-6 text-gray-600 text-sm">Expected Close: <%= deal.close_date&.strftime("%B %d, %Y") %></p>
   <h3 class="mb-3 text-lg font-semibold border-t pt-4">Deal Details</h3>
   <p class="text-gray-600 text-sm mb-6"><%= deal.description %></p>
-  <h3 class="mb-3 text-lg font-semibold border-t pt-4">Contacts</h3>
+  <h3 class="mb-2 text-lg font-semibold border-t pt-4">Contacts</h3>
   <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+    <% deal.contacts.each do |contact| %>
       <li class="py-4 pt-2">
-          <div class="flex items-center">
-              <div class="flex-shrink-0">
-                  <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/med/men/1.jpg" alt="Neil image">
-              </div>
-              <div class="flex-1 min-w-0 ms-4">
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Neil Sims
-                  </p>
-                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                      email@windster.com
-                  </p>
-              </div>
-              <%# <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  $320
-              </div> %>
-          </div>
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/med/<%= ['men', 'women'].sample %>/<%= rand(1..99) %>.jpg" alt="Contact avatar">
+            </div>
+            <div class="flex-1 min-w-0 ms-4">
+              <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                <%= contact.name %>
+              </p>
+              <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                <%= contact.email %>
+              </p>
+            </div>
+            <%# <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                $320
+            </div> %>
+        </div>
       </li>
-      <li class="py-3 sm:py-4">
-          <div class="flex items-center ">
-              <div class="flex-shrink-0">
-                  <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/med/women/1.jpg" alt="Bonnie image">
-              </div>
-              <div class="flex-1 min-w-0 ms-4">
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Bonnie Green
-                  </p>
-                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                      email@windster.com
-                  </p>
-              </div>
-              <%# <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  $3467
-              </div> %>
-          </div>
-      </li>
-      <li class="py-3 sm:py-4">
-          <div class="flex items-center">
-              <div class="flex-shrink-0">
-                  <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/med/men/2.jpg" alt="Michael image">
-              </div>
-              <div class="flex-1 min-w-0 ms-4">
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Michael Gough
-                  </p>
-                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                      email@windster.com
-                  </p>
-              </div>
-              <%# <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  $67
-              </div> %>
-          </div>
-      </li>
-      <li class="py-3 sm:py-4">
-          <div class="flex items-center ">
-              <div class="flex-shrink-0">
-                  <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/med/women/2.jpg" alt="Lana image">
-              </div>
-              <div class="flex-1 min-w-0 ms-4">
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Lana Byrd
-                  </p>
-                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                      email@windster.com
-                  </p>
-              </div>
-              <%# <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  $367
-              </div> %>
-          </div>
-      </li>
-      <li class="pt-3 pb-0 sm:pt-4">
-          <div class="flex items-center ">
-              <div class="flex-shrink-0">
-                  <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/med/men/3.jpg" alt="Thomas image">
-              </div>
-              <div class="flex-1 min-w-0 ms-4">
-                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Thomes Lean
-                  </p>
-                  <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                      email@windster.com
-                  </p>
-              </div>
-              <%# <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  $2367
-              </div> %>
-          </div>
-      </li>
+    <% end %>
   </ul>
 </div>

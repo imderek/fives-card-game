@@ -145,7 +145,10 @@ ContactDeal.create!([
   { contact_id: Contact.last.id, deal_id: Deal.third.id, primary: true },
   { contact_id: Contact.first.id, deal_id: Deal.fourth.id, primary: true },
   { contact_id: Contact.second.id, deal_id: Deal.fourth.id, primary: false },
-  { contact_id: Contact.third.id, deal_id: Deal.fourth.id, primary: false }
+  { contact_id: Contact.third.id, deal_id: Deal.fourth.id, primary: false },
+  { contact_id: Contact.first.id, deal_id: Deal.fifth.id, primary: true },
+  { contact_id: Contact.second.id, deal_id: Deal.fifth.id, primary: false },
+  { contact_id: Contact.third.id, deal_id: Deal.fifth.id, primary: false }
 ])
 
 # Create metrics
