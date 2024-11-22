@@ -5,6 +5,7 @@
 OrganizationMembership.destroy_all
 User.destroy_all
 Deal.destroy_all
+Contact.destroy_all
 Metric.destroy_all
 Organization.destroy_all
 
@@ -66,6 +67,71 @@ Deal.create!([
     amount: 225000,
     organization_id: org.id,
     close_date: 6.months.from_now
+  }
+])
+
+# Create contacts
+Contact.create!([
+  {
+    first_name: "Sarah",
+    last_name: "Smith",
+    email: "sarah.smith@acmecorp.com",
+    phone: "+1 (415) 555-0123",
+    primary: true,
+    organization_id: org.id
+  },
+  {
+    first_name: "John",
+    last_name: "Davis", 
+    email: "john.davis@techstart.io",
+    phone: "+1 (415) 555-0124",
+    primary: true,
+    organization_id: org.id
+  },
+  {
+    first_name: "Michael",
+    last_name: "Chen",
+    email: "mchen@globallogistics.com",
+    phone: "+1 (415) 555-0125",
+    primary: true,
+    organization_id: org.id
+  },
+  {
+    first_name: "Patricia",
+    last_name: "Rodriguez",
+    email: "prodriguez@fnb.com",
+    phone: "+1 (415) 555-0126",
+    primary: true,
+    organization_id: org.id
+  },
+  {
+    first_name: "James",
+    last_name: "Wilson",
+    email: "jwilson@innovatesolutions.com",
+    phone: "+1 (415) 555-0127",
+    primary: true,
+    organization_id: org.id
+  },
+  {
+    first_name: "Emily",
+    last_name: "Taylor",
+    email: "etaylor@techstart.io",
+    phone: "+1 (415) 555-0128",
+    organization_id: org.id
+  },
+  {
+    first_name: "Robert",
+    last_name: "Martinez",
+    email: "rmartinez@globallogistics.com",
+    phone: "+1 (415) 555-0129",
+    organization_id: org.id
+  },
+  {
+    first_name: "Lisa",
+    last_name: "Anderson",
+    email: "landerson@fnb.com",
+    phone: "+1 (415) 555-0130",
+    organization_id: org.id
   }
 ])
 
