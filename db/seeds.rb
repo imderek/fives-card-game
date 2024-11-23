@@ -3,10 +3,10 @@
 
 # Reset all tables
 OrganizationMembership.destroy_all
-User.destroy_all
 Deal.destroy_all
 Contact.destroy_all
 Metric.destroy_all
+User.destroy_all
 Organization.destroy_all
 
 # Create organizations
@@ -34,7 +34,8 @@ Deal.create!([
     status: "negotiating", 
     amount: 100000,
     organization_id: org.id,
-    close_date: 2.months.from_now
+    close_date: 2.months.from_now,
+    owner_id: user.id
   },
   { 
     name: "TechStart Inc.", 
@@ -42,7 +43,8 @@ Deal.create!([
     status: "discovery", 
     amount: 90000,
     organization_id: org.id,
-    close_date: 4.months.from_now
+    close_date: 4.months.from_now,
+    owner_id: user.id
   },
   { 
     name: "Global Logistics Ltd", 
@@ -50,7 +52,8 @@ Deal.create!([
     status: "closing", 
     amount: 65000,
     organization_id: org.id,
-    close_date: 2.weeks.from_now
+    close_date: 2.weeks.from_now,
+    owner_id: user.id
   },
   { 
     name: "First National Bank", 
@@ -58,7 +61,8 @@ Deal.create!([
     status: "negotiating", 
     amount: 200000,
     organization_id: org.id,
-    close_date: 1.month.from_now
+    close_date: 1.month.from_now,
+    owner_id: user.id
   },
   { 
     name: "Innovate Solutions LLC", 
@@ -66,7 +70,8 @@ Deal.create!([
     status: "discovery", 
     amount: 225000,
     organization_id: org.id,
-    close_date: 6.months.from_now
+    close_date: 6.months.from_now,
+    owner_id: user.id
   }
 ])
 

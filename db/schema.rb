@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_22_183104) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_22_183105) do
   create_table "contact_deals", force: :cascade do |t|
     t.integer "contact_id", null: false
     t.integer "deal_id", null: false
@@ -42,7 +42,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_183104) do
     t.datetime "updated_at", null: false
     t.decimal "amount", precision: 10, scale: 2
     t.date "close_date"
+    t.integer "owner_id"
     t.index ["organization_id"], name: "index_deals_on_organization_id"
+    t.index ["owner_id"], name: "index_deals_on_owner_id"
   end
 
   create_table "metrics", force: :cascade do |t|
@@ -124,6 +126,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_183104) do
   add_foreign_key "contact_deals", "deals"
   add_foreign_key "contacts", "organizations"
   add_foreign_key "deals", "organizations"
+  add_foreign_key "deals", "users", column: "owner_id"
   add_foreign_key "metrics", "organizations"
   add_foreign_key "organization_memberships", "organizations"
   add_foreign_key "organization_memberships", "users"
