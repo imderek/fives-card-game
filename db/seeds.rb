@@ -209,4 +209,16 @@ Metric.create!([
   }
 ])
 
+# Add tasks to deals
+Deal.all.each do |deal|
+  rand(2..5).times do
+    deal.tasks.create!(
+      title: Faker::Company.bs,
+      description: Faker::Lorem.sentence,
+      due_date: rand(10..30).days.from_now,
+      status: ['pending', 'in_progress', 'completed'].sample
+    )
+  end
+end
+
 puts "DB seeding complete!"

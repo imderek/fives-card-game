@@ -33,4 +33,28 @@
       </li>
     <% end %>
   </ul>
+
+  <h3 class="mb-2 text-lg font-semibold border-t pt-4">Tasks</h3>
+  <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+    <% deal.tasks.each do |task| %>
+      <li class="py-3">
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <h4 class="text-sm font-medium text-gray-900"><%= task.title %></h4>
+            <% if task.description.present? %>
+              <p class="text-sm text-gray-500"><%= task.description %></p>
+            <% end %>
+            <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
+              <% if task.due_date %>
+                <span>Due: <%= task.due_date.strftime("%B %d, %Y") %></span>
+              <% end %>
+              <span class="px-2 py-1 rounded-full text-xs <%= task_status_color(task.status) %>">
+                <%= task.status.titleize %>
+              </span>
+            </div>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
 </div>
