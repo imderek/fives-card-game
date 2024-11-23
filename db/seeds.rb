@@ -213,8 +213,8 @@ Metric.create!([
 Deal.all.each do |deal|
   rand(2..5).times do
     deal.tasks.create!(
-      title: Faker::Company.bs,
-      description: Faker::Lorem.sentence,
+      title: Faker::Company.bs.titleize,
+      description: "#{Faker::Verb.base.titleize} #{Faker::Company.buzzword} #{Faker::Company.catch_phrase}",
       due_date: rand(10..30).days.from_now,
       status: ['pending', 'in_progress', 'completed'].sample
     )
