@@ -1,17 +1,45 @@
 import { Controller } from "@hotwired/stimulus"
 import ApexCharts from "apexcharts"
-// const colors = require('tailwindcss/colors')
 
-// Connects to data-controller="chart"
 export default class extends Controller {
-  disconnect() {
-    console.log('disconnected')
+  static values = {
+    metric: String,
+    defaultRange: { type: String, default: '7_days' }
   }
 
-  connect() {
+  async connect() {
+    this.chart = null
+    await this.fetchAndRenderChart()
+    this.setupRangeSelector()
+  }
+
+  disconnect() {
+    if (this.chart) {
+      this.chart.destroy()
+    }
+  }
+
+  async fetchAndRenderChart(range = this.defaultRangeValue) {
+    const { startDate, endDate } = this.getDateRange(range)
+    
+    try {
+      const response = await fetch(`/api/metrics/chart_data?` + new URLSearchParams({
+        start_date: startDate.toISOString().split('T')[0],
+        end_date: endDate.toISOString().split('T')[0],
+        metric_name: "Total Sales" // TODO: Make this dynamic
+      }))
+      
+      const data = await response.json()
+      this.renderChart(data)
+    } catch (error) {
+      console.error('Error fetching chart data:', error)
+    }
+  }
+
+  renderChart(data) {
     const options = {
       chart: {
-        height: "70%",
+        height: "300px",
         maxWidth: "100%",
         type: "area",
         fontFamily: "Inter, sans-serif",
@@ -24,18 +52,15 @@ export default class extends Controller {
       },
       tooltip: {
         enabled: true,
-        x: {
-          show: false,
-        },
-      },
-      fill: {
-        type: "gradient",
-        gradient: {
-          opacityFrom: 0.55,
-          opacityTo: 0,
-          shade: "#1C64F2",
-          gradientToColors: ["#1C64F2"],
-        },
+        y: {
+          formatter: (value) => {
+            return data.unit === 'currency' 
+              ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
+              : data.unit === 'percentage'
+                ? `${value}%`
+                : value
+          }
+        }
       },
       markers: {
         size: 5,
@@ -60,17 +85,20 @@ export default class extends Controller {
           top: 0
         },
       },
-      series: [
-        {
-          name: "New users",
-          data: [6500, 6418, 6456, 6526, 6356, 6456],
-          color: "#1A56DB",
-        },
-      ],
+      series: [{
+        name: this.metricValue.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        data: data.values,
+        color: "#1A56DB"
+      }],
       xaxis: {
-        categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+        categories: data.dates,
         labels: {
           show: true,
+          format: 'M/d',
+          formatter: function(value) {
+            const date = new Date(value);
+            return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+          }
         },
         axisBorder: {
           show: false,
@@ -80,14 +108,51 @@ export default class extends Controller {
         },
       },
       yaxis: {
-        show: false,
+        labels: {
+          formatter: (value) => {
+            return data.unit === 'currency' 
+              ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact' }).format(value)
+              : data.unit === 'percentage'
+                ? `${value}%`
+                : value
+          }
+        }
       },
     }
     
-    if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') {
-      const chart = new ApexCharts(document.getElementById("area-chart"), options);
-      chart.render();
+    if (this.chart) {
+      this.chart.destroy()
     }
     
+    this.chart = new ApexCharts(this.element.querySelector("#area-chart"), options)
+    this.chart.render()
+  }
+
+  getDateRange(range) {
+    const endDate = new Date()
+    let startDate
+
+    switch (range) {
+      case '7_days':
+        startDate = new Date()
+        startDate.setDate(endDate.getDate() - 7)
+        break
+      case '30_days':
+        startDate = new Date()
+        startDate.setDate(endDate.getDate() - 30)
+        break
+      case 'ytd':
+        startDate = new Date(endDate.getFullYear(), 0, 1)
+        break
+      default:
+        startDate = new Date()
+        startDate.setDate(endDate.getDate() - 7)
+    }
+
+    return { startDate, endDate }
+  }
+
+  setupRangeSelector() {
+    // Implement range selector logic here
   }
 }

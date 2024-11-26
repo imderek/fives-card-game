@@ -15,4 +15,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#show"
+
+  namespace :api do
+    get 'metrics/chart_data', to: 'metrics#chart_data'
+  end
 end

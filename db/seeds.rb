@@ -156,63 +156,58 @@ ContactDeal.create!([
   { contact_id: Contact.third.id, deal_id: Deal.fifth.id, primary: false }
 ])
 
-# Create metrics
-Metric.create!([
-  {
+# Create metrics for a week of total sales
+7.times do |i|
+  Metric.create!(
     name: "Total Sales",
-    value: 248700,
+    value: rand(20000..50000), # Random value for demonstration
     unit: "currency",
-    period_start: Time.current.beginning_of_month,
-    period_end: Time.current.end_of_month,
-    change_percentage: 3,
+    period_start: i.days.ago.beginning_of_day,
+    period_end: i.days.ago.end_of_day,
+    change_percentage: rand(-20..20), # Random percentage change between -20% and +20%
     organization_id: org.id
-  },
-  {
-    name: "Win Rate", 
-    value: 24.7,
-    unit: "percentage",
-    period_start: Time.current.beginning_of_month,
-    period_end: Time.current.end_of_month,
-    change_percentage: 7,
-    organization_id: org.id
-  },
-  {
-    name: "Conversion Rate",
-    value: 29.6,
+  )
+end
+
+# Create metrics for a week of win rate
+7.times do |i|
+  Metric.create!(
+    name: "Win Rate",
+    value: rand(20..60), # Random percentage between 20-60%
     unit: "percentage", 
-    period_start: Time.current.beginning_of_month,
-    period_end: Time.current.end_of_month,
-    change_percentage: 9,
+    period_start: i.days.ago.beginning_of_day,
+    period_end: i.days.ago.end_of_day,
+    change_percentage: rand(-15..15), # Random percentage change between -15% and +15%
     organization_id: org.id
-  },
-  {
+  )
+end
+
+# Create metrics for a week of conversion rate
+7.times do |i|
+  Metric.create!(
+    name: "Conversion Rate",
+    value: rand(10..40), # Random percentage between 10-40%
+    unit: "percentage",
+    period_start: i.days.ago.beginning_of_day,
+    period_end: i.days.ago.end_of_day,
+    change_percentage: rand(-10..10), # Random percentage change between -10% and +10%
+    organization_id: org.id
+  )
+end
+
+# Create metrics for a week of pipeline value
+7.times do |i|
+  Metric.create!(
     name: "Pipeline Value",
-    value: 843200,
+    value: rand(100000..300000), # Random value between 100k-300k
     unit: "currency",
-    period_start: Time.current.beginning_of_month,
-    period_end: Time.current.end_of_month,
-    change_percentage: 14,
+    period_start: i.days.ago.beginning_of_day,
+    period_end: i.days.ago.end_of_day,
+    change_percentage: rand(-25..25), # Random percentage change between -25% and +25%
     organization_id: org.id
-  },
-  {
-    name: "Customer Acquisition Cost",
-    value: 120,
-    unit: "currency",
-    period_start: Time.current.beginning_of_month,
-    period_end: Time.current.end_of_month,
-    change_percentage: -5,
-    organization_id: org.id
-  },
-  {
-    name: "Average Deal Size",
-    value: 32400,
-    unit: "currency",
-    period_start: Time.current.beginning_of_month,
-    period_end: Time.current.end_of_month,
-    change_percentage: 12,
-    organization_id: org.id
-  }
-])
+  )
+end
+
 
 # Add tasks to deals
 Deal.all.each do |deal|
