@@ -7,6 +7,7 @@ export default class extends Controller {
   connect() {
     // Initialize board state
     this.boardState = Array(8).fill().map(() => [])
+    this.selectedCardIndex = null
     this.dealCards()
     this.renderBoard()
   }
@@ -85,7 +86,7 @@ export default class extends Controller {
               </div>
             `).join('')}
             ${Array(5 - stack.length).fill(`
-              <div class="w-16 h-24 bg-white/10 rounded-lg border border-white/20"></div>
+              <div class="hover:bg-green-600 cursor-pointer transition-all duration-200 w-16 h-24 bg-white/10 rounded-lg border border-white/20"></div>
             `).join('')}
           </div>
         `).join('')}
@@ -94,14 +95,22 @@ export default class extends Controller {
   }
 
   playCard(event) {
-    // Get the stack index from the clicked element
+    // Only proceed if a card is selected
+    if (this.selectedCardIndex === null) return
+    
     const stackIndex = parseInt(event.currentTarget.dataset.pokerStackParam)
     
-    // For now, just play the first card from player's hand to the selected stack
-    // Later, you might want to add a card selection UI
-    if (this.player1Cards.length > 0 && this.boardState[stackIndex].length < 5) {
-      const cardToPlay = this.player1Cards.shift()
-      this.boardState[stackIndex].push(cardToPlay)
+    // Only allow playing on the first row (player's side)
+    if (stackIndex >= 4) return
+    
+    // Check if the stack has room
+    if (this.boardState[stackIndex].length < 5) {
+      const card = this.player1Cards[this.selectedCardIndex]
+      this.player1Cards.splice(this.selectedCardIndex, 1)
+      this.boardState[stackIndex].push(card)
+      
+      // Reset selection
+      this.selectedCardIndex = null
       
       this.renderCards()
       this.renderBoard()
@@ -128,11 +137,12 @@ export default class extends Controller {
               const normalizedAngle = angle / 15;
               const yOffset = -20 * (1 - normalizedAngle * normalizedAngle);
               const xOffset = -angle * 0.5;
+              const isSelected = index === this.selectedCardIndex;
               return `
-              <div class="w-24 h-32 bg-white rounded-lg shadow-md relative ${getTextColor(card.suit)} cursor-pointer" 
+              <div class="w-24 h-32 bg-white rounded-lg shadow-md relative ${getTextColor(card.suit)} cursor-pointer transition-transform ${isSelected ? 'ring-4 ring-yellow-400 transform -translate-y-6' : ''}" 
                    data-action="click->poker#selectCard"
                    data-poker-card-index-param="${index}"
-                   style="z-index: ${index}; transform-origin: bottom center; transform: rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)">
+                   style="z-index: ${index}; transform-origin: bottom center; transform: ${isSelected ? 'translateY(-1.5rem)' : ''} rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)">
                 <div class="absolute top-2 left-2 text-2xl">${card.value}${suitEmoji[card.suit]}</div>
               </div>
             `}).join('')}
@@ -164,20 +174,14 @@ export default class extends Controller {
 
   selectCard(event) {
     const cardIndex = parseInt(event.currentTarget.dataset.pokerCardIndexParam)
-    const card = this.player1Cards[cardIndex]
     
-    // Remove the card from player's hand
-    this.player1Cards.splice(cardIndex, 1)
-    
-    // Add it to the first available slot in the first row (player's side)
-    for (let i = 0; i < 4; i++) {
-      if (this.boardState[i].length < 5) {
-        this.boardState[i].push(card)
-        break
-      }
+    // Toggle selection
+    if (this.selectedCardIndex === cardIndex) {
+      this.selectedCardIndex = null
+    } else {
+      this.selectedCardIndex = cardIndex
     }
     
     this.renderCards()
-    this.renderBoard()
   }
 }
