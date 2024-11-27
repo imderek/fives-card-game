@@ -3,7 +3,6 @@
   <head>
     <title><%= content_for(:title) || "Elephnt" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -18,123 +17,9 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-900 overflow-y-scroll">
-    <%= render 'layouts/nav' %>
-
-    <main class="min-h-24 bg-white">
-      <%= render 'shared/flash' %>
+  <body class="bg-green-700 overflow-y-scroll">
+    <main class="min-h-24">
       <%= yield %>
     </main>
-
-    <%= turbo_frame_tag "modal" %>
-
-    <footer data-turbo-permanent class="dark bg-white antialiased dark:bg-gray-900">
-      <div class="w-full p-4 py-6">
-        <!-- Logo and footer links, along with copyright information -->
-
-        <div>
-          <div class="items-start gap-6 md:gap-8 lg:flex 2xl:gap-24">
-            <div class="grid min-w-0 flex-1 grid-cols-2 gap-6 md:gap-8 xl:grid-cols-5">
-              <div class="mt-[-4px]">
-                <%= link_to dashboard_path, class: "mb-2 block" do %>
-                    <h3 class="text-2xl font-semibold dark:text-white">elephnt</h3>
-                <% end %>
-
-                <p class="text-sm text-neutral-500 dark:text-neutral-400">© 2024 <a href="#" class="hover:underline">elephnt, inc.</a></p>
-              </div>
-              <div>
-                <h6 class="mb-4 text-sm font-semibold uppercase text-neutral-900 dark:text-white">Company</h6>
-                <ul class="space-y-3">
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"> About </a>
-                  </li>
-
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"> Premium </a>
-                  </li>
-
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"> Blog </a>
-                  </li>
-
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"> Affiliate Program </a>
-                  </li>
-
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"> Get Coupon </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h6 class="mb-4 text-sm font-semibold uppercase text-neutral-900 dark:text-white">Order & Purchases</h6>
-                <ul class="space-y-3">
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Order Status</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Track Your Order</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Purchase History</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Returns & Refunds</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Payment Methods</a>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h6 class="mb-4 text-sm font-semibold uppercase text-neutral-900 dark:text-white">Support & Services</h6>
-                <ul class="space-y-3">
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Contact Support</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">FAQs</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Service Centers</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Warranty Information</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Product Manuals</a>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h6 class="mb-4 text-sm font-semibold uppercase text-neutral-900 dark:text-white">Partnerships</h6>
-                <ul class="space-y-3">
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Partner With Us</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Become a Supplier</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Affiliate Program</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Collaboration Opportunities</a>
-                  </li>
-                  <li>
-                    <a href="#" title="" class="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">Sponsorship Requests</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-    </footer>
   </body>
 </html>
