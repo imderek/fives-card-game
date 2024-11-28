@@ -1,0 +1,34 @@
+<div data-controller="poker" class="w-full flex flex-row">
+    <!-- Player 1 -->
+    <div class="flex flex-col items-center w-1/3 p-20">
+        <div data-poker-target="cards" class="mb-16 flex justify-center space-x-4">
+        </div>
+        <div data-poker-target="stack" class="mb-12 text-white text-center mb-8">
+            <div class="relative mb-8 w-32 h-48 mx-auto">
+                <div class="absolute w-32 h-48 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg shadow-md -rotate-6"></div>
+                <div class="absolute w-32 h-48 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg shadow-md -rotate-3"></div>
+                <div class="absolute w-32 h-48 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg shadow-md flex items-center justify-center text-2xl font-bold"></div>
+                <div class="absolute w-32 top-1/2 -translate-y-1/2">
+                    <div data-poker-target="stackCount" class="text-3xl font-bold"></div>
+                    <div class="text-center text-white/50 text-sm">
+                    Remaining
+                    </div>
+                </div>
+            </div>
+            <button 
+            data-poker-target="drawButton" 
+            data-action="poker#drawCard" 
+            class="border-2 border-white text-white px-4 py-2 rounded-md hover:bg-green-100 hover:text-green-700 active:bg-green-800 active:border-green-800 transition-colors"
+            >Draw Card</button>
+        </div>
+        <%# <button 
+        data-poker-target="dealButton" 
+        data-action="poker#dealCards" 
+        class="border-2 border-white text-white px-4 py-2 rounded-md hover:bg-green-100 hover:text-green-700 active:bg-green-800 active:border-green-800 transition-colors"
+        >Deal Cards</button> %>
+    </div>
+    <!-- Board -->
+    <div data-poker-target="board" class="flex flex-col items-center flex-1 bg-green-800 h-screen">
+        
+    </div>
+</div>

@@ -2,7 +2,7 @@
 require "fileutils"
 
 APP_ROOT = File.expand_path("..", __dir__)
-APP_NAME = "rails7sandbox"
+APP_NAME = "Elephnt"
 
 def system!(*args)
   system(*args, exception: true)

@@ -24,10 +24,10 @@ Rails.application.configure do
   # config.public_file_server.enabled = false
 
   # Compress CSS using a preprocessor.
-  # config.assets.css_compressor = :sass
+  config.assets.css_compressor = nil
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -72,7 +72,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
-  # config.active_job.queue_name_prefix = "rails7sandbox_production"
+  # config.active_job.queue_name_prefix = elephnt_production"
 
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
@@ -99,4 +99,10 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Change these asset-related configurations
+  config.assets.compile = true  # Temporarily enable dynamic compilation
+  config.assets.css_compressor = nil
+  config.assets.compress = true
+  config.assets.digest = true
 end

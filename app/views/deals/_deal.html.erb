@@ -1,0 +1,88 @@
+<div id="<%= dom_id deal %>">
+  <div class="mb-4 flex items-center justify-between">
+    <h3 class="text-2xl font-bold"><%= deal.name %></h3>
+    <div class="inline-block px-2.5 py-0.5 rounded-full text-sm font-medium <%= deal_status_color(deal.status) %>">
+      <%= deal.status.titleize %>
+    </div>
+  </div>
+  <div class="mb-3 text-sm">
+    <dl class="divide-y divide-gray-200">
+      <div class="py-3 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-0">
+        <dt class="text-gray-500">Deal Value</dt>
+        <dd class="font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
+          <%= number_to_currency(deal.amount, precision: 0) %>
+        </dd>
+      </div>
+      <div class="py-3 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-0">
+        <dt class="text-gray-500">Expected Close</dt>
+        <dd class="font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
+          <%= deal.close_date.strftime("%B %d, %Y") %>
+        </dd>
+      </div>
+      <%# <div class="py-3 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-0">
+        <dt class="text-gray-500">Opened on</dt>
+        <dd class="font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
+          <%#= deal.created_at.strftime("%B %d, %Y") %
+        </dd>
+      </div> %>
+      <div class="py-3 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-0">
+        <dt class="text-gray-500">Owner</dt>
+        <dd class="font-semibold text-gray-900 sm:col-span-2 sm:mt-0">
+          <%= deal.owner&.email || content_tag(:span, "Unassigned", class: "text-gray-400") %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+  <h3 class="mb-3 text-lg font-semibold">About This Deal</h3>
+  <p class="text-gray-600 text-sm mb-6"><%= deal.description %></p>
+
+  <!-- Contacts -->
+  <h3 class="mb-2 text-lg font-semibold border-t pt-4">Contacts</h3>
+  <ul role="list" class="mb-3 divide-y divide-gray-200 dark:divide-gray-700">
+    <% deal.contacts.each do |contact| %>
+      <li class="py-4 pt-2">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/med/<%= ['men', 'women'].sample %>/<%= rand(1..99) %>.jpg" alt="Contact avatar">
+          </div>
+          <div class="flex-1 min-w-0 ms-4">
+            <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
+              <%= contact.name %>
+            </p>
+            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+              <%= contact.email %>
+            </p>
+          </div>
+          <%# <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+              $320
+          </div> %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+
+  <!-- Tasks -->
+  <h3 class="mb-2 text-lg font-semibold border-t pt-4">Tasks</h3>
+  <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+    <% deal.tasks.each do |task| %>
+      <li class="py-3">
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <h4 class="mb-1 text-base font-semibold text-gray-900"><%= task.title %></h4>
+            <% if task.description.present? %>
+              <p class="text-sm text-gray-500"><%= task.description %></p>
+            <% end %>
+            <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
+              <% if task.due_date %>
+                <span>Due <%= task.due_date.strftime("%B %d, %Y") %></span>
+              <% end %>
+              <span class="px-2 py-1 rounded-full text-xs <%= task_status_color(task.status) %>">
+                <%= task.status.titleize %>
+              </span>
+            </div>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

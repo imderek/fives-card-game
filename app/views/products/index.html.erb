@@ -1,18 +1,14 @@
 <div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-  <% end %>
-
   <% content_for :title, "Products" %>
 
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl mb-8">Products</h1>
-    <%= link_to "New product", new_product_path, class: "rounded-lg py-3 px-5 bg-emerald-500 text-white block font-medium" %>
+  <div class="flex justify-between items-center mb-5">
+    <h1 class="font-bold text-2xl">Search Results</h1>
+    <%#= link_to "New product", new_product_path, class: "rounded-lg py-3 px-5 bg-primary-500 text-white block font-medium" %>
   </div>
-
-  <div id="products" class="min-w-full">
+  
+  <div id="products" class="grid grid-cols-1 auto-cols-max lg:grid-cols-4 md:grid-cols-3 justify-items-center justify-center gap-10 mb-5">
     <% @products.each do |product| %>
-      <%= render product %>
+      <%= render product, show_full_details: false %>
     <% end %>
   </div>
 </div>
