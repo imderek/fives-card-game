@@ -83,13 +83,22 @@ export default class extends Controller {
     const isStraight = cardValues.every((val, i) => i === 0 || val === cardValues[i - 1] + 1);
 
     if (isFlush && isStraight) return "Straight Flush";
-    if (counts[0] === 4) return "Four of a Kind";
+    if (counts[0] === 4) {
+      const quadValue = Object.entries(valueCounts).find(([_, count]) => count === 4)[0];
+      return `Quad ${quadValue}s`;
+    }
     if (counts[0] === 3 && counts[1] === 2) return "Full House";
     if (isFlush) return "Flush";
     if (isStraight) return "Straight";
-    if (counts[0] === 3) return "Three of a Kind";
+    if (counts[0] === 3) {
+      const tripValue = Object.entries(valueCounts).find(([_, count]) => count === 3)[0];
+      return `Trip ${tripValue}s`;
+    }
     if (counts[0] === 2 && counts[1] === 2) return "Two Pair";
-    if (counts[0] === 2) return "One Pair";
+    if (counts[0] === 2) {
+      const pairValue = Object.entries(valueCounts).find(([_, count]) => count === 2)[0];
+      return `Pair of ${pairValue}s`;
+    }
     const highCard = cardValues[cardValues.length - 1];
     const valueMap = {
       'A': 'Ace', 'K': 'King', 'Q': 'Queen', 'J': 'Jack',
@@ -114,10 +123,10 @@ export default class extends Controller {
         ${this.boardState.map((stack, index) => {
           const handType = stack.length === 5 ? this.evaluateHand(stack) : null;
           return `
-          <div class="relative flex gap-2 flex-col items-center justify-center border-2 border-dashed border-white/30 rounded-lg px-4 py-6"
+          <div class="relative flex gap-2 flex-col items-center justify-center border-2 border-dashed border-white/30 rounded-lg p-4"
                data-action="click->poker#playCard" 
                data-poker-stack-param="${index}">
-            ${handType ? `<div class="absolute top-[-0.8rem] bg-yellow-400 text-white shadow-md text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
+            ${handType ? `<div class="bg-yellow-400 text-white shadow-md text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
             ${stack.map(card => `
               <div class="w-16 h-24 bg-white rounded-lg border border-gray-200 flex items-center justify-center text-2xl font-bold ${getTextColor(card.suit)}">
                 ${card.value}${suitEmoji[card.suit]}
