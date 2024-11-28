@@ -9,7 +9,7 @@
     <%= yield :head %>
 
     <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon<%= ENV.fetch("RAILS_ENV") == "development" ? "-dev" : "" %>.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
