@@ -90,7 +90,14 @@ export default class extends Controller {
     if (counts[0] === 3) return "Three of a Kind";
     if (counts[0] === 2 && counts[1] === 2) return "Two Pair";
     if (counts[0] === 2) return "One Pair";
-    return "High Card";
+    const highCard = cardValues[cardValues.length - 1];
+    const valueMap = {
+      'A': 'Ace', 'K': 'King', 'Q': 'Queen', 'J': 'Jack',
+      '10': 'Ten', '9': 'Nine', '8': 'Eight', '7': 'Seven',
+      '6': 'Six', '5': 'Five', '4': 'Four', '3': 'Three', '2': 'Two'
+    };
+    const highCardValue = valueMap[values[highCard]] || values[highCard];
+    return `${highCardValue} High`;
   }
 
   renderBoard() {
@@ -107,10 +114,10 @@ export default class extends Controller {
         ${this.boardState.map((stack, index) => {
           const handType = stack.length === 5 ? this.evaluateHand(stack) : null;
           return `
-          <div class="flex gap-2 flex-col items-center justify-center border-2 border-dashed border-white/30 rounded-lg p-4" 
+          <div class="relative flex gap-2 flex-col items-center justify-center border-2 border-dashed border-white/30 rounded-lg px-4 py-6"
                data-action="click->poker#playCard" 
                data-poker-stack-param="${index}">
-            ${handType ? `<div class="text-white font-bold mb-2">${handType}</div>` : ''}
+            ${handType ? `<div class="absolute top-[-0.8rem] bg-yellow-400 text-white shadow-md text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
             ${stack.map(card => `
               <div class="w-16 h-24 bg-white rounded-lg border border-gray-200 flex items-center justify-center text-2xl font-bold ${getTextColor(card.suit)}">
                 ${card.value}${suitEmoji[card.suit]}
