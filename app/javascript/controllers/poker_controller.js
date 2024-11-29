@@ -76,6 +76,11 @@ export default class extends Controller {
 
     const counts = Object.values(valueCounts).sort((a, b) => b - a);
     const isFlush = cards.every(card => card.suit === cards[0].suit);
+    const valueMap = {
+      'A': 'Ace', 'K': 'King', 'Q': 'Queen', 'J': 'Jack',
+      '10': 'Ten', '9': 'Nine', '8': 'Eight', '7': 'Seven',
+      '6': 'Six', '5': 'Five', '4': 'Four', '3': 'Three', '2': 'Two'
+    };
     
     // Check for straight
     const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
@@ -97,14 +102,10 @@ export default class extends Controller {
     if (counts[0] === 2 && counts[1] === 2) return "Two Pair";
     if (counts[0] === 2) {
       const pairValue = Object.entries(valueCounts).find(([_, count]) => count === 2)[0];
-      return `Pair of ${pairValue}s`;
+      const pairCardName = valueMap[pairValue] || pairValue;
+      return `Pair of ${pairCardName}s`;
     }
     const highCard = cardValues[cardValues.length - 1];
-    const valueMap = {
-      'A': 'Ace', 'K': 'King', 'Q': 'Queen', 'J': 'Jack',
-      '10': 'Ten', '9': 'Nine', '8': 'Eight', '7': 'Seven',
-      '6': 'Six', '5': 'Five', '4': 'Four', '3': 'Three', '2': 'Two'
-    };
     const highCardValue = valueMap[values[highCard]] || values[highCard];
     return `${highCardValue} High`;
   }
