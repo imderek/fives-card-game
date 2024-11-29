@@ -97,7 +97,8 @@ export default class extends Controller {
     if (isStraight) return "Straight";
     if (counts[0] === 3) {
       const tripValue = Object.entries(valueCounts).find(([_, count]) => count === 3)[0];
-      return `Trip ${tripValue}s`;
+      const tripCardName = valueMap[tripValue] || tripValue;
+      return `Trip ${tripCardName}s`;
     }
     if (counts[0] === 2 && counts[1] === 2) return "Two Pair";
     if (counts[0] === 2) {
