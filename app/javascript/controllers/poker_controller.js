@@ -123,18 +123,18 @@ export default class extends Controller {
         ${this.boardState.map((stack, index) => {
           const handType = stack.length === 5 ? this.evaluateHand(stack) : null;
           return `
-          <div class="relative flex gap-2 flex-col items-center justify-center border-2 border-dashed border-white/30 rounded-lg px-4 py-2"
+          <div class="hover:bg-green-900 cursor-pointer transition-all duration-200 relative flex gap-2 flex-col items-center justify-center border-2 border-dashed border-white/30 rounded-lg px-4 py-2"
                data-action="click->poker#playCard" 
                data-poker-stack-param="${index}">
+               ${handType ? `<div class="bg-yellow-400 text-white shadow-md text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
                ${stack.map(card => `
                <div class="w-16 h-24 bg-white rounded-lg border border-gray-200 flex items-center justify-center text-2xl font-bold ${getTextColor(card.suit)}">
                ${card.value}${suitEmoji[card.suit]}
                </div>
                `).join('')}
                ${Array(5 - stack.length).fill(`
-               <div class="hover:bg-green-600 cursor-pointer transition-all duration-200 w-16 h-24 bg-white/10 rounded-lg border border-white/20"></div>
+               <div class="transition-all duration-200 w-16 h-24 bg-white/10 rounded-lg border border-white/20"></div>
                `).join('')}
-               ${handType ? `<div class="bg-white/20 text-white shadow-md text-sm font-medium px-2.5 py-2 rounded-lg">${handType}</div>` : ''}
           </div>
         `}).join('')}
       </div>
