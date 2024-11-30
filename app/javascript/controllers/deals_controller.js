@@ -31,8 +31,9 @@ export default class extends Controller {
     }
   }
 
-  closeDrawer() {
-    // Hide the drawer programmatically
-    this.drawer.hide();
-  }
+  // closeDrawer() {
+  //   console.log("closeDrawer");
+  //   // Hide the drawer programmatically
+  //   this.drawer.hide();
+  // }
 }
