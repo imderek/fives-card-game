@@ -13,4 +13,4 @@ bundle exec rails assets:precompile
 # Build Tailwind CSS
 bundle exec rails tailwindcss:build
 
-bundle exec rails db:migrate
+# bundle exec rails db:migrate
