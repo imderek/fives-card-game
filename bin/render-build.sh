@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit
 
+node --version
 bundle install
 
 # Clean up any previous builds
