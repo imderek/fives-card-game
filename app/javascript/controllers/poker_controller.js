@@ -121,7 +121,7 @@ export default class extends Controller {
     const getTextColor = suit => ['hearts', 'diamonds'].includes(suit) ? 'text-red-600' : 'text-black'
 
     this.boardTarget.innerHTML = `
-      <div class="grid grid-cols-4 grid-rows-2 gap-8 p-16 h-full w-full">
+      <div class="grid grid-cols-4 grid-rows-2 gap-4 md:gap-8 p-8 md:p-16 md:h-full w-full">
         ${this.boardState.map((stack, index) => {
           const handType = stack.length === 5 ? this.evaluateHand(stack) : null;
           return `
@@ -130,12 +130,12 @@ export default class extends Controller {
                data-poker-stack-param="${index}">
                ${handType ? `<div class="bg-yellow-400 text-white shadow-md text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
                ${stack.map(card => `
-               <div class="w-16 h-24 bg-white rounded-lg border border-gray-200 flex items-center justify-center text-2xl font-bold ${getTextColor(card.suit)}">
+               <div class="w-12 md:w-16 h-12 md:h-24 bg-white rounded-lg border border-gray-200 flex items-center justify-center text-2xl font-bold ${getTextColor(card.suit)}">
                ${card.value}${suitEmoji[card.suit]}
                </div>
                `).join('')}
                ${Array(5 - stack.length).fill(`
-               <div class="transition-all duration-200 w-16 h-24 bg-white/10 rounded-lg border border-white/20"></div>
+               <div class="transition-all duration-200 w-12 md:w-16 h-12 md:h-24 bg-white/10 rounded-lg border border-white/20"></div>
                `).join('')}
           </div>
         `}).join('')}
@@ -178,7 +178,7 @@ export default class extends Controller {
     this.cardsTarget.innerHTML = `
       <div class="text-center flex flex-col gap-12">
         <div>
-          <h1 class="mb-12 text-white text-2xl">My Cards</h1>
+          <h1 class="hidden mb-10 text-white text-2xl">My Cards</h1>
           <div class="flex -space-x-12 items-center justify-center">
             ${this.player1Cards.map((card, index) => {
               const totalCards = this.player1Cards.length;
@@ -187,8 +187,6 @@ export default class extends Controller {
               const yOffset = -20 * (1 - normalizedAngle * normalizedAngle);
               const xOffset = -angle * 0.5;
               const isSelected = index === this.selectedCardIndex;
-              // return `
-              // <div class="w-24 h-32 bg-white rounded-lg shadow-md relative ${getTextColor(card.suit)} cursor-pointer transition-transform ${isSelected ? 'shadow-[0_0_60px_-15px_rgba(0,0,0,0.75)] shadow-yellow-300 ring-4 ring-yellow-300 transform -translate-y-6' : ''}"
               return `
               <div class="w-24 h-32 bg-white rounded-lg relative ${getTextColor(card.suit)} cursor-pointer transition-transform ${isSelected ? 'shadow-lg ring-4 ring-yellow-400 transform -translate-y-6' : 'shadow-md'}"
                    data-action="click->poker#selectCard"
