@@ -121,7 +121,7 @@ export default class extends Controller {
     const getTextColor = suit => ['hearts', 'diamonds'].includes(suit) ? 'text-red-600' : 'text-black'
 
     this.boardTarget.innerHTML = `
-      <div class="grid grid-cols-4 grid-rows-2 gap-4 md:gap-8 p-8 md:p-16 md:h-full w-full">
+      <div class="grid grid-cols-4 grid-rows-2 gap-3 md:gap-8 p-4 md:p-16 md:h-full w-full">
         ${this.boardState.map((stack, index) => {
           const handType = stack.length === 5 ? this.evaluateHand(stack) : null;
           return `
