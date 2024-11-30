@@ -5,7 +5,6 @@ node --version
 bundle install
 
 # Clean up any previous builds
-rm -rf app/assets/builds/*
 bundle exec rails assets:clobber
 
 # Build Tailwind CSS
