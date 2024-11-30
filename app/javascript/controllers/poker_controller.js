@@ -199,7 +199,7 @@ export default class extends Controller {
             `}).join('')}
           </div>
         </div>
-        <div>
+        <div class="hidden md:block">
           <h1 class="mb-12 text-white text-2xl">Opponent</h1>
           <div class="flex -space-x-12 items-center justify-center">
             ${this.player2Cards.map((card, index) => {
