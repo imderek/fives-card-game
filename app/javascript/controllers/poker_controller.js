@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     // Initialize board state
-    this.boardState = Array(8).fill().map(() => [])
+    this.boardState = Array(6).fill().map(() => [])
     this.selectedCardIndex = null
     this.dealCards()
     this.renderBoard()
@@ -40,7 +40,7 @@ export default class extends Controller {
 
   drawCard() {
     if (this.deck.length <= 1) return // No more cards in stack
-    if (this.player1Cards.length >= 8) return // Can't hold more than 8 cards
+    // if (this.player1Cards.length >= 8) return // Can't hold more than 8 cards
     
     const card = this.deck.pop()
     this.player1Cards.push(card)
@@ -136,21 +136,21 @@ export default class extends Controller {
     const getTextColor = suit => ['hearts', 'diamonds'].includes(suit) ? 'text-red-600' : 'text-black'
 
     this.boardTarget.innerHTML = `
-      <div class="grid grid-cols-4 grid-rows-2 gap-3 md:gap-8 p-4 md:p-16 md:h-full w-full items-start">
+      <div class="grid grid-cols-3 grid-rows-2 gap-6 md:gap-8 py-4 p-6 md:p-16 md:h-full w-full justify-center items-start">
         ${this.boardState.map((stack, index) => {
           const handType = stack.length === 5 ? this.evaluateHand(stack) : null;
           return `
-          <div class="hover:bg-green-900 cursor-pointer transition-all duration-200 relative flex gap-2 flex-col items-start justify-center border-2 border-dashed border-white/30 rounded-lg px-4 py-2"
+          <div class="hover:bg-green-900 cursor-pointer transition-all duration-200 relative flex gap-2 flex-col items-start justify-center border border-white/30 rounded-lg px-4 py-2"
                data-action="click->poker#playCard" 
                data-poker-stack-param="${index}">
-               ${handType ? `<div class="bg-yellow-400 text-white shadow-md text-xs md:text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
+               ${handType ? `<div class="bg-yellow-400 text-white shadow-md text-xs text-center md:text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
                ${stack.map(card => `
-               <div class="w-12 md:w-16 h-12 md:h-24 bg-white rounded-lg border border-gray-200 flex items-center justify-center text-2xl font-bold ${getTextColor(card.suit)}">
+               <div class="mx-auto w-12 md:w-16 h-12 md:h-24 bg-white rounded-lg border border-gray-200 flex items-center justify-center text-xl md:text-2xl font-bold ${getTextColor(card.suit)}">
                ${card.value}${suitEmoji[card.suit]}
                </div>
                `).join('')}
                ${Array(5 - stack.length).fill(`
-               <div class="transition-all duration-200 w-12 md:w-16 h-12 md:h-24 bg-white/10 rounded-lg border border-white/20"></div>
+               <div class="mx-auto transition-all duration-200 w-12 md:w-16 h-12 md:h-24 bg-white/10 rounded-lg border border-white/20"></div>
                `).join('')}
           </div>
         `}).join('')}
