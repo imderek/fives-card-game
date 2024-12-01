@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="poker"
 export default class extends Controller {
-  static targets = ['cards', 'stackCount', 'board']
+  static targets = ['cards', 'stackCount', 'board', 'drawButton']
 
   connect() {
     // Initialize board state
@@ -40,11 +40,26 @@ export default class extends Controller {
 
   drawCard() {
     if (this.deck.length <= 1) return // No more cards in stack
+    if (this.player1Cards.length >= 8) return // Can't hold more than 8 cards
     
     const card = this.deck.pop()
     this.player1Cards.push(card)
     this.updateStackCount()
     this.renderCards()
+
+    // Force removal of hover state by cloning and replacing the button on mobile only
+    if (window.innerWidth < 768) { // 768px is standard md breakpoint
+      const drawButton = this.drawButtonTarget
+      const clone = drawButton.cloneNode(true)
+      // Re-add the Stimulus data attributes and event listeners
+      clone.setAttribute('data-poker-target', 'drawButton')
+      clone.setAttribute('data-action', 'poker#drawCard')
+      drawButton.classList.add('bg-green-800')
+      // Small delay to ensure active state is visible
+      setTimeout(() => {
+        drawButton.parentNode.replaceChild(clone, drawButton)
+      }, 150)
+    }
   }
 
   dealCards() {
