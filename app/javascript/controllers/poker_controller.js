@@ -48,18 +48,18 @@ export default class extends Controller {
     this.renderCards()
 
     // Force removal of hover state by cloning and replacing the button on mobile only
-    if (window.innerWidth < 768) { // 768px is standard md breakpoint
-      const drawButton = this.drawButtonTarget
-      const clone = drawButton.cloneNode(true)
-      // Re-add the Stimulus data attributes and event listeners
-      clone.setAttribute('data-poker-target', 'drawButton')
-      clone.setAttribute('data-action', 'poker#drawCard')
-      drawButton.classList.add('bg-green-800')
-      // Small delay to ensure active state is visible
-      setTimeout(() => {
-        drawButton.parentNode.replaceChild(clone, drawButton)
-      }, 150)
-    }
+    // if (window.innerWidth < 768) { // 768px is standard md breakpoint
+    //   const drawButton = this.drawButtonTarget
+    //   const clone = drawButton.cloneNode(true)
+    //   // Re-add the Stimulus data attributes and event listeners
+    //   clone.setAttribute('data-poker-target', 'drawButton')
+    //   clone.setAttribute('data-action', 'poker#drawCard')
+    //   drawButton.classList.add('bg-green-800')
+    //   // Small delay to ensure active state is visible
+    //   setTimeout(() => {
+    //     drawButton.parentNode.replaceChild(clone, drawButton)
+    //   }, 150)
+    // }
   }
 
   dealCards() {
