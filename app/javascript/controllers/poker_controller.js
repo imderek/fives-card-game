@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     // Initialize board state
-    this.boardState = Array(6).fill().map(() => [])
+    this.boardState = Array(8).fill().map(() => [])
     this.selectedCardIndex = null
     this.dealCards()
     this.renderBoard()
@@ -105,7 +105,8 @@ export default class extends Controller {
     if (isFlush && isStraight) return "Straight Flush";
     if (counts[0] === 4) {
       const quadValue = Object.entries(valueCounts).find(([_, count]) => count === 4)[0];
-      return `Quad ${quadValue}s`;
+      const quadCardName = valueMap[quadValue] || quadValue;
+      return `Quad ${quadCardName}s`;
     }
     if (counts[0] === 3 && counts[1] === 2) return "Full House";
     if (isFlush) return "Flush";
@@ -136,11 +137,11 @@ export default class extends Controller {
     const getTextColor = suit => ['hearts', 'diamonds'].includes(suit) ? 'text-red-600' : 'text-black'
 
     this.boardTarget.innerHTML = `
-      <div class="grid grid-cols-3 grid-rows-2 gap-6 md:gap-8 py-4 p-6 md:p-16 w-full justify-center">
+      <div class="grid grid-cols-4 grid-rows-2 gap-2 md:gap-8 py-4 p-6 md:p-16 w-full justify-center">
         ${this.boardState.map((stack, index) => {
           const handType = stack.length === 5 ? this.evaluateHand(stack) : null;
           return `
-          <div class="hover:bg-green-900 cursor-pointer transition-all duration-200 relative flex gap-1 flex-col items-start justify-center border border-white/30 rounded-lg px-4 py-2"
+          <div class="py-2 hover:bg-green-900 cursor-pointer transition-all duration-200 relative flex gap-1 flex-col items-start justify-center border border-white/30 rounded-lg"
                data-action="click->poker#playCard" 
                data-poker-stack-param="${index}">
                ${handType ? `<div class="mx-auto bg-yellow-400 text-white shadow-md text-xs text-center md:text-sm font-medium px-2.5 py-0.5 rounded-lg">${handType}</div>` : ''}
@@ -196,18 +197,31 @@ export default class extends Controller {
           <h1 class="hidden mb-10 text-white text-2xl">My Cards</h1>
           <div class="flex -space-x-12 items-center justify-center">
             ${this.player1Cards.map((card, index) => {
+              // Get total number of cards in player's hand
               const totalCards = this.player1Cards.length;
-              const angle = -15 + (30 / (totalCards - 1)) * index;
-              const normalizedAngle = angle / 15;
+
+              // Calculate rotation angle between -15 and +15 degrees based on card position
+              const angle = -25 + (50 / (totalCards - 1)) * index;
+
+              // Normalize angle to value between -1 and 1 for offset calculations
+              const normalizedAngle = angle / 25;
+
+              // Calculate vertical offset using quadratic function
+              // Cards rise more in the middle of the hand (-20px max)
               const yOffset = -20 * (1 - normalizedAngle * normalizedAngle);
-              const xOffset = -angle * 0.5;
+
+              // Calculate slight horizontal offset to bring cards closer together
+              // Multiplier of 0.05 keeps cards from spreading too far
+              const xOffset = -angle * 0.25;
+
+              // Track if this card is currently selected
               const isSelected = index === this.selectedCardIndex;
               return `
-              <div class="w-24 h-32 bg-white rounded-lg relative ${getTextColor(card.suit)} cursor-pointer transition-transform ${isSelected ? 'shadow-lg ring-4 ring-yellow-400 transform -translate-y-6' : 'shadow-md'}"
+              <div class="w-20 h-28 bg-white rounded-lg relative ${getTextColor(card.suit)} cursor-pointer transition-transform ${isSelected ? 'shadow-lg ring-4 ring-yellow-400 transform -translate-y-6' : 'shadow-md'}"
                    data-action="click->poker#selectCard"
                    data-poker-card-index-param="${index}"
                    style="z-index: ${index}; transform-origin: bottom center; transform: ${isSelected ? 'translateY(-0.75rem)' : ''} rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)">
-                <div class="absolute top-2 left-2 text-2xl">${card.value}${suitEmoji[card.suit]}</div>
+                <div class="absolute top-2 left-2 text-xl">${card.value}${suitEmoji[card.suit]}</div>
               </div>
             `}).join('')}
           </div>
