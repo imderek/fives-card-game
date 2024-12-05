@@ -233,15 +233,15 @@ export default class extends Controller {
               // Get the total number of cards in player 2's hand
               const totalCards = this.player2Cards.length;
               // Calculate the rotation angle for each card, spreading them evenly between -15 and +15 degrees
-              const angle = -15 + (30 / (totalCards - 1)) * index;
+              const angle = -25 + (50 / (totalCards - 1)) * index;
               // Normalize the angle to a value between -1 and 1 for calculating vertical offset
-              const normalizedAngle = angle / 15;
+              const normalizedAngle = angle / 25;
               // Calculate vertical offset using quadratic function - cards rise more in the middle
               const yOffset = -20 * (1 - normalizedAngle * normalizedAngle);
               // Calculate horizontal offset to bring cards closer together
               const xOffset = -angle * 0.5; // Increased multiplier to bring cards more inward
               return `
-              <div class="w-24 h-32 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg shadow-md relative" style="z-index: ${index}; transform-origin: bottom center; transform: rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)">
+              <div class="w-20 h-28 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg shadow-md relative" style="z-index: ${index}; transform-origin: bottom center; transform: rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)">
               </div>
             `}).join('')}
           </div>
