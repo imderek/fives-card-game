@@ -1,0 +1,11 @@
+<div id="player-controls" class="flex flex-col items-center gap-2">
+  <% if game.current_turn == current_user.id %>
+    <%= form_with(url: draw_card_game_path(game), 
+                method: :post,
+                data: { turbo_stream: true }) do |f| %>
+      <%= f.submit "Draw Card", 
+                  class: "px-4 py-2 #{game.current_player_can_draw?(current_user.id) ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'bg-gray-400 cursor-not-allowed'} text-white rounded transition-colors",
+                  disabled: !game.current_player_can_draw?(current_user.id) %>
+    <% end %>
+  <% end %>
+</div> 

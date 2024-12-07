@@ -1,0 +1,19 @@
+<div id="game-state" class="flex flex-col items-center gap-8 p-4">
+  <div class="opponent-hand">
+    <% opponent_card_count = current_user.id == game.player1_id ? game.player2_hand.size : game.player1_hand.size %>
+    <%= render "games/card_back", count: opponent_card_count %>
+  </div>
+
+  <div class="board-cards flex gap-4 min-h-[96px]">
+    <% game.board_cards.each do |card| %>
+      <%= render "games/card", card: card, playable: false, game: game %>
+    <% end %>
+  </div>
+
+  <div class="player-hand flex gap-2">
+    <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
+    <% player_hand.each do |card| %>
+      <%= render "games/card", card: card, playable: game.current_turn == current_user.id, game: game %>
+    <% end %>
+  </div>
+</div> 

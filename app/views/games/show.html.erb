@@ -1,0 +1,17 @@
+<div class="game-container">
+  <%= turbo_stream_from "game_#{@game.id}" %>
+  
+  <div id="game_error" class="text-red-600 text-center mb-4"></div>
+  
+  <div>
+    <%= render "game_status", game: @game, current_user: current_user %>
+  </div>
+  
+  <div>
+    <%= render "game_state", game: @game, current_user: current_user %>
+  </div>
+
+  <div>
+    <%= render partial: "player_controls", locals: { game: @game, current_user: current_user } %>
+  </div>
+</div>

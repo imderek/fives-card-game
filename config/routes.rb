@@ -14,9 +14,16 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "dashboards#show"
+  root "games#index"
 
   namespace :api do
     get 'metrics/chart_data', to: 'metrics#chart_data'
+  end
+
+  resources :games do
+    member do
+      post :play_card
+      post :draw_card
+    end
   end
 end

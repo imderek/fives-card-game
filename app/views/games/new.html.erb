@@ -1,0 +1,37 @@
+<div class="max-w-2xl mx-auto my-8 p-8 bg-white rounded-lg shadow">
+  <h1 class="text-2xl font-bold text-center mb-8">Start New Game</h1>
+
+  <%= form_with(model: @game, local: true, class: "space-y-8") do |f| %>
+    <div class="game-type-selection">
+      <h2 class="text-lg font-semibold mb-4">Choose Game Type</h2>
+      <div class="flex justify-center gap-8">
+        <div class="flex items-center gap-2">
+          <%= f.radio_button :game_type, :bot, class: "form-radio" %>
+          <%= f.label :game_type_bot, "Play against Bot", class: "text-gray-700" %>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <%= f.radio_button :game_type, :pvp, class: "form-radio" %>
+          <%= f.label :game_type_pvp, "Play against Player", class: "text-gray-700" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="player-selection" data-controller="player-selection">
+      <div class="player2-field" data-game-type="pvp">
+        <%= f.label :player2_id, "Select Opponent", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.collection_select :player2_id, 
+                              User.where.not(id: current_user.id), 
+                              :id, 
+                              :email, 
+                              { prompt: "Choose your opponent" },
+                              { class: "w-full p-2 border border-gray-300 rounded-md" } %>
+      </div>
+    </div>
+
+    <div class="flex justify-center gap-4">
+      <%= f.submit "Start Game", class: "px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+      <%= link_to "Cancel", games_path, class: "px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700" %>
+    </div>
+  <% end %>
+</div> 

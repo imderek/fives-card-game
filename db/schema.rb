@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_22_183105) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_05_183106) do
   create_table "contact_deals", force: :cascade do |t|
     t.integer "contact_id", null: false
     t.integer "deal_id", null: false
@@ -45,6 +45,24 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_183105) do
     t.integer "owner_id"
     t.index ["organization_id"], name: "index_deals_on_organization_id"
     t.index ["owner_id"], name: "index_deals_on_owner_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.integer "player1_id", null: false
+    t.integer "player2_id"
+    t.integer "status", default: 0
+    t.integer "game_type", default: 0
+    t.text "player1_hand"
+    t.text "player2_hand"
+    t.text "board_cards"
+    t.text "deck"
+    t.bigint "current_turn"
+    t.bigint "winner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "turn_phase", default: 0
+    t.index ["player1_id"], name: "index_games_on_player1_id"
+    t.index ["player2_id"], name: "index_games_on_player2_id"
   end
 
   create_table "metrics", force: :cascade do |t|
@@ -127,6 +145,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_183105) do
   add_foreign_key "contacts", "organizations"
   add_foreign_key "deals", "organizations"
   add_foreign_key "deals", "users", column: "owner_id"
+  add_foreign_key "games", "users", column: "player1_id"
+  add_foreign_key "games", "users", column: "player2_id"
   add_foreign_key "metrics", "organizations"
   add_foreign_key "organization_memberships", "organizations"
   add_foreign_key "organization_memberships", "users"
