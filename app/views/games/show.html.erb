@@ -1,17 +1,17 @@
-<div class="game-container">
+<div id="game-container" data-game-id="<%= @game.id %>" class="container mx-auto px-4 py-8">
   <%= turbo_stream_from "game_#{@game.id}" %>
   
   <div id="game_error" class="text-red-600 text-center mb-4"></div>
   
-  <div>
+  <div id="game_status">
     <%= render "game_status", game: @game, current_user: current_user %>
   </div>
   
-  <div>
+  <div id="game_state">
     <%= render "game_state", game: @game, current_user: current_user %>
   </div>
 
-  <div>
+  <div id="player_controls">
     <%= render partial: "player_controls", locals: { game: @game, current_user: current_user } %>
   </div>
 </div>

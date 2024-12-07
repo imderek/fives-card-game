@@ -51,35 +51,34 @@ class Game < ApplicationRecord
   end
   
   def broadcast_game_state
-    # Temporarily comment out broadcasts to test direct Turbo Stream responses
-    # Rails.logger.debug "Broadcasting game state for game #{id}"
-    # [player1_id, player2_id].compact.each do |player_id|
-    #   Rails.logger.debug "Broadcasting to player #{player_id}"
-    #   
-    #   current_user = User.find(player_id)
-    #   
-    #   broadcast_replace_to(
-    #     "game_#{id}",
-    #     target: "game_state",
-    #     partial: "games/game_state",
-    #     locals: { game: self, current_user: current_user }
-    #   )
-    #
-    #   broadcast_replace_to(
-    #     "game_#{id}",
-    #     target: "game_status",
-    #     partial: "games/game_status",
-    #     locals: { game: self, current_user: current_user }
-    #   )
-    #
-    #   broadcast_replace_to(
-    #     "game_#{id}",
-    #     target: "player_controls",
-    #     partial: "games/player_controls",
-    #     locals: { game: self, current_user: current_user }
-    #   )
-    #   
-    #   Rails.logger.debug "Finished broadcasting to player #{player_id}"
-    # end
+    Rails.logger.debug "Broadcasting game state for game #{id}"
+    [player1_id, player2_id].compact.each do |player_id|
+      Rails.logger.debug "Broadcasting to player #{player_id}"
+      
+      current_user = User.find(player_id)
+      
+      broadcast_replace_to(
+        "game_#{id}",
+        target: "game-state",
+        partial: "games/game_state",
+        locals: { game: self, current_user: current_user }
+      )
+
+      broadcast_replace_to(
+        "game_#{id}",
+        target: "game-status",
+        partial: "games/game_status",
+        locals: { game: self, current_user: current_user }
+      )
+
+      broadcast_replace_to(
+        "game_#{id}",
+        target: "player-controls",
+        partial: "games/player_controls",
+        locals: { game: self, current_user: current_user }
+      )
+      
+      Rails.logger.debug "Finished broadcasting to player #{player_id}"
+    end
   end
 end 
