@@ -2,6 +2,7 @@ class GamesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_game, except: [:index, :new, :create]
   skip_before_action :verify_authenticity_token, if: -> { request.format.turbo_stream? }
+  include ActionView::RecordIdentifier
 
   def index
     @games = Game.where(player1: current_user)
@@ -21,9 +22,16 @@ class GamesController < ApplicationController
     @game.player1 = current_user
 
     if @game.save
+      Turbo::StreamsChannel.broadcast_append_to(
+        "games",
+        target: "games_list",
+        partial: "games/game_broadcast",
+        locals: { game: @game }
+      )
+      
       redirect_to @game, notice: 'Game was successfully created.'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -96,6 +104,19 @@ class GamesController < ApplicationController
   rescue => e
     Rails.logger.error "Error in draw_card: #{e.message}\n#{e.backtrace.join("\n")}"
     render turbo_stream: turbo_stream.update("game_error", e.message)
+  end
+
+  def destroy
+    @game = Game.find(params[:id])
+    
+    if @game.destroy
+      Turbo::StreamsChannel.broadcast_remove_to(
+        "games",
+        target: dom_id(@game)
+      )
+      
+      redirect_to games_path
+    end
   end
 
   private

@@ -1,27 +1,11 @@
+<%= turbo_stream_from "games" %>
+
 <div class="max-w-7xl mx-auto p-6">
   <h1 class="text-3xl font-bold mb-8">Your Games</h1>
 
-  <div class="grid gap-6 mb-8">
+  <div id="games_list" class="grid gap-6 mb-8">
     <% @games.each do |game| %>
-      <div class="bg-white p-6 rounded-lg shadow">
-        <% opponent = game.player1_id == current_user.id ? game.player2 : game.player1 %>
-        <div class="flex justify-between items-center">
-          <div class="space-y-1">
-            <span class="inline-block px-2 py-1 text-sm font-semibold bg-blue-100 text-blue-800 rounded">
-              <%= game.game_type.upcase %>
-            </span>
-            <p class="text-gray-600">
-              vs <%= game.bot? ? "Bot" : opponent&.email %>
-            </p>
-            <span class="text-sm text-gray-500">
-              Status: <%= game.status %>
-            </span>
-          </div>
-          <%= link_to "Continue Game", 
-                      game_path(game), 
-                      class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" %>
-        </div>
-      </div>
+      <%= render "games/game", game: game %>
     <% end %>
   </div>
 
