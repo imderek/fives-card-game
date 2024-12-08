@@ -4,7 +4,7 @@
                 method: :post,
                 data: { turbo_stream: true }) do |f| %>
       <%= f.submit "Draw Card", 
-                  class: "px-4 py-2 #{game.current_player_can_draw?(current_user.id) ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'bg-gray-400 cursor-not-allowed'} text-white rounded transition-colors",
+                  class: "px-4 py-2 #{game.current_player_can_draw?(current_user.id) ? 'border border-white text-white hover:bg-white/10 cursor-pointer' : 'hidden bg-gray-400 cursor-not-allowed'} text-white rounded transition-colors",
                   disabled: !game.current_player_can_draw?(current_user.id) %>
     <% end %>
   <% end %>

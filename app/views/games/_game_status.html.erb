@@ -1,6 +1,6 @@
 <div id="game-status" class="text-center mb-4">
-  <p class="text-sm text-gray-600">
-    Turn: <%= game.current_turn == current_user.id ? "Your" : "Opponent's" %> |
-    Phase: <%= game.turn_phase.titleize %>
+  <p class="text-gray-600 dark:text-white">
+    <span class="dark:text-white/70"><%= game.current_turn == current_user.id ? "Your" : "Opponent's" %> Turn:</span>
+    <%= game.turn_phase.titleize %>
   </p>
 </div> 

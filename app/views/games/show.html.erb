@@ -7,7 +7,7 @@
     <%= render "game_status", game: @game, current_user: current_user %>
   </div>
   
-  <div id="game_state">
+  <div id="game_state" class="mb-4">
     <%= render "game_state", game: @game, current_user: current_user %>
   </div>
 
@@ -16,6 +16,6 @@
   </div>
 
   <div class="flex justify-center mt-16">
-    <%= link_to "Back to Games", games_path, class: "px-4 py-2 text-gray-500 hover:text-gray-700" %>
+    <%= link_to "Back to Home", games_path, class: "px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70" %>
   </div>
 </div>

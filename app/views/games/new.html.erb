@@ -1,5 +1,5 @@
-<div class="max-w-7xl mx-auto my-8 p-8">
-  <div class="p-6 bg-white rounded-lg shadow">
+<div class="flex justify-center mx-auto my-8 p-8">
+  <div class="p-12 bg-white rounded-lg shadow-xl">
     <h1 class="text-2xl font-bold text-center mb-8">Ready?</h1>
 
     <%= form_with(model: @game, local: true, class: "space-y-8") do |f| %>
@@ -32,7 +32,7 @@
 
       <div class="flex justify-center gap-4">
         <%= f.submit "Start Game", class: "cursor-pointer px-6 py-2 bg-primary-700 text-white rounded-md hover:bg-primary-800" %>
-        <%= link_to "Cancel", games_path, class: "px-6 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500" %>
+        <%= link_to "Cancel", games_path, class: "px-6 py-2 bg-white text-gray-700 rounded-md hover:text-gray-500 border border-gray-500" %>
       </div>
     <% end %>
   </div>
