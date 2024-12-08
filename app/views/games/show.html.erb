@@ -14,4 +14,8 @@
   <div id="player_controls">
     <%= render partial: "player_controls", locals: { game: @game, current_user: current_user } %>
   </div>
+
+  <div class="flex justify-center mt-16">
+    <%= link_to "Back to Games", games_path, class: "px-4 py-2 text-gray-500 hover:bg-gray-700" %>
+  </div>
 </div>
