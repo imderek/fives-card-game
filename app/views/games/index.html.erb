@@ -1,6 +1,11 @@
 <%= turbo_stream_from "games" %>
 
 <div class="max-w-7xl mx-auto p-6">
+  <div class="flex justify-end mb-4">
+    <%= button_to "Sign Out", destroy_user_session_path, 
+        method: :delete,
+        class: "px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700" %>
+  </div>
   <h1 class="text-3xl font-bold mb-8">Your Games</h1>
 
   <div id="games_list" class="grid gap-6 mb-8">

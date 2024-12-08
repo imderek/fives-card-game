@@ -5,8 +5,7 @@ class GamesController < ApplicationController
   include ActionView::RecordIdentifier
 
   def index
-    @games = Game.where(player1: current_user)
-                 .or(Game.where(player2: current_user))
+    @games = Game.where(player1: current_user).where('created_at >= ?', 1.hour.ago)
   end
 
   def show

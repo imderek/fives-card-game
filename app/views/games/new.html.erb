@@ -1,8 +1,8 @@
 <div class="max-w-2xl mx-auto my-8 p-8 bg-white rounded-lg shadow">
-  <h1 class="text-2xl font-bold text-center mb-8">Start New Game</h1>
+  <h1 class="text-2xl font-bold text-center mb-8">Ready?</h1>
 
   <%= form_with(model: @game, local: true, class: "space-y-8") do |f| %>
-    <div class="game-type-selection">
+    <div class="hidden game-type-selection">
       <h2 class="text-lg font-semibold mb-4">Choose Game Type</h2>
       <div class="flex justify-center gap-8">
         <div class="flex items-center gap-2">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="player-selection" data-controller="player-selection">
+    <div class="hidden player-selection" data-controller="player-selection">
       <div class="player2-field" data-game-type="pvp">
         <%= f.label :player2_id, "Select Opponent", class: "block text-sm font-medium text-gray-700 mb-2" %>
         <%= f.collection_select :player2_id, 
