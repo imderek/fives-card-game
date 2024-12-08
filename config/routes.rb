@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
   resources :deals
-  get "home/show"
+  # get "home/show"
   devise_for :users
   get "dashboard", to: "dashboards#show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
