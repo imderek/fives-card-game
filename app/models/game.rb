@@ -61,7 +61,8 @@ class Game < ApplicationRecord
   end
   
   def valid_move?(card)
-    return false unless card[:column].between?(0, 3)
+    # Convert column to integer if it's a string
+    column_index = card[:column].to_i
     
     # Get current board state
     board_state = GameBoardSerializer.new(self).as_json
@@ -69,9 +70,11 @@ class Game < ApplicationRecord
     # Determine which player's columns to check
     player_key = card[:player_id] == player1_id ? :player_1 : :player_2
     
-    # Check if the column already has 5 cards
-    column_cards = board_state[player_key][:columns][card[:column]][:cards]
-    column_cards.length < 5
+    # Get the current number of cards in the target column
+    current_column_cards = board_state[player_key][:columns][column_index][:cards].size
+    
+    # Check if adding a card would exceed the maximum (5 cards)
+    current_column_cards < 5
   end
   
   private

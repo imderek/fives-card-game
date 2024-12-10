@@ -38,7 +38,8 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         if current_user.id == @game.current_turn && @game.turn_phase == "play_card"
-          card = JSON.parse(params[:card]).symbolize_keys
+          # No need to parse JSON since Rails already did it
+          card = params[:card].to_unsafe_h.symbolize_keys
           card[:player_id] = current_user.id
           
           if @game.valid_move?(card)
@@ -53,7 +54,7 @@ class GamesController < ApplicationController
             player_key = current_user.id == @game.player1_id ? :player_1 : :player_2
             
             # Add card to the appropriate column
-            board_state[player_key][:columns][card[:column]][:cards] << "#{card[:value]}#{card[:suit].first.upcase}"
+            board_state[player_key][:columns][card[:column].to_i][:cards] << "#{card[:value]}#{card[:suit].first.upcase}"
             
             # Update the game's board_cards with the new state
             @game.board_cards = []

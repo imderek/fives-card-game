@@ -17,9 +17,12 @@
     <!-- Player's board area -->
     <div class="player-board grid grid-cols-4 gap-2">
       <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
-      <% player_data[:columns].each do |column| %>
+      <% player_data[:columns].each_with_index do |column, index| %>
         <!-- Column -->
-        <div class="min-w-14 min-h-28 p-2 relative column bg-primary-800 rounded-xl">
+        <div class="min-w-14 min-h-28 p-2 relative column bg-primary-800 rounded-xl" 
+             data-controller="card"
+             data-action="click->card#playColumn"
+             data-column-index="<%= index %>">
           <!-- Hand name -->
           <% if column[:hand_name].present? %>
             <div class="text-xs mb-1 text-center text-white/70 relative top-[-0.1rem]"><%= column[:hand_name] %></div>
