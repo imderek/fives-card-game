@@ -12,6 +12,11 @@
       <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
       <% opponent_data[:columns].each do |column| %>
         <div class="column flex flex-col gap-2 border border-dashed border-gray-300 p-2">
+          <% if column[:hand_name].present? %>
+            <div class="text-sm font-semibold text-gray-700">
+              <%= column[:hand_name] %>
+            </div>
+          <% end %>
           <% column[:cards].each do |card_code| %>
             <%= render partial: "games/card", locals: { 
               card: game.find_card(card_code), 
@@ -29,6 +34,11 @@
       <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
       <% player_data[:columns].each do |column| %>
         <div class="column flex flex-col gap-2 border border-dashed border-gray-300 p-2">
+          <% if column[:hand_name].present? %>
+            <div class="text-sm font-semibold text-gray-700">
+              <%= column[:hand_name] %>
+            </div>
+          <% end %>
           <% column[:cards].each do |card_code| %>
             <%= render partial: "games/card", locals: { 
               card: game.find_card(card_code), 

@@ -60,6 +60,20 @@ class Game < ApplicationRecord
     }
   end
   
+  def valid_move?(card)
+    return false unless card[:column].between?(0, 3)
+    
+    # Get current board state
+    board_state = GameBoardSerializer.new(self).as_json
+    
+    # Determine which player's columns to check
+    player_key = card[:player_id] == player1_id ? :player_1 : :player_2
+    
+    # Check if the column already has 5 cards
+    column_cards = board_state[player_key][:columns][card[:column]][:cards]
+    column_cards.length < 5
+  end
+  
   private
   
   def setup_initial_game_state

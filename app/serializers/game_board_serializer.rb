@@ -1,4 +1,6 @@
 class GameBoardSerializer
+  include PokerHandDetector
+  
   def initialize(game)
     @game = game
   end
@@ -15,11 +17,13 @@ class GameBoardSerializer
   def serialize_player_columns(player_id)
     {
       columns: (0..3).map do |column|
+        cards = @game.board_cards_for_player(player_id, column).map { |card| 
+          "#{card[:value]}#{card[:suit].first.upcase}"
+        }
+        
         {
-          cards: @game.board_cards_for_player(player_id, column).map { |card| 
-            "#{card[:value]}#{card[:suit].first.upcase}"
-          },
-          hand_name: nil # You can add poker hand detection logic here later
+          cards: cards,
+          hand_name: detect_hand(cards)
         }
       end
     }

@@ -39,8 +39,9 @@ class GamesController < ApplicationController
       format.turbo_stream do
         if current_user.id == @game.current_turn && @game.turn_phase == "play_card"
           card = JSON.parse(params[:card]).symbolize_keys
+          card[:player_id] = current_user.id
           
-          if valid_move?(card)
+          if @game.valid_move?(card)
             # Remove card from player's hand
             current_hand = current_user.id == @game.player1_id ? :player1_hand : :player2_hand
             @game[current_hand] = @game[current_hand].reject { |c| c[:suit] == card[:suit] && c[:value] == card[:value] }
@@ -84,7 +85,7 @@ class GamesController < ApplicationController
               render turbo_stream: turbo_stream.update("game_error", "Failed to update game")
             end
           else
-            render turbo_stream: turbo_stream.update("game_error", "Invalid move")
+            render turbo_stream: turbo_stream.update("game_error", "Cannot add more than 5 cards to a column")
           end
         else
           render turbo_stream: turbo_stream.update("game_error", "Not your turn or wrong phase")
