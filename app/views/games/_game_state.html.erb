@@ -4,7 +4,7 @@
   <div class="player-hand flex gap-1">
     <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
     <% player_hand.each do |card| %>
-      <%= render partial: "games/card", locals: { card: card, current_user: current_user, playable: game.current_turn == current_user.id, game: game } %>
+      <%= render partial: "games/card", locals: { card: card, current_user: current_user, playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"), game: game } %>
     <% end %>
   </div>
 
