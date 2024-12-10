@@ -19,20 +19,22 @@
       <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
       <% player_data[:columns].each do |column| %>
         <!-- Column -->
-        <div class="min-w-14 min-h-28 p-2 column flex flex-col -space-y-10 md:-space-y-16 items-center bg-primary-800 rounded-xl">
+        <div class="min-w-14 min-h-28 p-2 relative column bg-primary-800 rounded-xl">
+          <!-- Hand name -->
           <% if column[:hand_name].present? %>
-            <div class="text-sm font-semibold text-gray-700">
-              <%= column[:hand_name] %>
-            </div>
+            <div class="text-xs mb-1 text-center text-white/70 relative top-[-0.1rem]"><%= column[:hand_name] %></div>
           <% end %>
-          <% column[:cards].each do |card_code| %>
-            <%= render partial: "games/card", locals: { 
-              card: game.find_card(card_code), 
-              current_user: current_user, 
-              playable: false, 
-              game: game 
-            } %>
-          <% end %>
+          <!-- Cards vertically stacked -->
+          <div class="flex flex-col -space-y-10 md:-space-y-16 items-center">
+            <% column[:cards].each do |card_code| %>
+              <%= render partial: "games/card", locals: { 
+                card: game.find_card(card_code), 
+                current_user: current_user, 
+                playable: false, 
+                game: game 
+              } %>
+            <% end %>
+          </div>
         </div>
       <% end %>
     </div>
