@@ -45,8 +45,13 @@ class GamesController < ApplicationController
             current_hand = current_user.id == @game.player1_id ? :player1_hand : :player2_hand
             @game[current_hand] = @game[current_hand].reject { |c| c[:suit] == card[:suit] && c[:value] == card[:value] }
             
-            # Add card to board
-            @game.board_cards = @game.board_cards + [card]
+            # Add card to board with player_id and column information
+            @game.board_cards = @game.board_cards + [{
+              suit: card[:suit],
+              value: card[:value],
+              player_id: current_user.id,
+              column: card[:column]
+            }]
 
             @game.turn_phase = :draw_card
             

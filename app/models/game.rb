@@ -29,13 +29,26 @@ class Game < ApplicationRecord
     save
   end
   
+  def board_cards_for_player(player_id, column)
+    board_cards.select do |card| 
+      if game_type == "bot"
+        # For bot games, nil player_id means bot's cards
+        (player_id.nil? && card[:player_id].nil?) || 
+        (!player_id.nil? && card[:player_id] == player_id)
+      else
+        card[:player_id] == player_id
+      end && 
+      card[:column] == column
+    end
+  end
+  
   private
   
   def setup_initial_game_state
     self.deck = generate_deck
     self.player1_hand = draw_initial_hand
     self.player2_hand = draw_initial_hand
-    self.board_cards = []
+    self.board_cards = [] # Each card will now need: { suit:, value:, player_id:, column: }
     self.current_turn = player1_id
     self.turn_phase = :play_card
   end
@@ -47,7 +60,7 @@ class Game < ApplicationRecord
   end
   
   def draw_initial_hand
-    deck.pop(7)
+    deck.pop(6)
   end
   
   def broadcast_game_state

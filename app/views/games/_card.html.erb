@@ -1,17 +1,28 @@
-<div class="relative <%= playable ? 'cursor-pointer' : '' %> w-16 h-24 bg-white rounded-lg border border-gray-200 shadow-sm transform hover:-translate-y-1 transition-transform">
+<div 
+  class="relative <%= playable ? 'cursor-pointer' : '' %> w-16 h-24 bg-white rounded-lg border border-gray-200 shadow-sm transform hover:-translate-y-1 transition-transform"
+  data-controller="card"
+  data-action="click->card#showColumnSelector"
+>
   <% if playable %>
-    <%= form_with(url: play_card_game_path(game), 
-                 method: :post, 
-                 class: "absolute inset-0",
-                 data: { turbo_stream: true }) do |f| %>
-      <%= f.hidden_field :card, value: card.to_json %>
-      <%= f.submit "Play Card", 
-                  class: "w-full h-full opacity-0 cursor-pointer",
-                  data: { 
-                    card_value: card[:value],
-                    card_suit: card[:suit]
-                  } %>
-    <% end %>
+    <div class="column-selector absolute inset-0 hidden" data-card-target="columnSelector">
+      <div class="grid grid-cols-4 h-full">
+        <% 4.times do |i| %>
+          <%= form_with(
+                url: play_card_game_path(game), 
+                method: :post, 
+                class: "h-full", 
+                data: { 
+                  turbo: true,
+                  action: "submit->card#submitForm"
+                }
+              ) do |f| %>
+            <% player_card = card.merge(column: i, player_id: current_user.id) %>
+            <%= f.hidden_field :card, value: player_card.to_json %>
+            <%= f.button "#{i + 1}", type: "submit", class: "w-full h-full p-4 bg-blue-500 bg-opacity-50 hover:bg-opacity-75 text-white" %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 
   <div class="w-full h-full flex flex-col items-center justify-between p-2">
