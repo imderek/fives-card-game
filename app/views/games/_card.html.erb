@@ -1,7 +1,7 @@
 <%= content_tag :div,
   class: "relative #{playable ? 'cursor-pointer' : ''} w-14 h-20 md:w-20 md:h-28 bg-white rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]",
   data: {
-    controller: "card",
+    controller: playable ? "card" : nil,
     card: card.merge(gameId: game.id).to_json,
     action: playable ? "click->card#selectCard" : nil,
     card_target: "cardElement"
