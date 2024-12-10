@@ -12,8 +12,7 @@
                 method: :post, 
                 class: "h-full", 
                 data: { 
-                  turbo: true,
-                  action: "submit->card#submitForm"
+                  turbo: true
                 }
               ) do |f| %>
             <% player_card = card.merge(column: i, player_id: current_user.id) %>

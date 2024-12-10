@@ -45,13 +45,32 @@ class GamesController < ApplicationController
             current_hand = current_user.id == @game.player1_id ? :player1_hand : :player2_hand
             @game[current_hand] = @game[current_hand].reject { |c| c[:suit] == card[:suit] && c[:value] == card[:value] }
             
-            # Add card to board with player_id and column information
-            @game.board_cards = @game.board_cards + [{
-              suit: card[:suit],
-              value: card[:value],
-              player_id: current_user.id,
-              column: card[:column]
-            }]
+            # Get current board state
+            board_state = GameBoardSerializer.new(@game).as_json
+            
+            # Determine which player's columns to update
+            player_key = current_user.id == @game.player1_id ? :player_1 : :player_2
+            
+            # Add card to the appropriate column
+            board_state[player_key][:columns][card[:column]][:cards] << "#{card[:value]}#{card[:suit].first.upcase}"
+            
+            # Update the game's board_cards with the new state
+            @game.board_cards = []
+            [:player_1, :player_2].each do |player_key|
+              player_id = player_key == :player_1 ? @game.player1_id : @game.player2_id
+              board_state[player_key][:columns].each_with_index do |column, column_index|
+                column[:cards].each do |card_code|
+                  value = card_code[0..-2]
+                  suit = card_code[-1].downcase
+                  @game.board_cards << {
+                    suit: suit,
+                    value: value,
+                    player_id: player_id,
+                    column: column_index
+                  }
+                end
+              end
+            end
 
             @game.turn_phase = :draw_card
             

@@ -23,5 +23,8 @@ module Elephnt
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Add the serializers path to autoload paths
+    config.autoload_paths += %W(#{config.root}/app/serializers)
   end
 end

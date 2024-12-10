@@ -42,6 +42,24 @@ class Game < ApplicationRecord
     end
   end
   
+  def find_card(card_code)
+    {
+      value: card_code[0..-2],
+      suit: card_code[-1].downcase
+    }
+  end
+  
+  def card_to_code(card)
+    "#{card[:value]}#{card[:suit].first.upcase}"
+  end
+  
+  def code_to_card(code)
+    {
+      value: code[0..-2],
+      suit: code[-1].downcase
+    }
+  end
+  
   private
   
   def setup_initial_game_state
