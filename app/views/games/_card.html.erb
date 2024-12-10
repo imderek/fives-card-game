@@ -3,27 +3,6 @@
   data-controller="card"
   data-action="click->card#showColumnSelector"
 >
-  <% if playable %>
-    <div class="column-selector absolute inset-0 hidden" data-card-target="columnSelector">
-      <div class="grid grid-cols-4 h-full">
-        <% 4.times do |i| %>
-          <%= form_with(
-                url: play_card_game_path(game), 
-                method: :post, 
-                class: "h-full", 
-                data: { 
-                  turbo: true
-                }
-              ) do |f| %>
-            <% player_card = card.merge(column: i, player_id: current_user.id) %>
-            <%= f.hidden_field :card, value: player_card.to_json %>
-            <%= f.button "#{i + 1}", type: "submit", class: "w-full h-full p-4 bg-blue-500 bg-opacity-50 hover:bg-opacity-75 text-white" %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-
   <div class="w-full h-full flex flex-col items-center justify-between p-2">
     <div class="text-<%= card[:suit].in?(['♥', '♦']) ? 'red' : 'black' %>-600 text-sm">
       <%= card[:value] %>
@@ -37,4 +16,24 @@
       <%= card[:value] %>
     </div>
   </div>
+  <% if playable %>
+    <div class="column-selector hidden" data-card-target="columnSelector">
+      <div class="flex flex-row h-full">
+        <% 4.times do |i| %>
+          <%= form_with(
+                url: play_card_game_path(game), 
+                method: :post, 
+                class: "h-full", 
+                data: { 
+                  turbo: true
+                }
+              ) do |f| %>
+            <% player_card = card.merge(column: i, player_id: current_user.id) %>
+            <%= f.hidden_field :card, value: player_card.to_json %>
+            <%= f.button "#{i + 1}", type: "submit", class: "w-full p-1 bg-blue-500 bg-opacity-50 hover:bg-opacity-75 text-white" %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div> 
