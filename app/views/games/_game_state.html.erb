@@ -1,61 +1,63 @@
 <% board_state = GameBoardSerializer.new(game).as_json %>
 
-<div id="game-state" class="flex flex-col items-center gap-8 p-4">
-  <div class="opponent-hand">
-    <% opponent_card_count = current_user.id == game.player1_id ? game.player2_hand.size : game.player1_hand.size %>
-    <%= render "games/card_back", count: opponent_card_count %>
-  </div>
-
-  <div class="board flex flex-col gap-8">
-    <!-- Opponent's board area -->
-    <div class="opponent-board grid grid-cols-4 gap-4">
-      <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
-      <% opponent_data[:columns].each do |column| %>
-        <div class="column flex flex-col gap-2 border border-dashed border-gray-300 p-2">
-          <% if column[:hand_name].present? %>
-            <div class="text-sm font-semibold text-gray-700">
-              <%= column[:hand_name] %>
-            </div>
-          <% end %>
-          <% column[:cards].each do |card_code| %>
-            <%= render partial: "games/card", locals: { 
-              card: game.find_card(card_code), 
-              current_user: current_user, 
-              playable: false, 
-              game: game 
-            } %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- Player's board area -->
-    <div class="player-board grid grid-cols-4 gap-4">
-      <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
-      <% player_data[:columns].each do |column| %>
-        <div class="column flex flex-col gap-2 border border-dashed border-gray-300 p-2">
-          <% if column[:hand_name].present? %>
-            <div class="text-sm font-semibold text-gray-700">
-              <%= column[:hand_name] %>
-            </div>
-          <% end %>
-          <% column[:cards].each do |card_code| %>
-            <%= render partial: "games/card", locals: { 
-              card: game.find_card(card_code), 
-              current_user: current_user, 
-              playable: false, 
-              game: game 
-            } %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="player-hand flex gap-2">
+<div id="game-state" class="w-full flex flex-col items-center gap-8">
+  <div class="player-hand flex gap-1">
     <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
     <% player_hand.each do |card| %>
       <%= render partial: "games/card", locals: { card: card, current_user: current_user, playable: game.current_turn == current_user.id, game: game } %>
     <% end %>
+  </div>
+
+  <div class="hidden opponent-hand">
+    <% opponent_card_count = current_user.id == game.player1_id ? game.player2_hand.size : game.player1_hand.size %>
+    <%= render "games/card_back", count: opponent_card_count %>
+  </div>
+
+  <div class="board w-auto flex flex-col gap-4">
+    <!-- Player's board area -->
+    <div class="player-board grid grid-cols-4 gap-2">
+      <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
+      <% player_data[:columns].each do |column| %>
+        <!-- Column -->
+        <div class="min-w-14 min-h-28 p-2 column flex flex-col -space-y-10 md:-space-y-16 items-center bg-primary-800 rounded-xl">
+          <% if column[:hand_name].present? %>
+            <div class="text-sm font-semibold text-gray-700">
+              <%= column[:hand_name] %>
+            </div>
+          <% end %>
+          <% column[:cards].each do |card_code| %>
+            <%= render partial: "games/card", locals: { 
+              card: game.find_card(card_code), 
+              current_user: current_user, 
+              playable: false, 
+              game: game 
+            } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Opponent's board area -->
+    <div class="opponent-board grid grid-cols-4 gap-2">
+      <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
+      <% opponent_data[:columns].each do |column| %>
+        <!-- Column -->
+        <div class="min-w-14 min-h-28 column flex flex-col gap-2 items-center bg-primary-800 rounded-xl p-2">
+          <% if column[:hand_name].present? %>
+            <div class="text-sm font-semibold text-gray-700">
+              <%= column[:hand_name] %>
+            </div>
+          <% end %>
+          <% column[:cards].each do |card_code| %>
+            <%= render partial: "games/card", locals: { 
+              card: game.find_card(card_code), 
+              current_user: current_user, 
+              playable: false, 
+              game: game 
+            } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div> 

@@ -1,19 +1,11 @@
 <div 
-  class="relative <%= playable ? 'cursor-pointer' : '' %> w-16 h-24 bg-white rounded-lg border border-gray-200 shadow-sm transform hover:-translate-y-1 transition-transform"
+  class="relative <%= playable ? 'cursor-pointer' : '' %> w-14 h-20 md:w-20 md:h-28 bg-white rounded-lg border border-gray-200 shadow-lg"
   data-controller="card"
   data-action="click->card#showColumnSelector"
 >
-  <div class="w-full h-full flex flex-col items-center justify-between p-2">
-    <div class="text-<%= card[:suit].in?(['♥', '♦']) ? 'red' : 'black' %>-600 text-sm">
-      <%= card[:value] %>
-    </div>
-    
-    <div class="text-<%= card[:suit].in?(['♥', '♦']) ? 'red' : 'black' %>-600 text-2xl">
-      <%= card[:suit] %>
-    </div>
-    
-    <div class="text-<%= card[:suit].in?(['♥', '♦']) ? 'red' : 'black' %>-600 text-sm transform rotate-180">
-      <%= card[:value] %>
+  <div class="w-full h-full flex flex-col items-start p-1 px-2 md:p-2">
+    <div class="text-<%= card[:suit].in?(['♥', '♦']) ? 'red' : 'black' %>-600 text-lg md:text-xl">
+      <%= card[:value] %><%= card[:suit] %>
     </div>
   </div>
   <% if playable %>
@@ -36,4 +28,4 @@
       </div>
     </div>
   <% end %>
-</div> 
+</div>
