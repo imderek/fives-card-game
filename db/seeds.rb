@@ -15,7 +15,7 @@ org = Organization.create!(
 # Create users
 user = User.create!(
   email: "demo@imderek.com", 
-  password: "demo", 
+  password: Rails.env.development? ? "demo" : "production",
   organization_id: org.id 
 )
 
