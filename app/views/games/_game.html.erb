@@ -1,4 +1,4 @@
-<div id="<%= dom_id(game) %>" class="bg-white p-6 px-4 rounded-lg shadow-xl">
+<div id="<%= dom_id(game) %>" class="bg-white p-6 px-4 rounded-xl shadow-xl">
   <% opponent = game.player1_id == current_user.id ? game.player2 : game.player1 %>
   <div class="flex justify-between items-center">
     <div class="space-y-1">
