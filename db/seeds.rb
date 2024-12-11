@@ -14,12 +14,12 @@ org = Organization.create!(
 
 # Create users
 user = User.create!(
-  email: "demo@imderek.com", 
+  email: "demo@demo.com",
   password: Rails.env.development? ? "demo" : "production",
   organization_id: org.id 
 )
 
-# Create bot user if it doesn't exist
+# Create bot user
 User.create!(
   email: 'bot@example.com',
   password: SecureRandom.hex(10),
