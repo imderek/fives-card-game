@@ -22,7 +22,7 @@ module.exports = {
         'card-enter': 'card-enter 500ms ease-out forwards'
       },
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: {

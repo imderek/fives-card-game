@@ -12,12 +12,15 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/new-icon.png" type="image/png">
     <link rel="apple-touch-icon" href="/new-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-green-700">
+  <body class="bg-green-600">
     <main class="dark w-full min-h-24">
       <%#= render 'shared/flash' %>
       <%= yield %>
