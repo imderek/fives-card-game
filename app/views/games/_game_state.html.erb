@@ -1,6 +1,6 @@
 <% board_state = GameBoardSerializer.new(game).as_json %>
 
-<div id="game-state" class="w-full flex flex-col items-center gap-8">
+<div id="game-state" class="w-full flex flex-col items-center gap-7">
   <!-- player hand -->
   <div class="player-hand flex gap-[.35rem]">
     <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
@@ -54,11 +54,10 @@
       <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
       <% opponent_data[:columns].each do |column| %>
         <!-- Column -->
-        <div class="min-w-[4.5rem] min-h-[6rem] column flex flex-col gap-2 items-center bg-primary-800 rounded-xl p-2">
+        <div class="min-w-[4.5rem] min-h-[6rem] p-2 relative column bg-primary-800 rounded-xl">
+          <!-- Hand name -->
           <% if column[:hand_name].present? %>
-            <div class="text-sm font-semibold text-gray-700">
-              <%= column[:hand_name] %>
-            </div>
+            <div class="text-xs mb-1 text-center text-white/70 relative top-[-0.1rem]"><%= column[:hand_name] %></div>
           <% end %>
           <!-- Cards vertically stacked -->
           <div class="flex flex-col -space-y-10 md:-space-y-16 items-center">

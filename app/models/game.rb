@@ -104,22 +104,25 @@ class Game < ApplicationRecord
       
       current_user = User.find(player_id)
       
+      # Create a dedicated stream name for each player
+      stream_name = "game_#{id}_player_#{player_id}"
+      
       broadcast_replace_to(
-        "game_#{id}",
+        stream_name,
         target: "game-state",
         partial: "games/game_state",
         locals: { game: self, current_user: current_user }
       )
 
       broadcast_replace_to(
-        "game_#{id}",
+        stream_name,
         target: "game-status",
         partial: "games/game_status",
         locals: { game: self, current_user: current_user }
       )
 
       broadcast_replace_to(
-        "game_#{id}",
+        stream_name,
         target: "player-controls",
         partial: "games/player_controls",
         locals: { game: self, current_user: current_user }
