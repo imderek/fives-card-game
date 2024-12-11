@@ -49,12 +49,12 @@
           </div>
         <% end %>
       </div>
-      <div class="py-4 text-center text-black/40 text-sm font-medium uppercase">Player 1</div>
+      <div class="py-2 text-center text-black/40 text-sm font-medium uppercase">Player 1</div>
     </div>
 
     <!-- Opponent's board area -->
     <div class="pb-6">
-      <div class="py-4 border-t border-primary-800 text-center text-black/40 text-sm font-medium uppercase">Opponent</div>
+      <div class="py-2 border-t border-primary-800 text-center text-black/40 text-sm font-medium uppercase">Opponent</div>
       <div class="px-6 opponent-board grid grid-cols-4 gap-2">
         <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
         <% opponent_data[:columns].each do |column| %>
