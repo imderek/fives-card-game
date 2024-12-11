@@ -1,5 +1,5 @@
 <div class="dark justify-center mx-auto my-8 p-8">
-  <h1 class="text-2xl font-semibold text-center mb-8 dark:text-white">Ready to play?</h1>
+  <h1 class="text-2xl font-semibold text-center dark:text-white">Ready to play?</h1>
 
   <%= form_with(model: @game, local: true, class: "space-y-8") do |f| %>
     <div class="hidden game-type-selection">
@@ -29,9 +29,9 @@
       </div>
     </div>
 
-    <div class="flex justify-center gap-4 font-medium">
-      <%= f.submit "Start Game", class: "cursor-pointer px-6 py-2 bg-primary-700 text-white rounded-md hover:bg-primary-800 dark:text-primary-700 dark:bg-white dark:hover:bg-white/80" %>
-      <%= link_to "Cancel", games_path, class: "px-6 py-2 bg-white dark:text-white rounded-md dark:hover:text-white/80 dark:border dark:border-white/50 dark:bg-transparent dark:hover:bg-white/10 dark:hover:text-gray-400" %>
+    <div class="flex flex-col md:flex-row justify-center gap-3 font-medium">
+      <%= f.submit "Start Game", class: "cursor-pointer px-6 py-3 bg-primary-700 text-white rounded-md hover:bg-primary-800 dark:text-primary-700 dark:bg-white dark:hover:bg-white/80" %>
+      <%= link_to "Cancel", games_path, class: "px-6 py-3 text-center bg-white dark:text-white rounded-md dark:hover:text-white/80 dark:border dark:border-white/50 dark:bg-transparent dark:hover:bg-white/10 dark:hover:text-gray-400" %>
     </div>
   <% end %>
 </div> 

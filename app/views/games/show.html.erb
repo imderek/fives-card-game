@@ -1,4 +1,4 @@
-<div id="game-container" data-game-id="<%= @game.id %>" class="container mx-auto px-4 py-5">
+<div id="game-container" data-game-id="<%= @game.id %>" class="container mx-auto py-5">
   <%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
 
   <div id="game_error" class="hidden text-white/50 text-center mb-4"></div>
@@ -16,6 +16,6 @@
   </div>
 
   <div class="flex justify-center">
-    <%= link_to "Back to Home", games_path, class: "mb-6 text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70" %>
+    <%= link_to "Back to Home", games_path, class: "border border-white/50 rounded-md mb-10 px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70" %>
   </div>
 </div>
