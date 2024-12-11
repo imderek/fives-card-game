@@ -2,7 +2,7 @@
 
 <div id="game-state" class="w-full flex flex-col items-center gap-7">
   <!-- player hand -->
-  <div class="player-hand flex gap-[.35rem]">
+  <div class="player-hand flex flex-row -space-x-[.35rem]">
     <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
     <% player_hand.each_with_index do |card, index| %>
       <%= render partial: "games/card", locals: { 
@@ -26,7 +26,7 @@
       <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
       <% player_data[:columns].each_with_index do |column, index| %>
         <!-- Column -->
-        <div class="min-w-[4.5rem] min-h-[6rem] p-2 relative column bg-primary-800 rounded-xl" 
+        <div class="min-w-[4.5rem] min-h-[6rem] p-2 relative column bg-primary-900 rounded-xl" 
              data-controller="card"
              data-action="click->card#playColumn"
              data-column-index="<%= index %>">
@@ -50,28 +50,31 @@
     </div>
 
     <!-- Opponent's board area -->
-    <div class="pt-6 border-t-2 border-primary-800 opponent-board grid grid-cols-4 gap-2">
-      <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
-      <% opponent_data[:columns].each do |column| %>
-        <!-- Column -->
-        <div class="min-w-[4.5rem] min-h-[6rem] p-2 relative column bg-primary-800 rounded-xl">
-          <!-- Hand name -->
-          <% if column[:hand_name].present? %>
-            <div class="text-xs mb-1 text-center text-white/70 relative top-[-0.1rem]"><%= column[:hand_name] %></div>
-          <% end %>
-          <!-- Cards vertically stacked -->
-          <div class="flex flex-col -space-y-10 md:-space-y-16 items-center">
-            <% column[:cards].each do |card_code| %>
-              <%= render partial: "games/card", locals: { 
-                card: game.find_card(card_code), 
-                current_user: current_user, 
-                playable: false, 
-                game: game 
-              } %>
+    <div class="">
+      <div class="py-2 border-t border-primary-900 text-center text-black/40 text-sm font-medium uppercase">Opponent</div>
+      <div class="opponent-board grid grid-cols-4 gap-2">
+        <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
+        <% opponent_data[:columns].each do |column| %>
+          <!-- Column -->
+          <div class="min-w-[4.5rem] min-h-[6rem] p-2 relative column bg-primary-900 rounded-xl">
+            <!-- Hand name -->
+            <% if column[:hand_name].present? %>
+              <div class="text-xs mb-1 text-center text-white/70 relative top-[-0.1rem]"><%= column[:hand_name] %></div>
             <% end %>
+            <!-- Cards vertically stacked -->
+            <div class="flex flex-col -space-y-10 md:-space-y-16 items-center">
+              <% column[:cards].each do |card_code| %>
+                <%= render partial: "games/card", locals: { 
+                  card: game.find_card(card_code), 
+                  current_user: current_user, 
+                  playable: false, 
+                  game: game 
+                } %>
+              <% end %>
+            </div>
           </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div> 
