@@ -31,14 +31,13 @@ class Game < ApplicationRecord
   
   def board_cards_for_player(player_id, column)
     board_cards.select do |card| 
-      if game_type == "bot"
-        # For bot games, nil player_id means bot's cards
-        (player_id.nil? && card[:player_id].nil?) || 
-        (!player_id.nil? && card[:player_id] == player_id)
+      if player_id == player1_id
+        # Player 1's cards are in columns 0-3
+        card[:player_id] == player1_id && card[:column] == column
       else
-        card[:player_id] == player_id
-      end && 
-      card[:column] == column
+        # Player 2's cards are in columns 4-7
+        card[:player_id] == player2_id && card[:column] == (column + 4)
+      end
     end
   end
   

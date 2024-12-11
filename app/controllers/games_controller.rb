@@ -19,6 +19,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     @game.player1 = current_user
+    @game.player2_id ||= User.find_by(email: 'bot@example.com').id  # Use the bot user
 
     if @game.save
       Turbo::StreamsChannel.broadcast_append_to(
@@ -37,11 +38,16 @@ class GamesController < ApplicationController
   def play_card
     respond_to do |format|
       format.turbo_stream do
+        Rails.logger.debug "Current turn: #{@game.current_turn}"
+        Rails.logger.debug "Current user: #{current_user.id}"
+        Rails.logger.debug "Bot ID: #{@game.player2_id}"
+        
         unless valid_turn?
           render_error("Not your turn or wrong phase") and return
         end
 
         card = params[:card].to_unsafe_h.symbolize_keys.merge(player_id: current_user.id)
+        Rails.logger.debug "Playing card: #{card.inspect}"
         
         unless @game.valid_move?(card)
           render_error("Cannot add more than 5 cards to a column") and return
@@ -99,50 +105,64 @@ class GamesController < ApplicationController
     current_user.id == @game.current_turn && @game.turn_phase == "play_card"
   end
 
-  def play_card_and_update_game(card)
-    # Remove played card from hand
-    current_hand = current_user.id == @game.player1_id ? :player1_hand : :player2_hand
-    @game[current_hand] = @game[current_hand].reject do |c| 
-      c[:suit] == card[:suit] && c[:value] == card[:value]
-    end
+  def play_card_and_update_game(played_card)
+    begin
+      Rails.logger.debug "Playing card: #{played_card.inspect}"
+      
+      # Update board state with the played card
+      update_board_state(played_card)
+      
+      # Remove card from player's hand and update current turn
+      if played_card[:player_id] == @game.player1_id
+        @game.player1_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+        @game.current_turn = @game.player2_id
+      else
+        @game.player2_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+        @game.current_turn = @game.player1_id
+      end
 
-    # Update board state
-    update_board_state(card)
-    
-    # Draw new card
-    drawn_card = @game.deck.pop
-    @game[current_hand] = @game[current_hand] + [drawn_card.symbolize_keys]
-    
-    # Update turn
-    @game.current_turn = @game.player2_id || @game.player1_id
-    @game.turn_phase = :play_card
-    
-    @game.save
+      if @game.save
+        # The after_update_commit callback will handle broadcasting
+        
+        # If it's the bot's turn, make their move
+        if bot_turn?
+          make_bot_move
+        end
+        
+        true
+      else
+        Rails.logger.error "Failed to save game: #{@game.errors.full_messages}"
+        false
+      end
+    rescue => e
+      Rails.logger.error "Error in play_card_and_update_game: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      false
+    end
   end
 
   def update_board_state(played_card)
-    board_state = GameBoardSerializer.new(@game).as_json
-    player_key = current_user.id == @game.player1_id ? :player_1 : :player_2
+    Rails.logger.debug "Updating board state with card: #{played_card.inspect}"
+    Rails.logger.debug "Player1 ID: #{@game.player1_id}, Player2 ID: #{@game.player2_id}"
     
-    # Add card to column
-    board_state[player_key][:columns][played_card[:column].to_i][:cards] << 
-      "#{played_card[:value]}#{played_card[:suit].first.upcase}"
+    # Initialize board_cards if nil
+    @game.board_cards ||= []
     
-    # Convert board state back to board_cards array
-    @game.board_cards = []
-    [:player_1, :player_2].each do |player_key|
-      player_id = player_key == :player_1 ? @game.player1_id : @game.player2_id
-      board_state[player_key][:columns].each_with_index do |column, column_index|
-        column[:cards].each do |card_code|
-          @game.board_cards << {
-            suit: card_code[-1].downcase,
-            value: card_code[0..-2],
-            player_id: player_id,
-            column: column_index
-          }
-        end
-      end
+    # Adjust column number based on player
+    column = played_card[:column].to_i
+    if played_card[:player_id] == @game.player2_id
+      column += 4  # Shift Player 2's columns to 4-7
     end
+    
+    # Add the new card to board_cards
+    @game.board_cards << {
+      suit: played_card[:suit],
+      value: played_card[:value],
+      player_id: played_card[:player_id],
+      column: column
+    }
+    
+    Rails.logger.debug "Final board_cards: #{@game.board_cards.inspect}"
   end
 
   def render_success_response
@@ -155,5 +175,27 @@ class GamesController < ApplicationController
 
   def render_error(message)
     render turbo_stream: turbo_stream.update("game_error", message)
+  end
+
+  def bot_turn?
+    @game.current_turn == @game.player2_id && @game.player2.email == 'bot@example.com'
+  end
+
+  def make_bot_move
+    # Pick a random card and column for the bot
+    bot_hand = @game.player2_hand
+    return if bot_hand.empty?
+    
+    bot_card = bot_hand.sample
+    bot_column = rand(0..3)  # Use 0-3, update_board_state will adjust it to 4-7
+    
+    played_card = {
+      suit: bot_card[:suit],
+      value: bot_card[:value],
+      player_id: @game.player2_id,
+      column: bot_column
+    }
+    
+    play_card_and_update_game(played_card)
   end
 end
