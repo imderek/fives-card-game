@@ -12,6 +12,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'card-enter': {
+          '0%': { opacity: '0', transform: 'translateY(-20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        }
+      },
+      animation: {
+        'card-enter': 'card-enter 500ms ease-out forwards'
+      },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },

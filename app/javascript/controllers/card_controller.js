@@ -12,11 +12,11 @@ export default class extends Controller {
     
     // Remove selected class from any previously selected card
     document.querySelectorAll('.selected-card').forEach(el => {
-      el.classList.remove('selected-card', 'ring-2', 'ring-blue-500')
+      el.classList.remove('selected-card', 'ring-2', 'ring-yellow-500', 'top-[-10px]', 'shadow-xl')
     })
     
     // Add selected class to this card
-    this.element.classList.add('selected-card', 'ring-2', 'ring-blue-500')
+    this.element.classList.add('selected-card', 'ring-2', 'ring-yellow-500', 'top-[-10px]', 'shadow-xl')
     
     // Store the selected card data globally
     window.selectedCard = JSON.parse(this.element.dataset.card)

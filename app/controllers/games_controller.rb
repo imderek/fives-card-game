@@ -38,7 +38,6 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         if current_user.id == @game.current_turn && @game.turn_phase == "play_card"
-          # No need to parse JSON since Rails already did it
           card = params[:card].to_unsafe_h.symbolize_keys
           card[:player_id] = current_user.id
           
@@ -74,7 +73,13 @@ class GamesController < ApplicationController
               end
             end
 
-            @game.turn_phase = :draw_card
+            # Auto-draw a card
+            drawn_card = @game.deck.pop
+            @game[current_hand] = @game[current_hand] + [drawn_card.symbolize_keys]
+            
+            # Switch turn to other player and set phase
+            @game.current_turn = @game.player2_id || @game.player1_id
+            @game.turn_phase = :play_card
             
             if @game.save
               render turbo_stream: [
@@ -95,39 +100,6 @@ class GamesController < ApplicationController
     end
   rescue => e
     Rails.logger.error "Error in play_card: #{e.message}\n#{e.backtrace.join("\n")}"
-    render turbo_stream: turbo_stream.update("game_error", e.message)
-  end
-
-  def draw_card
-    respond_to do |format|
-      format.turbo_stream do
-        if current_user.id == @game.current_turn && @game.turn_phase == "draw_card"
-          drawn_card = @game.deck.pop
-          current_hand = current_user.id == @game.player1_id ? :player1_hand : :player2_hand
-          
-          # Add card to player's hand
-          @game[current_hand] = @game[current_hand] + [drawn_card.symbolize_keys]
-          
-          # End turn and switch to play phase
-          @game.turn_phase = :play_card
-          @game.current_turn = @game.player2_id || @game.player1_id
-          
-          if @game.save!
-            render turbo_stream: [
-              turbo_stream.replace("game-state", partial: "games/game_state", locals: { game: @game, current_user: current_user }),
-              turbo_stream.replace("game-status", partial: "games/game_status", locals: { game: @game, current_user: current_user }),
-              turbo_stream.replace("player-controls", partial: "games/player_controls", locals: { game: @game, current_user: current_user })
-            ]
-          else
-            render turbo_stream: turbo_stream.update("game_error", "Failed to update game")
-          end
-        else
-          render turbo_stream: turbo_stream.update("game_error", "Not your turn or wrong phase")
-        end
-      end
-    end
-  rescue => e
-    Rails.logger.error "Error in draw_card: #{e.message}\n#{e.backtrace.join("\n")}"
     render turbo_stream: turbo_stream.update("game_error", e.message)
   end
 
