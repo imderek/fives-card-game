@@ -115,9 +115,15 @@ class GamesController < ApplicationController
       # Remove card from player's hand and update current turn
       if played_card[:player_id] == @game.player1_id
         @game.player1_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+        # Draw a card for player 1
+        drawn_card = @game.deck.pop
+        @game.player1_hand << drawn_card if drawn_card
         @game.current_turn = @game.player2_id
       else
         @game.player2_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+        # Draw a card for player 2
+        drawn_card = @game.deck.pop
+        @game.player2_hand << drawn_card if drawn_card
         @game.current_turn = @game.player1_id
       end
 
