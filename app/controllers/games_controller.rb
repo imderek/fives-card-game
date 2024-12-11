@@ -154,18 +154,12 @@ class GamesController < ApplicationController
     # Initialize board_cards if nil
     @game.board_cards ||= []
     
-    # Adjust column number based on player
-    column = played_card[:column].to_i
-    if played_card[:player_id] == @game.player2_id
-      column += 4  # Shift Player 2's columns to 4-7
-    end
-    
-    # Add the new card to board_cards
+    # Add the new card to board_cards without adjusting the column
     @game.board_cards << {
       suit: played_card[:suit],
       value: played_card[:value],
       player_id: played_card[:player_id],
-      column: column
+      column: played_card[:column].to_i  # Just convert to integer, no adjustment
     }
     
     Rails.logger.debug "Final board_cards: #{@game.board_cards.inspect}"
@@ -192,8 +186,16 @@ class GamesController < ApplicationController
     bot_hand = @game.player2_hand
     return if bot_hand.empty?
     
+    # Get available columns (those with fewer than 5 cards)
+    available_columns = (4..7).select do |col|
+      @game.board_cards.count { |card| card[:player_id] == @game.player2_id && card[:column] == col } < 5
+    end
+    
+    Rails.logger.debug "Available columns for bot: #{available_columns.inspect}"
+    return if available_columns.empty?  # No valid moves available
+    
     bot_card = bot_hand.sample
-    bot_column = rand(0..3)  # Use 0-3, update_board_state will adjust it to 4-7
+    bot_column = available_columns.sample  # Already using columns 4-7
     
     played_card = {
       suit: bot_card[:suit],
@@ -202,6 +204,7 @@ class GamesController < ApplicationController
       column: bot_column
     }
     
+    Rails.logger.debug "Bot playing card #{bot_card.inspect} in column #{bot_column}"
     play_card_and_update_game(played_card)
   end
 end
