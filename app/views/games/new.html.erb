@@ -1,5 +1,22 @@
-<div class="dark justify-center mx-auto my-8 p-8">
-  <h1 class="text-2xl font-semibold text-center dark:text-white">Ready to play?</h1>
+<div class="dark justify-center mx-auto mb-8 py-8 px-4">
+  <h1 class="mb-6 text-2xl font-semibold text-center dark:text-white">Choose an opponent</h1>
+
+  <div class="w-full grid grid-cols-3 gap-2 text-center">
+    <div class="bg-white border-4 border-yellow-500 p-2 py-3 rounded-xl shadow-xl">
+      <h2 class="text-lg font-semibold mb-1">Easy</h2>
+      <p class="text-xs text-gray-600">Plays a random card in a random column.</p>
+    </div>
+    <div class="bg-transparent border border-white/50 p-2 py-3 rounded-xl">
+      <h2 class="text-lg font-semibold text-white mb-1">Medium</h2>
+      <p class="text-xs text-white/70">Plays to maximize hand strength in specific columns.</p>
+      <div class="mt-3 bg-emerald-800 text-white/80 text-xs p-1 rounded-lg">Coming soon</div>
+    </div>
+    <div class="bg-transparent border border-white/50 p-2 py-3 rounded-xl">
+      <h2 class="text-lg font-semibold text-white mb-1">Hard</h2>
+      <p class="text-xs text-white/70">Analyzes the opponent's board to block strong hands.</p>
+      <div class="mt-3 bg-emerald-800 text-white/80 text-xs p-1 rounded-lg">Coming soon</div>
+    </div>
+  </div>
 
   <%= form_with(model: @game, local: true, class: "space-y-8") do |f| %>
     <div class="hidden game-type-selection">
