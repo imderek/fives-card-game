@@ -1,24 +1,24 @@
-<div class="dark justify-center mx-auto mb-8 py-8 px-4">
-  <h1 class="mb-6 text-2xl font-semibold text-center dark:text-white">Choose a Bot</h1>
+<div class="dark justify-center mx-auto mb-5 py-8 px-4">
+  <h1 class="mb-4 text-xl font-semibold text-center dark:text-white">Choose Your Opponent</h1>
 
-  <div class="w-full grid grid-cols-3 gap-2 text-center">
-    <div class="bg-white border-4 border-red-500 p-2 py-3 rounded-xl shadow-xl">
+  <div class="mb-6 w-full md:w-96 mx-auto px-4 flex flex-col gap-4 text-center">
+    <div class="bg-white border-4 border-red-500 p-4 px-8 rounded-xl shadow-xl">
       <h2 class="text-lg font-semibold mb-1">Easy</h2>
       <p class="text-xs text-gray-600">Plays a random card in a random column.</p>
     </div>
-    <div class="bg-transparent border border-white/50 p-2 py-3 rounded-xl">
+    <div class="bg-transparent border border-white/50 p-4 px-8 rounded-xl">
       <h2 class="text-lg font-semibold text-white mb-1">Medium</h2>
       <p class="text-xs text-white/70">Plays to maximize hand strength in specific columns.</p>
-      <div class="mt-3 bg-emerald-800 text-white/80 text-xs p-1 rounded-lg">Coming soon</div>
+      <div class="mt-3 bg-black/20 text-white/80 text-xs p-1 rounded-lg">Coming soon</div>
     </div>
-    <div class="bg-transparent border border-white/50 p-2 py-3 rounded-xl">
+    <div class="bg-transparent border border-white/50 p-4 px-8 rounded-xl">
       <h2 class="text-lg font-semibold text-white mb-1">Hard</h2>
       <p class="text-xs text-white/70">Analyzes the opponent's board to block strong hands.</p>
-      <div class="mt-3 bg-emerald-800 text-white/80 text-xs p-1 rounded-lg">Coming soon</div>
+      <div class="mt-3 bg-black/20 text-white/80 text-xs p-1 rounded-lg">Coming soon</div>
     </div>
   </div>
 
-  <%= form_with(model: @game, local: true, class: "space-y-8") do |f| %>
+  <%= form_with(model: @game, local: true, class: "") do |f| %>
     <div class="hidden game-type-selection">
       <h2 class="text-lg font-semibold mb-4">Choose Game Type</h2>
       <div class="flex justify-center gap-8">
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row justify-center gap-3 font-medium px-4">
+    <div class="px-4 flex flex-col md:flex-row justify-center gap-3 font-medium">
       <%= f.submit "Start Game", class: "cursor-pointer px-6 py-3 bg-primary-700 text-white rounded-md hover:bg-primary-800 dark:text-primary-700 dark:bg-white dark:hover:bg-white/80" %>
       <%= link_to "Cancel", games_path, class: "px-6 py-3 text-center bg-white dark:text-white rounded-md dark:hover:text-white/80 dark:border dark:border-white/50 dark:bg-transparent dark:hover:bg-white/10 dark:hover:text-gray-400" %>
     </div>

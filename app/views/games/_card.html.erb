@@ -7,7 +7,7 @@
     card_target: "cardElement"
   } do %>
   <div class="w-full h-full flex flex-col items-start p-1 px-2 md:p-2">
-    <div class="text-<%= card[:suit].in?(['♥', '♦']) ? 'red' : 'black' %>-600 text-lg md:text-xl">
+    <div class="<%= card[:suit].in?(['♥', '♦']) ? 'text-red-500' : 'text-black' %> text-lg md:text-xl">
       <%= card[:value] %><%= card[:suit] %>
     </div>
   </div>
