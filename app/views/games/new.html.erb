@@ -1,8 +1,8 @@
 <div class="dark justify-center mx-auto mb-8 py-8 px-4">
-  <h1 class="mb-6 text-2xl font-semibold text-center dark:text-white">Choose an opponent</h1>
+  <h1 class="mb-6 text-2xl font-semibold text-center dark:text-white">Choose a Bot</h1>
 
   <div class="w-full grid grid-cols-3 gap-2 text-center">
-    <div class="bg-white border-4 border-yellow-500 p-2 py-3 rounded-xl shadow-xl">
+    <div class="bg-white border-4 border-red-500 p-2 py-3 rounded-xl shadow-xl">
       <h2 class="text-lg font-semibold mb-1">Easy</h2>
       <p class="text-xs text-gray-600">Plays a random card in a random column.</p>
     </div>
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col md:flex-row justify-center gap-3 font-medium">
+    <div class="flex flex-col md:flex-row justify-center gap-3 font-medium px-4">
       <%= f.submit "Start Game", class: "cursor-pointer px-6 py-3 bg-primary-700 text-white rounded-md hover:bg-primary-800 dark:text-primary-700 dark:bg-white dark:hover:bg-white/80" %>
       <%= link_to "Cancel", games_path, class: "px-6 py-3 text-center bg-white dark:text-white rounded-md dark:hover:text-white/80 dark:border dark:border-white/50 dark:bg-transparent dark:hover:bg-white/10 dark:hover:text-gray-400" %>
     </div>
