@@ -9,9 +9,30 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+    # Find user by email
+    user = User.find_by(email: params[:user][:email])
+
+    if user
+      # If user exists, sign them in
+      if sign_in(user)
+        redirect_to root_path, notice: "Signed in successfully!"
+      else
+        redirect_to new_user_session_path, alert: "Sign in failed."
+      end
+    else
+      # If user doesn't exist, create a new user and sign them up
+      user = User.new(email: params[:user][:email])
+      user.organization = Organization.create(name: params[:email])
+
+      if user.save
+        sign_in(user)
+        redirect_to root_path, notice: "Signed up and signed in successfully!"
+      else
+        redirect_to new_user_session_path, alert: "Sign up failed."
+      end
+    end
+  end
 
   # DELETE /resource/sign_out
   # def destroy
