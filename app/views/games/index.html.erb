@@ -2,7 +2,7 @@
 
 <div class="max-w-7xl mx-auto p-6">
   <div class="flex flex-row justify-between mb-4">
-    <h1 class="text-3xl font-bold dark:text-white">Games</h1>
+    <h1 class="text-3xl font-bold dark:text-white">Lobby</h1>
     <%= button_to "Sign Out", destroy_user_session_path, 
         method: :delete,
         class: "px-4 py-2 text-sm bg-gray-400 text-white rounded-lg hover:bg-gray-500 dark:bg-white/20 dark:hover:bg-white/30" %>
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <h1 class="text-xl font-semibold mb-4 dark:text-white">Recently Played</h1>
+  <h1 class="text-xl font-semibold mb-4 dark:text-white">Recent Games</h1>
 
   <div id="games_list" class="grid gap-4">
     <% @games.each do |game| %>
