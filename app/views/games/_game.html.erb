@@ -1,24 +1,22 @@
-<div id="<%= dom_id(game) %>" class="bg-white p-6 px-4 rounded-xl shadow-xl">
+<%= link_to game_path(game), id: dom_id(game), class: "block bg-white py-4 px-4 rounded-xl shadow-xl" do %>
   <% opponent = game.player1_id == current_user.id ? game.player2 : game.player1 %>
-  <div class="flex justify-between items-center">
-    <div class="space-y-1">
-      <p class="text-sm text-gray-500">
-        <span class="inline-block mr-2 px-2 py-1 text-sm font-semibold bg-red-100 text-red-600 rounded">
+  <div class="flex justify-between items-center text-sm">
+    <div>
+      <div class="flex flex-row items-center mb-1">
+        <span class="inline-block mr-2 px-2 py-1 font-semibold bg-red-100 text-red-600 rounded">
             <%#= game.game_type.upcase %>
-            VS BOT
+            BOT VS
         </span>
-        <%= time_ago_in_words(game.created_at).capitalize %> ago
-      </p>
+        <span class="inline-block"><%= game.player1.email %></span>
+      </div>
+      <div class="text-gray-500"><%= time_ago_in_words(game.created_at).capitalize %> ago</div>
     </div>
 
     <div class="flex gap-4 items-center">
-      <%= link_to game_path(game), 
-                  class: "text-primary-600 hover:text-primary-700 relative right-2" do %>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347c-.75.412-1.667-.13-1.667-.986V5.653Z" />
-        </svg>
+      <%= content_tag :span,class: "text-gray-400 hover:text-gray-500 relative right-2" do %>
+        <i class="fa fa-chevron-right text-lg"></i>
       <% end %>
-      
+
       <% if false %>
         <%= button_to game_path(game), 
             method: :delete,
@@ -31,4 +29,4 @@
       <% end %>
     </div>
   </div>
-</div> 
+<% end %>
