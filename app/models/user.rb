@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :owned_deals, class_name: 'Deal', foreign_key: 'owner_id'
+  belongs_to :organization
 
   # Skip password validation
   def password_required?
