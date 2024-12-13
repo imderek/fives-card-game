@@ -5,7 +5,7 @@ class GamesController < ApplicationController
   include ActionView::RecordIdentifier
 
   def index
-    @games = Game.where('created_at >= ?', 23.hours.ago).order(created_at: :desc).includes(:player1, :player2).limit(8)
+    @games = Game.where('created_at >= ?', 23.hours.ago).order(created_at: :desc).includes(:player1, :player2).limit(5)
   end
 
   def show
