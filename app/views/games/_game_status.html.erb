@@ -1,6 +1,6 @@
-<div id="game-status" class="w-full mb-6 text-center">
+<div id="game-status" class="<%= current_user.id != game.player1_id || game.winner_id ? 'w-full mb-6 text-center' : 'hidden' %>">
   <% if current_user.id != game.player1_id %>
-    <div class="mx-6 bg-black/20 text-white/80 text-sm p-2 rounded-lg">Spectator mode</div>
+    <div class="mx-6 mb-4 bg-black/20 text-white/80 text-sm p-2 rounded-lg">Spectator mode</div>
   <% end %>
 
   <% if game.winner_id %>
