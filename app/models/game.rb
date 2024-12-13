@@ -1,6 +1,7 @@
 class Game < ApplicationRecord
   belongs_to :player1, class_name: 'User'
   belongs_to :player2, class_name: 'User', optional: true # optional for bot games
+  belongs_to :winner, class_name: 'User', optional: true
   
   serialize :player1_hand, coder: YAML
   serialize :player2_hand, coder: YAML

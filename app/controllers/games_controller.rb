@@ -128,12 +128,13 @@ class GamesController < ApplicationController
       end
 
       if @game.save
-        # The after_update_commit callback will handle broadcasting
-        
-        # If it's the bot's turn, make their move
+        # If it's the bot's turn, make their move first
         if bot_turn?
           make_bot_move
         end
+        
+        # Check for winner after both moves are complete
+        GameCompletionService.new(@game).check_for_winner
         
         true
       else
