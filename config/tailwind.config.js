@@ -16,10 +16,15 @@ module.exports = {
         'card-enter': {
           '0%': { opacity: '0', transform: 'translateY(-20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' }
+        },
+        'enter-scale': {
+          '0%': { opacity: '0', transform: 'scale(60%)' },
+          '100%': { opacity: '1', transform: 'scale(100%)' }
         }
       },
       animation: {
-        'card-enter': 'card-enter 500ms ease-out forwards'
+        'card-enter': 'card-enter 500ms ease-out forwards',
+        'enter-scale': 'enter-scale 200ms ease-out forwards'
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
