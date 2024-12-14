@@ -3,7 +3,7 @@
   <head>
     <title><%= content_for(:title) || "Fives" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-    <meta name="theme-color" content="#047857">
+    <meta name="theme-color" content="#334155">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -21,7 +21,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-primary-700">
+  <body class="bg-gradient-to-b from-slate-700 to-slate-900 bg-slate-900 h-full min-h-screen">
     <main class="dark w-full min-h-24">
       <%#= render 'shared/flash' %>
       <%= yield %>

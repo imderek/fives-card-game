@@ -1,19 +1,19 @@
-<%= link_to game_path(game), id: dom_id(game), class: "block bg-white py-4 px-4 rounded-xl shadow-xl" do %>
+<%= link_to game_path(game), id: dom_id(game), class: "block bg-white dark:bg-slate-500/50 dark:text-white py-4 px-4 rounded-lg shadow-xl" do %>
   <% opponent = game.player1_id == current_user.id ? game.player2 : game.player1 %>
   <div class="flex justify-between items-center text-sm">
     <div>
       <div class="flex flex-row items-center mb-1">
-        <span class="inline-block mr-2 px-2 py-1 font-semibold bg-red-100 text-red-600 rounded">
+        <span class="inline-block mr-2 px-2 py-1 font-semibold bg-red-100 text-red-600 rounded dark:bg-slate-500/50 dark:text-white">
             <%#= game.game_type.upcase %>
             BOT VS
         </span>
         <span class="inline-block"><%= game.player1.email %></span>
       </div>
-      <div class="text-gray-500"><%= time_ago_in_words(game.created_at).capitalize %> ago</div>
+      <div class="text-gray-500 dark:text-white/70 text-xs"><%= time_ago_in_words(game.created_at).capitalize %> ago</div>
     </div>
 
     <div class="flex gap-4 items-center">
-      <%= content_tag :span,class: "text-gray-400 hover:text-gray-500 relative right-2" do %>
+      <%= content_tag :span,class: "text-gray-400 hover:text-gray-500 relative right-2 dark:text-white/70" do %>
         <i class="fa fa-chevron-right text-lg"></i>
       <% end %>
 
