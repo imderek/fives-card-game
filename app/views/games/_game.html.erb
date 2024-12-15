@@ -7,7 +7,7 @@
             <%#= game.game_type.upcase %>
             BOT VS
         </span>
-        <span class="inline-block"><%= game.player1.email %></span>
+        <span class="inline-block font-medium"><%= game.player1.email.capitalize %></span>
       </div>
       <div class="text-gray-500 dark:text-white/70 text-xs"><%= time_ago_in_words(game.created_at).capitalize %> ago</div>
     </div>
