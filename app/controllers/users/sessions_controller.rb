@@ -10,8 +10,9 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    # Find user by email
-    user = User.find_by(email: params[:user][:email])
+    # Find user by email (case insensitive)
+    email = params[:user][:email].downcase
+    user = User.find_by("lower(email) = ?", email)
 
     if user
       # If user exists, sign them in
@@ -22,8 +23,8 @@ class Users::SessionsController < Devise::SessionsController
       end
     else
       # If user doesn't exist, create a new user and sign them up
-      user = User.new(email: params[:user][:email])
-      user.organization = Organization.create(name: params[:email])
+      user = User.new(email: email)
+      user.organization = Organization.create(name: email)
 
       if user.save
         sign_in(user)
