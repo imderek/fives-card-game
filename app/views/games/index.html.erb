@@ -21,12 +21,24 @@
     </div>
   </div>
 
-  <h1 class="text-xl font-semibold mb-4 dark:text-white">Recent Games</h1>
+  <h1 class="text-xl font-medium mb-4 dark:text-white">Leaderboard</h1>
+  <div class="grid gap-4 mb-5">
+    <div class="text-sm flex flex-col divide-y divide-slate-700 *:py-2 first:*:pt-0 last:*:pb-0 justify-between bg-white dark:bg-slate-500/50 dark:text-white py-4 px-4 rounded-lg shadow-xl">
+      <% @leaderboard.each_with_index do |user, index| %>
+        <div class="flex flex-row justify-between">
+          <div class=""><span class="inline-block w-5 text-slate-400"><%= index + 1 %></span> <%= user.email %></div>
+          <div class=""><%= user.wins %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 
   <!-- Recent Games -->
+  <h1 class="text-xl font-semibold mb-4 dark:text-white">Recent Games</h1>
   <div id="games_list" class="grid gap-4">
     <% @games.each do |game| %>
       <%= render "games/game", game: game %>
     <% end %>
   </div>
+
 </div>

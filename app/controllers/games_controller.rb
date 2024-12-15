@@ -6,6 +6,11 @@ class GamesController < ApplicationController
 
   def index
     @games = Game.where('created_at >= ?', 23.hours.ago).order(created_at: :desc).includes(:player1, :player2).limit(5)
+    @leaderboard = User.select('users.*, COUNT(games.id) as wins')
+                      .left_joins(:won_games)
+                      .group('users.id')
+                      .order('wins DESC')
+                      .limit(5)
   end
 
   def show
