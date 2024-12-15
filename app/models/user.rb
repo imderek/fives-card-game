@@ -4,6 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Remove the email validation
+  validates :email, presence: true
+
   has_many :owned_deals, class_name: 'Deal', foreign_key: 'owner_id'
   belongs_to :organization
 
