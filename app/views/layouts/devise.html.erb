@@ -3,7 +3,7 @@
   <head>
     <title><%= content_for(:title) || "FIVES" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="#334155">
+    <meta name="theme-color" content="#1e293b">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -26,7 +26,7 @@
     <main class="min-h-24">
       <%= render 'shared/flash' %>
       <section class="">
-        <h1 class="w-5/6 md:w-80 md:mx-auto md:mb-4 md:text-center uppercase leading-9 tracking-tighter text-5xl font-bold px-6 pt-24 pb-4 text-slate-500/50">Mother fucking <span class="text-white">Fives</span></h1>
+        <h1 class="w-full md:w-80 md:mx-auto md:mb-4 md:text-center uppercase leading-9 tracking-tighter text-5xl font-bold pl-6 pr-6 pt-24 pb-4 text-slate-500/50">A poker-based game called <br/><span class="text-white">Fives</span></h1>
         <div class="flex flex-col items-center justify-center p-6 mx-auto lg:py-0">
             <%= yield %>
         </div>
