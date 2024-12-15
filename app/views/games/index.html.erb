@@ -30,7 +30,7 @@
         <div class="flex flex-row justify-between items-center px-1">
           <!-- Left column -->
           <div class="flex flex-row gap-1 items-center">
-            <div class="inline-block w-4 text-slate-400"><%= index + 1 %></div>
+            <div class="inline-block w-2 mr-2 text-slate-400 text-center"><%= index + 1 %></div>
             <div class="mr-2 w-6 h-6 rounded-full <%= ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 'bg-pink-500', 'bg-indigo-500'][index % 7] %> text-white flex items-center justify-center"><%= user.email.first.upcase %></div>
             <div class="font-medium"><%= user.email.capitalize %></div>
           </div>
