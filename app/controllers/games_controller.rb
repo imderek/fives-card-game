@@ -8,6 +8,7 @@ class GamesController < ApplicationController
     @games = Game.where('created_at >= ?', 23.hours.ago).order(created_at: :desc).includes(:player1, :player2).limit(5)
     @leaderboard = User.select('users.*, COUNT(games.id) as wins')
                       .left_joins(:won_games)
+                      .where.not(email: 'bot@example.com')
                       .group('users.id')
                       .order('wins DESC')
                       .limit(5)

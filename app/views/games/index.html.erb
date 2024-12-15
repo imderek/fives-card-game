@@ -21,12 +21,20 @@
     </div>
   </div>
 
+  <!-- Leaderboard -->
   <h1 class="text-xl font-medium mb-4 dark:text-white">Leaderboard</h1>
   <div class="grid gap-4 mb-5">
-    <div class="text-sm flex flex-col divide-y divide-slate-700 *:py-2 first:*:pt-0 last:*:pb-0 justify-between bg-white dark:bg-slate-500/50 dark:text-white py-4 px-3 rounded-lg shadow-xl">
+    <div class="text-sm flex flex-col gap-2 justify-between bg-white dark:bg-slate-500/50 dark:text-white py-3 px-3 rounded-lg shadow-xl">
       <% @leaderboard.each_with_index do |user, index| %>
-        <div class="flex flex-row justify-between px-1">
-          <div class=""><span class="inline-block w-5 text-slate-400"><%= index + 1 %></span> <%= user.email %></div>
+        <!-- User row -->
+        <div class="flex flex-row justify-between items-center px-1">
+          <!-- Left column -->
+          <div class="flex flex-row gap-1 items-center">
+            <div class="inline-block w-3 text-slate-400"><%= index + 1 %></div>
+            <div class="mr-1 w-6 h-6 rounded-full <%= ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500', 'bg-pink-500', 'bg-indigo-500'][index % 7] %> text-white flex items-center justify-center"><%= user.email.first.upcase %></div>
+            <div class=""><%= user.email %></div>
+          </div>
+          <!-- Right column -->
           <div class=""><%= user.wins %></div>
         </div>
       <% end %>
