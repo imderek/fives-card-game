@@ -1,24 +1,45 @@
-# README
+# Fives the Game
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A web-based card game where you build poker hands that compete with an opponent's hands.
 
-Things you may want to cover:
+## Development Setup
 
-* Ruby version
+### Prerequisites
 
-* System dependencies
+* Ruby 3.2.0+
+* Rails 7.0+
+* PostgreSQL
+* Node.js 16+
+* Yarn
 
-* Configuration
+### Installation
 
-* Database creation
+1. Clone the repository
+2. Install dependencies: `bundle install`
+3. Set up the database: `rails db:setup`
+4. Start the server: `bin/dev -p 3001`
+5. Visit `http://localhost:3001` in your browser
 
-* Database initialization
+## Testing
 
-* How to run the test suite
+Run the test suite with:
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+bundle exec rspec
+```
 
-* Deployment instructions
+## Deployment
 
-* ...
+The application automatically deploys to Render whenever changes are pushed to the `main` branch and the tests pass.
+
+## Features
+
+* Real-time card games with WebSocket support
+* User authentication
+* Game matchmaking
+* AI opponents
+* Leaderboard system
+
+## License
+
+This project is licensed under the MIT License.
