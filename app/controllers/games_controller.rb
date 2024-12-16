@@ -25,7 +25,12 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     @game.player1 = current_user
-    @game.player2_id ||= User.find_by(email: 'bot@example.com').id  # Use the bot user
+    
+    # If no player2 is selected, default to easy bot
+    if @game.player2_id.blank?
+      bot_user = User.find_by(email: 'bot_easy@example.com')
+      @game.player2_id = bot_user.id
+    end
 
     if @game.save
       Turbo::StreamsChannel.broadcast_append_to(
@@ -185,33 +190,17 @@ class GamesController < ApplicationController
   end
 
   def bot_turn?
-    @game.current_turn == @game.player2_id && @game.player2.email == 'bot@example.com'
+    @game.current_turn == @game.player2_id && @game.player2.email.start_with?('bot_')
   end
 
   def make_bot_move
-    # Pick a random card and column for the bot
-    bot_hand = @game.player2_hand
-    return if bot_hand.empty?
+    return unless bot_turn?
     
-    # Get available columns (those with fewer than 5 cards)
-    available_columns = (4..7).select do |col|
-      @game.board_cards.count { |card| card[:player_id] == @game.player2_id && card[:column] == col } < 5
-    end
-    
-    Rails.logger.debug "Available columns for bot: #{available_columns.inspect}"
-    return if available_columns.empty?  # No valid moves available
-    
-    bot_card = bot_hand.sample
-    bot_column = available_columns.sample  # Already using columns 4-7
-    
-    played_card = {
-      suit: bot_card[:suit],
-      value: bot_card[:value],
-      player_id: @game.player2_id,
-      column: bot_column
-    }
-    
-    Rails.logger.debug "Bot playing card #{bot_card.inspect} in column #{bot_column}"
-    play_card_and_update_game(played_card)
+    strategy = BotService.get_strategy(@game)
+    bot_move = strategy.make_move
+    return unless bot_move
+
+    Rails.logger.debug "Bot playing card #{bot_move.inspect}"
+    play_card_and_update_game(bot_move)
   end
 end

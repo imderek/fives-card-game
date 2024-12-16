@@ -19,12 +19,14 @@ user = User.create!(
   organization_id: org.id 
 )
 
-# Create bot user
-User.create!(
-  email: 'bot@example.com',
-  password: SecureRandom.hex(10),
-  organization_id: org.id
-)
+# Create bot users for different difficulties
+['easy', 'medium', 'hard'].each do |difficulty|
+  User.create!(
+    email: "bot_#{difficulty}@example.com",
+    password: SecureRandom.hex(10),
+    organization_id: org.id
+  )
+end
 
 # Create organization memberships
 OrganizationMembership.create!([
