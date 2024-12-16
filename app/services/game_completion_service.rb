@@ -40,11 +40,20 @@ class GameCompletionService
 
   private
 
+  def card_value_to_int(value)
+    case value
+    when 'A' then 14
+    when 'K' then 13
+    when 'Q' then 12
+    when 'J' then 11
+    else value.to_i
+    end
+  end
+
   def score_poker_hand(cards)
     return 0 if cards.empty?
     
-    # Convert values to integers before processing
-    values = cards.map { |card| card[:value].to_i }
+    values = cards.map { |card| card_value_to_int(card[:value]) }
     suits = cards.map { |card| card[:suit] }
     
     # Score different poker hands (from highest to lowest)
@@ -53,21 +62,25 @@ class GameCompletionService
     elsif straight_flush?(values, suits)
       800   # Straight Flush
     elsif four_of_a_kind?(values)
-      700   # Four of a Kind
+      700 + values.max  # Four of a Kind + high card value
     elsif full_house?(values)
-      600   # Full House
+      # Add the value of the three of a kind cards to the base score
+      three_of_a_kind_value = values.tally.find { |_, count| count == 3 }&.first || 0
+      600 + three_of_a_kind_value  # Full House + three of a kind value
     elsif flush?(suits)
-      500   # Flush
+      500 + values.max  # Flush + high card value
     elsif straight?(values)
       400   # Straight
     elsif three_of_a_kind?(values)
-      300   # Three of a Kind
+      # Add the value of the three matching cards
+      three_of_a_kind_value = values.tally.find { |_, count| count == 3 }&.first || 0
+      300 + three_of_a_kind_value  # Three of a Kind + card value
     elsif two_pair?(values)
       200   # Two Pair
     elsif one_pair?(values)
-      100   # One Pair
+      100 + values.max  # One Pair + high card value
     else
-      highest_card(values) # High Card
+      values.max # High Card
     end
   end
 
