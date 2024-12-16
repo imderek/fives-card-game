@@ -1,14 +1,16 @@
 <%= content_tag :div,
-  class: "#{defined?(last) && last ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''} relative #{playable ? 'cursor-pointer' : ''} transition-transform w-14 h-20 md:w-20 md:h-28 bg-white rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]",
+  class: "#{defined?(last) && last ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''} relative #{playable ? 'cursor-pointer' : ''} transition-transform w-14 h-20 md:w-20 md:h-28 #{defined?(facedown) && facedown ? 'bg-gradient-to-br from-slate-500 to-slate-700' : 'bg-white'} rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]",
   data: {
     controller: playable ? "card" : nil,
-    card: card.merge(gameId: game.id).to_json,
+    card: card&.merge(gameId: game.id)&.to_json,
     action: playable ? "click->card#selectCard" : nil,
     card_target: "cardElement"
   } do %>
-  <div class="w-full h-full flex flex-col items-start p-1 px-2 md:p-2">
-    <div class="<%= card[:suit].in?(['♥', '♦']) ? 'text-red-500' : 'text-black' %> text-lg md:text-xl">
-      <%= card[:value] %><%= card[:suit] %>
+  <% unless defined?(facedown) && facedown %>
+    <div class="w-full h-full flex flex-col items-start p-1 px-2 md:p-2">
+      <div class="<%= card[:suit].in?(['♥', '♦']) ? 'text-red-500' : 'text-black' %> text-lg md:text-xl">
+        <%= card[:value] %><%= card[:suit] %>
+      </div>
     </div>
-  </div>
+  <% end %>
 <% end %>

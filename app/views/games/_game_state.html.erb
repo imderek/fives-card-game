@@ -80,4 +80,18 @@
       </div>
     </div>
   </div>
+  <!-- opponent hand -->
+  <div class="opponent-hand flex flex-row -space-x-[.35rem]">
+    <% opponent_hand = current_user.id == game.player1_id ? game.player2_hand : game.player1_hand %>
+    <% opponent_hand.each_with_index do |card, index| %>
+      <%= render partial: "games/card", locals: { 
+        card: nil, # Pass nil instead of the actual card to hide it
+        current_user: current_user, 
+        playable: false,
+        game: game,
+        last: index == opponent_hand.size - 1,
+        facedown: true # Add facedown flag to render back of card
+      } %>
+    <% end %>
+  </div>
 </div> 
