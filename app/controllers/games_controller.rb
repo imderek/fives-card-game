@@ -118,39 +118,42 @@ class GamesController < ApplicationController
 
   def play_card_and_update_game(played_card)
     begin
-      Rails.logger.debug "Playing card: #{played_card.inspect}"
-      
-      # Update board state with the played card
-      update_board_state(played_card)
-      
-      # Remove card from player's hand and update current turn
-      if played_card[:player_id] == @game.player1_id
-        @game.player1_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
-        # Draw a card for player 1
-        drawn_card = @game.deck.pop
-        @game.player1_hand << drawn_card if drawn_card
-        @game.current_turn = @game.player2_id
-      else
-        @game.player2_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
-        # Draw a card for player 2
-        drawn_card = @game.deck.pop
-        @game.player2_hand << drawn_card if drawn_card
-        @game.current_turn = @game.player1_id
-      end
-
-      if @game.save
-        # If it's the bot's turn, make their move first
-        if bot_turn?
-          make_bot_move
+      Game.transaction do
+        Rails.logger.debug "Playing card: #{played_card.inspect}"
+        
+        # Update board state with the played card
+        update_board_state(played_card)
+        
+        # Remove card from player's hand and update current turn
+        if played_card[:player_id] == @game.player1_id
+          @game.player1_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+          # Draw a card for player 1
+          drawn_card = @game.deck.pop
+          @game.player1_hand << drawn_card if drawn_card
+          @game.current_turn = @game.player2_id
+        else
+          @game.player2_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+          # Draw a card for player 2
+          drawn_card = @game.deck.pop
+          @game.player2_hand << drawn_card if drawn_card
+          @game.current_turn = @game.player1_id
         end
-        
-        # Check for winner after both moves are complete
-        GameCompletionService.new(@game).check_for_winner
-        
-        true
-      else
-        Rails.logger.error "Failed to save game: #{@game.errors.full_messages}"
-        false
+
+        if @game.save
+          # Make bot move within the same transaction
+          if bot_turn?
+            make_bot_move
+          end
+          
+          # Check for winner after both moves are complete
+          GameCompletionService.new(@game).check_for_winner
+          
+          # Only render the response here, let the model handle broadcasting
+          true
+        else
+          Rails.logger.error "Failed to save game: #{@game.errors.full_messages}"
+          false
+        end
       end
     rescue => e
       Rails.logger.error "Error in play_card_and_update_game: #{e.message}"
@@ -178,11 +181,7 @@ class GamesController < ApplicationController
   end
 
   def render_success_response
-    render turbo_stream: [
-      turbo_stream.replace("game-state", partial: "games/game_state", locals: { game: @game, current_user: current_user }),
-      turbo_stream.replace("game-status", partial: "games/game_status", locals: { game: @game, current_user: current_user }),
-      turbo_stream.replace("player-controls", partial: "games/player_controls", locals: { game: @game, current_user: current_user })
-    ]
+    render turbo_stream: turbo_stream.update("game_error", "") # Just clear any errors
   end
 
   def render_error(message)
