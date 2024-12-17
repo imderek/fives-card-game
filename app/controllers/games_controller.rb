@@ -5,7 +5,10 @@ class GamesController < ApplicationController
   include ActionView::RecordIdentifier
 
   def index
-    @games = Game.where('created_at >= ?', 23.hours.ago).order(created_at: :desc).includes(:player1, :player2).limit(5)
+    @games = Game.where('created_at >= ? AND (player1_id = ? OR player2_id = ?)', 23.hours.ago, current_user.id, current_user.id)
+                 .order(created_at: :desc)
+                 .includes(:player1, :player2)
+                 .limit(5)
     @leaderboard = User.select('users.*, COUNT(games.id) as wins')
                       .left_joins(:won_games)
                       .where("email NOT LIKE ?", "%bot%")

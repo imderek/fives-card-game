@@ -42,11 +42,14 @@
   </div>
 
   <!-- Recent Games -->
-  <h1 class="text-xl font-semibold mb-4 dark:text-white">Recent Games</h1>
-  <div id="games_list" class="grid gap-4">
-    <% @games.each do |game| %>
-      <%= render "games/game", game: game %>
-    <% end %>
-  </div>
-
+  <h1 class="text-xl font-semibold <%= @games.any? ? 'mb-4' : 'mb-2' %> dark:text-white">My Recent Games</h1>
+  <% if @games.any? %>
+    <div id="games_list" class="grid gap-4">
+      <% @games.each do |game| %>
+        <%= render "games/game", game: game %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-slate-500">You haven't played yet.</div>
+  <% end %>
 </div>
