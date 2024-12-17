@@ -1,6 +1,6 @@
 <%= turbo_stream_from "games" %>
 
-<div class="max-w-7xl mx-auto px-4 py-6 pb-12">
+<div class="max-w-7xl mx-auto px-4 py-6 pb-20">
   <div class="flex flex-row justify-between mb-5">
     <h1 class="text-3xl font-bold text-white dark:text-white">Lobby</h1>
     <%= button_to "Sign Out", destroy_user_session_path, 
@@ -9,7 +9,7 @@
   </div>
 
   <!-- Start New Game -->
-  <div class="mb-5 text-center bg-gradient-to-br from-slate-600 to-slate-800 dark:text-white p-5 rounded-xl shadow-xl">
+  <div class="mb-5 text-center bg-gradient-to-br from-slate-600 to-slate-800 dark:text-white p-6 rounded-xl shadow-xl">
     <h2 class="text-xl font-semibold mb-3">Start a New Game</h2>
     <div class="flex justify-center gap-4">
       <%= link_to "Play vs Bot",
