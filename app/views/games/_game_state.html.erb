@@ -2,7 +2,7 @@
 
 <div id="game-state" class="w-full flex flex-col items-center gap-7">
   <!-- player hand -->
-  <div class="player-hand flex flex-row -space-x-[.35rem]">
+  <div class="player-hand flex flex-row -space-x-[.3rem]">
     <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
     <% player_hand.each_with_index do |card, index| %>
       <%= render partial: "games/card", locals: { 
@@ -81,7 +81,7 @@
     </div>
   </div>
   <!-- opponent hand -->
-  <div class="opponent-hand flex flex-row -space-x-[.35rem]">
+  <div class="opponent-hand flex flex-row -space-x-[.3rem]">
     <% opponent_hand = current_user.id == game.player1_id ? game.player2_hand : game.player1_hand %>
     <% opponent_hand.each_with_index do |card, index| %>
       <%= render partial: "games/card", locals: { 
