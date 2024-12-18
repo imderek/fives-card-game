@@ -31,7 +31,7 @@
           <!-- Left column -->
           <div class="flex flex-row gap-1 items-center">
             <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
-            <div class="mr-1 w-6 h-6 rounded-full bg-gradient-to-b border-2 shadow-lg <%= ['from-red-500 to-red-600 border-red-500', 'from-blue-500 to-blue-600 border-blue-500', 'from-green-500 to-green-600 border-green-500', 'from-purple-500 to-purple-600 border-purple-500', 'from-amber-500 to-amber-600 border-amber-500', 'from-pink-500 to-pink-600 border-pink-500', 'from-indigo-500 to-indigo-600 border-indigo-500'][index % 7] %> text-white flex items-center justify-center"><%= user.email.first.upcase %></div>
+            <div class="mr-1 w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= user.email.first.upcase %></div>
             <div class="font-medium"><%= user.email.capitalize %></div>
           </div>
           <!-- Right column -->
