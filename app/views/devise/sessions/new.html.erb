@@ -3,7 +3,7 @@
         <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "flex flex-col gap-4" }) do |f| %>
             <%#= f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
             <%= f.text_field :email, autofocus: true, autocomplete: "name", class: "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-slate-400 focus:border-slate-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-slate-500 dark:focus:border-slate-500", placeholder: "Enter your name", required: true %>
-            <%= f.submit "Start Playing", class: "w-full rounded-lg shadow-[0_12px_11px_-3px_rgba(0,0,0,.2),0_4px_6px_-4px_rgba(0,0,0,.1)] text-slate-900 rounded-lg shadow-[0_12px_11px_-3px_rgba(0,0,0,.2),0_4px_6px_-4px_rgba(0,0,0,.1)] border-2 border-amber-400 bg-gradient-to-br from-amber-500 via-amber-400 via-30% to-amber-600 px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-slate-800" %>
+            <%= f.submit "Start Playing", class: "font-medium w-full rounded-lg shadow-[0_12px_11px_-3px_rgba(0,0,0,.2),0_4px_6px_-4px_rgba(0,0,0,.1)] text-slate-900 rounded-lg shadow-[0_12px_11px_-3px_rgba(0,0,0,.2),0_4px_6px_-4px_rgba(0,0,0,.1)] border-2 border-amber-400 bg-gradient-to-br from-amber-500 via-amber-400 via-30% to-amber-600 px-5 py-2.5 text-center dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-slate-800" %>
         <% end %>
     </div>
 </div>
