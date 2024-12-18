@@ -9,7 +9,7 @@
   </div>
 
   <!-- Start New Game -->
-  <div class="mb-5 text-center border border-slate-500 bg-gradient-to-tl from-slate-600 from-0% via-slate-300 via-30% via-slate-400 to-90% to-slate-700 dark:text-white py-8 rounded-xl shadow-xl">
+  <div class="mb-5 text-center border border-slate-500 bg-gradient-to-br from-slate-700 from-0% via-slate-600 to-slate-300 dark:text-white py-8 rounded-xl shadow-xl">
     <h2 class="text-xl font-semibold mb-3">Start a New Game</h2>
     <div class="flex justify-center gap-4">
       <%= link_to "Play vs Bot",
@@ -24,7 +24,7 @@
   <!-- Leaderboard -->
   <h1 class="text-xl font-medium mb-4 dark:text-white">Leaderboard</h1>
   <div class="grid gap-4 mb-5">
-    <div class="text-sm flex flex-col gap-2 justify-between bg-slate-800 dark:text-white py-3 px-3 rounded-xl shadow-xl">
+    <div class="text-sm flex flex-col gap-2 justify-between border border-slate-500 bg-gradient-to-br from-slate-700 from-0% via-slate-600 via-60% to-slate-400 dark:text-white py-3 px-3 rounded-xl shadow-xl">
       <% @leaderboard.each_with_index do |user, index| %>
         <!-- User row -->
         <div class="flex flex-row justify-between items-center px-1">
