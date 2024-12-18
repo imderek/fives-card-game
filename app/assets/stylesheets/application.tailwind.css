@@ -13,5 +13,5 @@
 */
 
 .turbo-progress-bar {
-  background: theme('colors.primary.500');
+  background: theme('colors.amber.500');
 }
