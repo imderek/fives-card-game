@@ -27,7 +27,14 @@ export default class extends Controller {
       console.log("No card selected")
       return
     }
-    
+
+    // Flash the selected column with a highlight
+    const column = event.currentTarget
+    column.classList.add('ring-slate-500', 'ring-2')
+    setTimeout(() => {
+      column.classList.remove('ring-slate-500', 'ring-2')
+    }, 1500)
+
     const columnIndex = event.currentTarget.dataset.columnIndex
     console.log("Playing card", window.selectedCard, "to column", columnIndex)
 
