@@ -28,12 +28,20 @@ export default class extends Controller {
       return
     }
 
+    // Check if column already has 5 cards
+    const cardsInColumn = event.currentTarget.querySelector('.flex').children.length
+    if (cardsInColumn >= 5) {
+      console.log("Column is full")
+      return
+    }
+
     // Flash the selected column with a highlight
     const column = event.currentTarget
-    column.classList.add('ring-slate-500', 'ring-2')
+    column.classList.add('ring-2', 'ring-amber-500')
     setTimeout(() => {
-      column.classList.remove('ring-slate-500', 'ring-2')
-    }, 1500)
+      console.log('resetting column')
+      column.classList.remove('ring-2', 'ring-amber-500')
+    }, 500)
 
     const columnIndex = event.currentTarget.dataset.columnIndex
     console.log("Playing card", window.selectedCard, "to column", columnIndex)

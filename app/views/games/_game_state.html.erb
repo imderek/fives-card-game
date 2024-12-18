@@ -27,7 +27,7 @@
         <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
         <% player_data[:columns].each_with_index do |column, index| %>
           <!-- Column -->
-          <div class="min-w-[4.5rem] min-h-[6rem] p-2 relative column bg-slate-600/70 rounded-xl shadow-lg" 
+          <div class="min-w-[4.5rem] min-h-[6rem] p-2 relative column bg-slate-600/70 rounded-xl shadow-lg transition-all duration-150"
               data-controller="card"
               data-action="click->card#playColumn"
               data-column-index="<%= index %>">
