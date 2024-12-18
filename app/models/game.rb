@@ -30,16 +30,15 @@ class Game < ApplicationRecord
     save
   end
   
-  def board_cards_for_player(player_id, column)
-    board_cards.select do |card| 
-      if player_id == player1_id
-        # Player 1's cards are in columns 0-3
-        card[:player_id] == player1_id && card[:column] == column
-      else
-        # Player 2's cards are in columns 4-7
-        card[:player_id] == player2_id && card[:column] == (column + 4)
-      end
+  def board_cards_for_player(player_id, column = nil)
+    return [] if board_cards.nil?
+    
+    filtered_cards = board_cards.select do |card|
+      card[:player_id] == player_id && 
+      (column.nil? || card[:column].to_i == column.to_i)
     end
+    
+    filtered_cards || []
   end
   
   def find_card(card_code)

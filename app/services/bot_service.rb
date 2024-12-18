@@ -1,7 +1,7 @@
 # app/services/bot_service.rb
 class BotService
   STRATEGY_MAPPING = {
-    'bot_easy@example.com' => BotStrategies::EasyBot,
+    'bot_easy@example.com' => BotStrategies::MediumBot,
     # Add more strategies as they're implemented:
     # 'bot_medium@example.com' => BotStrategies::MediumBot,
     # 'bot_hard@example.com' => BotStrategies::HardBot

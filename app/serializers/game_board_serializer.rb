@@ -7,16 +7,16 @@ class GameBoardSerializer
 
   def as_json
     {
-      player_1: serialize_player_columns(@game.player1_id),
-      player_2: serialize_player_columns(@game.player2_id)
+      player_1: serialize_player_columns(@game.player1_id, 0..3),
+      player_2: serialize_player_columns(@game.player2_id, 4..7)
     }
   end
 
   private
 
-  def serialize_player_columns(player_id)
+  def serialize_player_columns(player_id, column_range)
     {
-      columns: (0..3).map do |column|
+      columns: column_range.map do |column|
         cards = @game.board_cards_for_player(player_id, column).map { |card| 
           "#{card[:value]}#{card[:suit].first.upcase}"
         }
