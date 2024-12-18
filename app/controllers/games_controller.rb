@@ -55,30 +55,20 @@ class GamesController < ApplicationController
   def play_card
     respond_to do |format|
       format.turbo_stream do
-        Rails.logger.debug "Current turn: #{@game.current_turn}"
-        Rails.logger.debug "Current user: #{current_user.id}"
-        Rails.logger.debug "Bot ID: #{@game.player2_id}"
+        @game.skip_broadcast = true  # Disable automatic broadcasting
         
-        unless valid_turn?
-          render_error("Not your turn or wrong phase") and return
-        end
-
-        card = params[:card].to_unsafe_h.symbolize_keys.merge(player_id: current_user.id)
-        Rails.logger.debug "Playing card: #{card.inspect}"
+        # Create the played_card hash with the required data
+        played_card = params[:card].merge(player_id: current_user.id)
         
-        unless @game.valid_move?(card)
-          render_error("Cannot add more than 5 cards to a column") and return
-        end
-
-        if play_card_and_update_game(card)
-          # Check if it's the bot's turn and make the bot move
-          if bot_turn?
-            Rails.logger.debug "Bot's turn - making move"
-            make_bot_move
-          end
-          render_success_response
+        if play_card_and_update_game(played_card)
+          # Check for bot's turn and make move if needed
+          make_bot_move if bot_turn?
+          
+          @game.skip_broadcast = false  # Re-enable and do one final broadcast
+          @game.broadcast_game_state
+          head :ok
         else
-          render_error("Failed to update game")
+          render_error("Invalid move")
         end
       end
     end
@@ -131,28 +121,26 @@ class GamesController < ApplicationController
     success = false
     
     begin
-      Game.transaction do
-        Rails.logger.debug "Playing card: #{played_card.inspect}"
-        update_board_state(played_card)
-        
-        # Remove card from player's hand and update current turn
-        if played_card[:player_id] == @game.player1_id
-          @game.player1_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
-          drawn_card = @game.deck.pop
-          @game.player1_hand << drawn_card if drawn_card
-          @game.current_turn = @game.player2_id
-        else
-          @game.player2_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
-          drawn_card = @game.deck.pop
-          @game.player2_hand << drawn_card if drawn_card
-          @game.current_turn = @game.player1_id
-        end
-
-        success = @game.save
-
-        # Check for winner using the GameCompletionService
-        GameCompletionService.new(@game).check_for_winner
+      Rails.logger.debug "Playing card: #{played_card.inspect}"
+      update_board_state(played_card)
+      
+      # Remove card from player's hand and update current turn
+      if played_card[:player_id] == @game.player1_id
+        @game.player1_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+        drawn_card = @game.deck.pop
+        @game.player1_hand << drawn_card if drawn_card
+        @game.current_turn = @game.player2_id
+      else
+        @game.player2_hand.delete_if { |card| card[:suit] == played_card[:suit] && card[:value] == played_card[:value] }
+        drawn_card = @game.deck.pop
+        @game.player2_hand << drawn_card if drawn_card
+        @game.current_turn = @game.player1_id
       end
+
+      success = @game.save
+
+      # Check for winner using the GameCompletionService
+      GameCompletionService.new(@game).check_for_winner
 
       success
     rescue => e
@@ -164,22 +152,14 @@ class GamesController < ApplicationController
 
   def make_bot_move
     Rails.logger.debug "Making bot move for game #{@game.id}"
-    bot_type = @game.player2.email.split(' ')[0].downcase # 'easy' or 'medium'
-    strategy_class = "BotStrategies::#{bot_type.capitalize}Bot".constantize
-    Rails.logger.debug "Using strategy class: #{strategy_class}"
     
-    strategy = strategy_class.new(@game)
+    strategy = BotService.get_strategy(@game)
     bot_move = strategy.make_move
     
     if bot_move
       Rails.logger.debug "Bot playing move: #{bot_move.inspect}"
       play_card_and_update_game(bot_move)
-    else
-      Rails.logger.debug "Bot couldn't make a move"
     end
-  rescue => e
-    Rails.logger.error "Error in bot move: #{e.message}"
-    Rails.logger.error e.backtrace.join("\n")
   end
 
   def update_board_state(played_card)
@@ -210,6 +190,14 @@ class GamesController < ApplicationController
 
   def bot_turn?
     Rails.logger.debug "Checking bot turn - current_turn: #{@game.current_turn}, player2: #{@game.player2.email}"
-    @game.current_turn == @game.player2_id && @game.player2.email.include?('bot')
+    is_bot = @game.player2.email.include?("bot")
+    is_bot_turn = @game.current_turn == @game.player2_id
+    
+    if is_bot && is_bot_turn
+      Rails.logger.debug "Bot's turn - making move"
+      return true
+    end
+    
+    false
   end
 end

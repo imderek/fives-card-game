@@ -14,7 +14,45 @@ class Game < ApplicationRecord
   
   before_create :setup_initial_game_state
   
+  def broadcast_game_state
+    return if skip_broadcast
+    Rails.logger.debug "Broadcasting game state for game #{id}"
+    [player1_id, player2_id].compact.each do |player_id|
+      Rails.logger.debug "Broadcasting to player #{player_id}"
+      
+      current_user = User.find(player_id)
+      
+      # Create a dedicated stream name for each player
+      stream_name = "game_#{id}_player_#{player_id}"
+      
+      broadcast_replace_to(
+        stream_name,
+        target: "game-state",
+        partial: "games/game_state",
+        locals: { game: self, current_user: current_user }
+      )
+
+      broadcast_replace_to(
+        stream_name,
+        target: "game-status",
+        partial: "games/game_status",
+        locals: { game: self, current_user: current_user }
+      )
+
+      broadcast_replace_to(
+        stream_name,
+        target: "player-controls",
+        partial: "games/player_controls",
+        locals: { game: self, current_user: current_user }
+      )
+      
+      Rails.logger.debug "Finished broadcasting to player #{player_id}"
+    end
+  end
+  
   after_update_commit :broadcast_game_state
+  
+  attr_accessor :skip_broadcast
   
   def current_player_can_draw?(user_id)
     current_turn == user_id && turn_phase == "draw_card"
@@ -95,40 +133,5 @@ class Game < ApplicationRecord
   
   def draw_initial_hand
     deck.pop(6)
-  end
-  
-  def broadcast_game_state
-    Rails.logger.debug "Broadcasting game state for game #{id}"
-    [player1_id, player2_id].compact.each do |player_id|
-      Rails.logger.debug "Broadcasting to player #{player_id}"
-      
-      current_user = User.find(player_id)
-      
-      # Create a dedicated stream name for each player
-      stream_name = "game_#{id}_player_#{player_id}"
-      
-      broadcast_replace_to(
-        stream_name,
-        target: "game-state",
-        partial: "games/game_state",
-        locals: { game: self, current_user: current_user }
-      )
-
-      broadcast_replace_to(
-        stream_name,
-        target: "game-status",
-        partial: "games/game_status",
-        locals: { game: self, current_user: current_user }
-      )
-
-      broadcast_replace_to(
-        stream_name,
-        target: "player-controls",
-        partial: "games/player_controls",
-        locals: { game: self, current_user: current_user }
-      )
-      
-      Rails.logger.debug "Finished broadcasting to player #{player_id}"
-    end
   end
 end 
