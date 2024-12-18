@@ -1,4 +1,4 @@
-<%= link_to game_path(game), id: dom_id(game), class: "block border border-slate-500 bg-gradient-to-br from-slate-700 from-0% via-slate-600 via-60% to-slate-400 dark:text-white py-4 px-4 rounded-lg shadow-lg" do %>
+<%= link_to game_path(game), id: dom_id(game), class: "block bg-slate-700 dark:text-white py-4 px-4 rounded-lg shadow-lg" do %>
   <% opponent = game.player1_id == current_user.id ? game.player2 : game.player1 %>
   <div class="flex justify-between items-center text-sm">
     <div>
