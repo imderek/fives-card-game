@@ -1,31 +1,42 @@
-<div class="dark justify-center mx-auto mb-5 py-6 px-3">
+<div class="dark justify-center mx-auto mb-5 py-6 px-3" data-controller="bot-selection">
   <h1 class="mb-6 text-xl font-semibold text-center dark:text-white">Choose Your Bot</h1>
-
-  <div class="mb-7 w-full md:w-96 mx-auto text-sm flex flex-row gap-2 text-center">
-    <div class="flex-1">
-      <div class="h-20 flex flex-col justify-center items-center mb-3 bg-white px-2 rounded-lg shadow-xl">
-        <h2 class="relative text-lg font-semibold dark:text-slate-700">Easy</h2>
-        <div class="hidden relative top-[.15rem] text-md text-yellow-400"><i class="fa fa-check-circle"></i></div>
-      </div>
-      <p class="text-slate-300 text-xs">Plays a random card in any column.</p>
-    </div>
-    <div class="flex-1">
-      <div class="h-20 flex flex-col justify-center items-center mb-3 bg-transparent border border-slate-500/60 px-2 rounded-lg">
-        <h2 class="text-white text-lg font-semibold leading-6">Medium</h2>
-        <div class="text-xs text-slate-400">Coming soon</div>
-      </div>
-      <p class="text-slate-300 text-xs">Plays to strengthen specific hands.</p>
-    </div>
-    <div class="flex-1">
-      <div class="h-20 flex flex-col justify-center items-center mb-3 bg-transparent border border-slate-500/60 px-2 rounded-lg">
-        <h2 class="text-white text-lg font-semibold leading-6">Hard</h2>
-        <div class="text-xs text-slate-400">Coming soon</div>
-      </div>
-      <p class="text-slate-300 text-xs">Tries to block opponent's strongest hands.</p>
-    </div>
-  </div>
-
   <%= form_with(model: @game, local: true, class: "") do |f| %>
+    <%= f.hidden_field :bot_difficulty, 
+        data: { bot_selection_target: "difficulty" } %>
+    
+    <div class="mb-7 w-full md:w-96 mx-auto text-sm flex flex-row gap-2 text-center">
+      <div class="flex-1">
+        <div data-bot-selection-target="botCard"
+             data-difficulty="easy"
+             data-action="click->bot-selection#select"
+             class="cursor-pointer h-20 flex flex-col justify-center items-center mb-3 bg-white px-2 rounded-lg shadow-xl hover:bg-gray-50">
+          <h2 class="relative text-lg font-semibold dark:text-slate-700">Easy</h2>
+        </div>
+        <p class="text-slate-300 text-xs">Plays a random card in any column.</p>
+      </div>
+      
+      <div class="flex-1">
+        <div data-bot-selection-target="botCard"
+             data-difficulty="medium"
+             data-action="click->bot-selection#select"
+             class="cursor-pointer h-20 flex flex-col justify-center items-center mb-3 bg-transparent border border-slate-500/60 px-2 rounded-lg hover:bg-gray-50">
+          <h2 class="text-white text-lg font-semibold leading-6">Medium</h2>
+        </div>
+        <p class="text-slate-300 text-xs">Plays to strengthen specific hands.</p>
+      </div>
+      
+      <div class="flex-1">
+        <div data-bot-selection-target="botCard"
+             data-difficulty="hard"
+             data-action="click->bot-selection#select"
+             class="cursor-pointer h-20 flex flex-col justify-center items-center mb-3 bg-transparent border border-slate-500/60 px-2 rounded-lg">
+          <h2 class="text-white text-lg font-semibold leading-6">Hard</h2>
+          <div class="text-xs text-slate-400/80">Coming soon</div>
+        </div>
+        <p class="text-slate-300 text-xs">Tries to block opponent's strongest hands.</p>
+      </div>
+    </div>
+    
     <div class="hidden game-type-selection">
       <h2 class="text-lg font-semibold mb-4">Choose Game Type</h2>
       <div class="flex justify-center gap-8">
@@ -58,4 +69,4 @@
       <%= link_to "Cancel", games_path, class: "px-6 py-3 text-center bg-white dark:text-white rounded-md dark:hover:text-white/80 dark:border dark:border-slate-500/60 dark:bg-transparent dark:hover:bg-white/10 dark:hover:text-gray-400" %>
     </div>
   <% end %>
-</div> 
+</div>

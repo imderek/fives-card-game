@@ -20,9 +20,9 @@ user = User.create!(
 )
 
 # Create bot users for different difficulties
-['easy', 'medium', 'hard'].each do |difficulty|
+['easy bot', 'medium bot', 'hard bot'].each do |difficulty|
   User.create!(
-    email: "bot_#{difficulty}@example.com",
+    email: difficulty,
     password: SecureRandom.hex(10),
     organization_id: org.id
   )
