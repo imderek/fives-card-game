@@ -1,19 +1,31 @@
 <% board_state = GameBoardSerializer.new(game).as_json %>
 
 <div id="game-state" class="w-full flex flex-col items-center gap-4">
-  <!-- player hand -->
-  <div class="player-hand flex flex-row -space-x-[.3rem]">
-    <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
-    <% player_hand.each_with_index do |card, index| %>
-      <%= render partial: "games/card", locals: { 
-        card: card, 
-        current_user: current_user, 
-        playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"), 
-        game: game, 
-        last: index == player_hand.size - 1
-      } %>
-    <% end %>
+  <div class="px-2 w-full flex flex-row justify-center gap-2">
+    <!-- player hand -->
+    <div class="player-hand flex flex-row -space-x-[1rem]">
+      <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
+      <% player_hand.each_with_index do |card, index| %>
+        <%= render partial: "games/card", locals: { 
+          card: card, 
+          current_user: current_user, 
+          playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"), 
+          game: game, 
+          last: index == player_hand.size - 1
+        } %>
+      <% end %>
+    </div>
+    <!-- player score -->
+    <div class="flex flex-col justify-center items-center border border-slate-500/50 rounded-lg py-2 w-20">
+      <% player_total_score = (game.column_scores || {}).select { |col, _| 
+        (current_user.id == game.player1_id && col.to_i < 4) || 
+        (current_user.id == game.player2_id && col.to_i >= 4) 
+      }.values.sum %>
+      <div class="text-base font-semibold text-white"><%= player_total_score %></div>
+      <div class="text-xs text-slate-500">My Score</div>
+    </div>
   </div>
+
 
   <div class="hidden opponent-hand">
     <% opponent_card_count = current_user.id == game.player1_id ? game.player2_hand.size : game.player1_hand.size %>
@@ -90,18 +102,29 @@
       </div>
     </div>
   </div>
-  <!-- opponent hand -->
-  <div class="opponent-hand flex flex-row -space-x-[.3rem]">
-    <% opponent_hand = current_user.id == game.player1_id ? game.player2_hand : game.player1_hand %>
-    <% opponent_hand.each_with_index do |card, index| %>
-      <%= render partial: "games/card", locals: { 
-        card: game.winner_id.present? ? card : nil,
-        current_user: current_user, 
-        playable: false,
-        game: game,
-        last: index == opponent_hand.size - 1,
-        facedown: !game.winner_id.present?
-      } %>
-    <% end %>
+  <div class="px-2 w-full flex flex-row justify-center gap-2">
+    <!-- opponent hand -->
+    <div class="opponent-hand flex flex-row -space-x-[1rem]">
+      <% opponent_hand = current_user.id == game.player1_id ? game.player2_hand : game.player1_hand %>
+      <% opponent_hand.each_with_index do |card, index| %>
+        <%= render partial: "games/card", locals: { 
+          card: game.winner_id.present? ? card : nil,
+          current_user: current_user, 
+          playable: false,
+          game: game,
+          last: index == opponent_hand.size - 1,
+          facedown: !game.winner_id.present?
+        } %>
+      <% end %>
+    </div>
+    <!-- opponent score -->
+    <div class="flex flex-col justify-center items-center border border-slate-500/50 rounded-lg py-2 w-20">
+      <% opponent_total_score = (game.column_scores || {}).select { |col, _| 
+        (current_user.id == game.player2_id && col.to_i < 4) || 
+        (current_user.id == game.player1_id && col.to_i >= 4) 
+      }.values.sum %>
+      <div class="text-base font-semibold text-white"><%= opponent_total_score %></div>
+      <div class="text-xs text-slate-500">Opponent</div>
+    </div>
   </div>
 </div> 
