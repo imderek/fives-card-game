@@ -5,23 +5,7 @@ class GameCompletionService
 
   def score_partial_hand(cards)
     return 0 if cards.empty?
-    
-    values = cards.map { |card| card_value_to_int(card[:value]) }
-    suits = cards.map { |card| card[:suit] }
-    value_counts = values.tally
-    high_card = values.max
-    
-    if value_counts.values.max == 4
-      700 + high_card # Quads
-    elsif value_counts.values.max == 3
-      300 + high_card # Trips
-    elsif value_counts.values.count { |v| v == 2 } == 2
-      200 + high_card # Two Pair
-    elsif value_counts.values.max == 2
-      100 + high_card # Pair
-    else
-      high_card # High Card
-    end
+    score_poker_hand(cards)
   end
 
   def check_for_winner
@@ -77,27 +61,21 @@ class GameCompletionService
     values = cards.map { |card| card_value_to_int(card[:value]) }
     suits = cards.map { |card| card[:suit] }
     
-    if royal_flush?(values, suits)
-      1000  # Royal Flush
-    elsif straight_flush?(values, suits)
-      800   # Straight Flush
-    elsif four_of_a_kind?(values)
-      700 + values.max  # Quads
-    elsif full_house?(values)
-      600 + values.max  # Full House
-    elsif flush?(suits)
-      500 + values.max  # Flush
-    elsif straight?(values)
-      400   # Straight
-    elsif three_of_a_kind?(values)
-      300 + values.max  # Trips
-    elsif two_pair?(values)
-      200 + values.max  # Two Pair
-    elsif one_pair?(values)
-      100 + values.max  # Pair
-    else
-      values.max # High Card
+    # For 5-card hands
+    if cards.length == 5
+      return 1000 if royal_flush?(values, suits)  # Royal Flush
+      return 800 if straight_flush?(values, suits) # Straight Flush
+      return 600 + values.max if full_house?(values) # Full House
+      return 500 + values.max if flush?(suits)    # Flush
+      return 400 if straight?(values)             # Straight
     end
+    
+    # For hands that can be scored with fewer than 5 cards
+    return 700 + values.max if four_of_a_kind?(values)  # Quads
+    return 300 + values.max if three_of_a_kind?(values) # Trips
+    return 200 + values.max if two_pair?(values)        # Two Pair
+    return 100 + values.max if one_pair?(values)        # Pair
+    values.max # High Card
   end
 
   def royal_flush?(values, suits)
@@ -118,7 +96,7 @@ class GameCompletionService
   end
 
   def flush?(suits)
-    suits.uniq.size == 1
+    suits.uniq.size == 1 && suits.size == 5  # Added check for exactly 5 cards
   end
 
   def straight?(values)
