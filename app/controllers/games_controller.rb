@@ -57,24 +57,29 @@ class GamesController < ApplicationController
       format.turbo_stream do
         @game.skip_broadcast = true  # Disable automatic broadcasting
         
-        # Create the played_card hash with the required data
         played_card = params[:card].merge(player_id: current_user.id)
         
         if play_card_and_update_game(played_card)
-          # Update column score after playing card
-          column = played_card[:column].to_i
-          column_cards = @game.board_cards_for_player(current_user.id, column)
-          new_score = GameCompletionService.new(@game).score_partial_hand(column_cards)
-          
-          # Update the column scores in the database
+          # Update scores for both players' columns
           current_scores = @game.column_scores || {}
-          current_scores[column.to_s] = new_score
+          
+          # Score player 1's columns (0-3)
+          (0..3).each do |col|
+            cards = @game.board_cards_for_player(@game.player1_id, col)
+            current_scores[col.to_s] = GameCompletionService.new(@game).score_partial_hand(cards)
+          end
+          
+          # Score player 2's columns (4-7)
+          (4..7).each do |col|
+            cards = @game.board_cards_for_player(@game.player2_id, col)
+            current_scores[col.to_s] = GameCompletionService.new(@game).score_partial_hand(cards)
+          end
+          
           @game.update!(column_scores: current_scores)
           
-          # Check for bot's turn and make move if needed
           make_bot_move if bot_turn?
           
-          @game.skip_broadcast = false  # Re-enable and do one final broadcast
+          @game.skip_broadcast = false
           @game.broadcast_game_state
           head :ok
         else
