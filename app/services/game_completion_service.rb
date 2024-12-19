@@ -11,23 +11,16 @@ class GameCompletionService
     value_counts = values.tally
     high_card = values.max
     
-    case cards.length
-    when 1
-      high_card # Single card score
-    when 2..4
-      if value_counts.values.max == 4
-        700 + high_card # Quads
-      elsif value_counts.values.max == 3
-        300 + high_card # Trips
-      elsif value_counts.values.count { |v| v == 2 } == 2
-        200 + high_card # Two Pair
-      elsif value_counts.values.max == 2
-        100 + high_card # Pair
-      else
-        high_card # High Card
-      end
+    if value_counts.values.max == 4
+      700 + high_card # Quads
+    elsif value_counts.values.max == 3
+      300 + high_card # Trips
+    elsif value_counts.values.count { |v| v == 2 } == 2
+      200 + high_card # Two Pair
+    elsif value_counts.values.max == 2
+      100 + high_card # Pair
     else
-      score_poker_hand(cards) # Use existing full hand scoring for 5 cards
+      high_card # High Card
     end
   end
 
@@ -84,29 +77,24 @@ class GameCompletionService
     values = cards.map { |card| card_value_to_int(card[:value]) }
     suits = cards.map { |card| card[:suit] }
     
-    # Score different poker hands (from highest to lowest)
     if royal_flush?(values, suits)
       1000  # Royal Flush
     elsif straight_flush?(values, suits)
       800   # Straight Flush
     elsif four_of_a_kind?(values)
-      700 + values.max  # Quads + high card value
+      700 + values.max  # Quads
     elsif full_house?(values)
-      # Add the value of the Trips cards to the base score
-      three_of_a_kind_value = values.tally.find { |_, count| count == 3 }&.first || 0
-      600 + three_of_a_kind_value  # Full House + Trips value
+      600 + values.max  # Full House
     elsif flush?(suits)
-      500 + values.max  # Flush + high card value
+      500 + values.max  # Flush
     elsif straight?(values)
       400   # Straight
     elsif three_of_a_kind?(values)
-      # Add the value of the three matching cards
-      three_of_a_kind_value = values.tally.find { |_, count| count == 3 }&.first || 0
-      300 + three_of_a_kind_value  # Trips + card value
+      300 + values.max  # Trips
     elsif two_pair?(values)
-      200   # Two Pair
+      200 + values.max  # Two Pair
     elsif one_pair?(values)
-      100 + values.max  # Pair + high card value
+      100 + values.max  # Pair
     else
       values.max # High Card
     end
