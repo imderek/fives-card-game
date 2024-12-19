@@ -76,11 +76,22 @@ class GamesController < ApplicationController
           end
           
           @game.update!(column_scores: current_scores)
+          @game.broadcast_game_state  # First broadcast with updated scores
           
-          make_bot_move if bot_turn?
+          if bot_turn?
+            make_bot_move 
+            # Update scores again after bot move
+            current_scores = @game.column_scores || {}
+            (0..7).each do |col|
+              player_id = col < 4 ? @game.player1_id : @game.player2_id
+              cards = @game.board_cards_for_player(player_id, col)
+              current_scores[col.to_s] = GameCompletionService.new(@game).score_partial_hand(cards)
+            end
+            @game.update!(column_scores: current_scores)
+          end
           
           @game.skip_broadcast = false
-          @game.broadcast_game_state
+          @game.broadcast_game_state  # Final broadcast
           head :ok
         else
           render_error("Invalid move")
