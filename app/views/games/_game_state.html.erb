@@ -80,9 +80,9 @@
             <!-- Hand name -->
             <% if column[:hand_name].present? %>
               <div class="text-xs mb-1 text-center text-slate-300/90 relative top-[-0.1rem]">
-                <%= column[:hand_name] %>
+                <div><%= column[:hand_name] %></div>
                 <% if column[:score] && column[:score] > 0 %>
-                  <span class="text-amber-400">+<%= column[:score] %></span>
+                  <div class="text-amber-400">+<%= column[:score] %></div>
                 <% end %>
               </div>
             <% end %>
