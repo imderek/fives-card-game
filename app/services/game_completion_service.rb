@@ -3,6 +3,34 @@ class GameCompletionService
     @game = game
   end
 
+  def score_partial_hand(cards)
+    return 0 if cards.empty?
+    
+    values = cards.map { |card| card_value_to_int(card[:value]) }
+    suits = cards.map { |card| card[:suit] }
+    value_counts = values.tally
+    high_card = values.max
+    
+    case cards.length
+    when 1
+      high_card # Single card score
+    when 2..4
+      if value_counts.values.max == 4
+        700 + high_card # Quads
+      elsif value_counts.values.max == 3
+        300 + high_card # Trips
+      elsif value_counts.values.count { |v| v == 2 } == 2
+        200 + high_card # Two Pair
+      elsif value_counts.values.max == 2
+        100 + high_card # Pair
+      else
+        high_card # High Card
+      end
+    else
+      score_poker_hand(cards) # Use existing full hand scoring for 5 cards
+    end
+  end
+
   def check_for_winner
     return unless board_full?
     
@@ -62,11 +90,11 @@ class GameCompletionService
     elsif straight_flush?(values, suits)
       800   # Straight Flush
     elsif four_of_a_kind?(values)
-      700 + values.max  # Four of a Kind + high card value
+      700 + values.max  # Quads + high card value
     elsif full_house?(values)
-      # Add the value of the three of a kind cards to the base score
+      # Add the value of the Trips cards to the base score
       three_of_a_kind_value = values.tally.find { |_, count| count == 3 }&.first || 0
-      600 + three_of_a_kind_value  # Full House + three of a kind value
+      600 + three_of_a_kind_value  # Full House + Trips value
     elsif flush?(suits)
       500 + values.max  # Flush + high card value
     elsif straight?(values)
@@ -74,11 +102,11 @@ class GameCompletionService
     elsif three_of_a_kind?(values)
       # Add the value of the three matching cards
       three_of_a_kind_value = values.tally.find { |_, count| count == 3 }&.first || 0
-      300 + three_of_a_kind_value  # Three of a Kind + card value
+      300 + three_of_a_kind_value  # Trips + card value
     elsif two_pair?(values)
       200   # Two Pair
     elsif one_pair?(values)
-      100 + values.max  # One Pair + high card value
+      100 + values.max  # Pair + high card value
     else
       values.max # High Card
     end

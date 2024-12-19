@@ -61,6 +61,16 @@ class GamesController < ApplicationController
         played_card = params[:card].merge(player_id: current_user.id)
         
         if play_card_and_update_game(played_card)
+          # Update column score after playing card
+          column = played_card[:column].to_i
+          column_cards = @game.board_cards_for_player(current_user.id, column)
+          new_score = GameCompletionService.new(@game).score_partial_hand(column_cards)
+          
+          # Update the column scores in the database
+          current_scores = @game.column_scores || {}
+          current_scores[column.to_s] = new_score
+          @game.update!(column_scores: current_scores)
+          
           # Check for bot's turn and make move if needed
           make_bot_move if bot_turn?
           

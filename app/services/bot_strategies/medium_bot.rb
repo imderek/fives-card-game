@@ -87,8 +87,8 @@ module BotStrategies
       # Bonus for matching values in same column
       score += case value_matches
       when 2 then 40  # Pair
-      when 3 then 80  # Three of a kind
-      when 4 then 160 # Four of a kind
+      when 3 then 80  # Trips
+      when 4 then 160 # Quads
       else 0
       end
 

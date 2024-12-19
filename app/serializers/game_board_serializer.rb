@@ -23,7 +23,8 @@ class GameBoardSerializer
         
         {
           cards: cards,
-          hand_name: detect_hand(cards)
+          hand_name: detect_partial_hand(cards),
+          score: @game.column_scores[column.to_s] || 0
         }
       end
     }

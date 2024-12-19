@@ -22,7 +22,7 @@ module PokerHandDetector
     elsif straight_flush?(numeric_values, suits)
       "Straight Flush"
     elsif four_of_a_kind?(numeric_values)
-      "Four of a Kind"
+      "Quads"
     elsif full_house?(numeric_values)
       "Full House"
     elsif flush?(suits)
@@ -30,13 +30,82 @@ module PokerHandDetector
     elsif straight?(numeric_values)
       "Straight"
     elsif three_of_a_kind?(numeric_values)
-      "Three of a Kind"
+      "Trips"
     elsif two_pair?(numeric_values)
       "Two Pair"
     elsif one_pair?(numeric_values)
-      "One Pair"
+      "Pair"
     else
       "High Card"
+    end
+  end
+
+  def detect_partial_hand(cards)
+    return nil if cards.empty?
+    
+    values = cards.map { |code| code[0..-2] }
+    suits = cards.map { |code| code[-1] }
+    value_counts = values.tally
+    
+    case cards.length
+    when 1
+      "High Card"
+    when 2
+      if value_counts.values.max == 2
+        "Pair"
+      else
+        "High Card"
+      end
+    when 3
+      if value_counts.values.max == 3
+        "Trips"
+      elsif value_counts.values.max == 2
+        "Pair"
+      else
+        "High Card"
+      end
+    when 4
+      if value_counts.values.max == 4
+        "Quads"
+      elsif value_counts.values.max == 3
+        "Trips"
+      elsif value_counts.values.count { |v| v == 2 } == 2
+        "Two Pair"
+      elsif value_counts.values.max == 2
+        "Pair"
+      else
+        "High Card"
+      end
+    else
+      detect_hand(cards) # Use existing full hand detection for 5 cards
+    end
+  end
+
+  def score_partial_hand(cards)
+    return 0 if cards.empty?
+    
+    values = cards.map { |card| card_value_to_int(card[:value]) }
+    suits = cards.map { |card| card[:suit] }
+    value_counts = values.tally
+    high_card = values.max
+    
+    case cards.length
+    when 1
+      high_card # Single card score
+    when 2..4
+      if value_counts.values.max == 4
+        700 + high_card # Quads
+      elsif value_counts.values.max == 3
+        300 + high_card # Trips
+      elsif value_counts.values.count { |v| v == 2 } == 2
+        200 + high_card # Two Pair
+      elsif value_counts.values.max == 2
+        100 + high_card # Pair
+      else
+        high_card # High Card
+      end
+    else
+      score_poker_hand(cards) # Use existing full hand scoring for 5 cards
     end
   end
 
