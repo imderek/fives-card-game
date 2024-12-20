@@ -4,15 +4,68 @@
   <% end %>
 
   <% if game.winner_id %>
-    <div class="w-full px-6">
-      <%= link_to "Back to Lobby", games_path, class: "block text-center border border-slate-500/50 rounded-lg mb-4 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70" %>
-    </div>
-    <div class="w-full mb-6 px-6 text-center animate-enter-scale">
-      <div class="w-full mx-auto bg-white text-black text-sm py-5 rounded-lg">
-        <i class="fa fa-trophy text-yellow-400 text-2xl animate-bounce"></i>
-        <h2 class="text-lg font-bold mb-0"><%= game.winner.email.titleize %></h2>
-        <p class="text-gray-400 font-semibold mb-0">Winner</p>
-      </div>
+    <!-- modal init -->
+    <div class="hidden" data-modal-target="small-modal" data-modal-toggle="small-modal"></div>
+    <div class="bg-slate-900/50 dark:bg-slate-900/80 fixed inset-0 z-40"></div>
+    <div id="small-modal" tabindex="-1" class="animate-enter-scale fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
+        <div class="relative w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow-2xl">
+                <!-- Modal body -->
+                <div class="px-4 pt-5 pb-6">
+                  <h1 class="text-2xl font-bold text-slate-900 text-center mb-5"><%= game.winner_id == game.player1_id ? "You Won!" : "Game Over" %></h1>
+                  <!-- scoreboard -->
+                  <div class="flex items-center justify-center gap-4 mb-4">
+                    <div class="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
+                      <div class="absolute -top-4 bg-white z-1 p-1"><i class="fa fa-trophy text-yellow-400 text-xl animate-bounce"></i></div>
+                      <div class="text-2xl font-bold text-slate-900"><%= number_with_delimiter((game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum) %></div>
+                      <div class="text-sm font-medium text-slate-900"><%= game.player1.email.titleize %></div>
+                    </div>
+                    <div class="flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
+                      <div class="text-2xl font-bold text-slate-400"><%= number_with_delimiter((game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum) %></div>
+                      <div class="text-sm font-medium text-slate-400"><%= game.player2.email.titleize %></div>
+                    </div>
+                  </div>
+                  <div class="flex gap-4 mb-4">
+                    <!-- Player 1's hands -->
+                    <div class="flex-1">
+                      <div class="flex flex-col gap-1">
+                        <% board_state = GameBoardSerializer.new(game).as_json %>
+                        <% board_state[:player_1][:columns].each do |column| %>
+                          <% if column[:hand_name].present? %>
+                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2 line-clamp-1">
+                              <%= column[:hand_name] %>
+                              <% if column[:score] && column[:score] > 0 %>
+                                <span class="float-right">+<%= column[:score] %></span>
+                              <% end %>
+                            </div>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+
+                    <!-- Player 2's hands -->
+                    <div class="flex-1 mb-2">
+                      <div class="flex flex-col gap-1">
+                        <% board_state[:player_2][:columns].each do |column| %>
+                          <% if column[:hand_name].present? %>
+                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2 line-clamp-1">
+                              <%= column[:hand_name] %>
+                              <% if column[:score] && column[:score] > 0 %>
+                                <span class="float-right">+<%= column[:score] %></span>
+                              <% end %>
+                            </div>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-full">
+                    <%= link_to "Back to Lobby", games_path, class: "block text-center rounded-lg px-4 py-3 font-medium text-base text-white bg-amber-500 hover:bg-amber-600" %>
+                  </div>
+                </div>
+            </div>
+        </div>
     </div>
   <% end %>
 </div> 
