@@ -63,18 +63,22 @@ class GameCompletionService
     
     # For 5-card hands
     if cards.length == 5
-      return 1000 if royal_flush?(values, suits)  # Royal Flush
-      return 800 if straight_flush?(values, suits) # Straight Flush
-      return 600 + values.max if full_house?(values) # Full House
-      return 500 + values.max if flush?(suits)    # Flush
-      return 400 if straight?(values)             # Straight
+      return 1000 if royal_flush?(values, suits)    # Royal Flush
+      return 800 if straight_flush?(values, suits)  # Straight Flush
+      return 700 if four_of_a_kind?(values)        # Quads
+      return 600 if full_house?(values)            # Full House
+      return 500 if flush?(suits)                  # Flush
+      return 400 if straight?(values)              # Straight
+      return 300 if three_of_a_kind?(values)       # Trips
+      return 200 if two_pair?(values)              # Two Pair
+      return 100 if one_pair?(values)              # Pair
     end
     
-    # For hands that can be scored with fewer than 5 cards
-    return 700 + values.max if four_of_a_kind?(values)  # Quads
-    return 300 + values.max if three_of_a_kind?(values) # Trips
-    return 200 + values.max if two_pair?(values)        # Two Pair
-    return 100 + values.max if one_pair?(values)        # Pair
+    # For hands with fewer than 5 cards
+    return 700 if four_of_a_kind?(values)          # Quads
+    return 300 if three_of_a_kind?(values)         # Trips
+    return 200 if two_pair?(values)                # Two Pair
+    return 100 if one_pair?(values)                # Pair
     values.max # High Card
   end
 
@@ -92,7 +96,11 @@ class GameCompletionService
 
   def full_house?(values)
     tally = values.tally
-    tally.any? { |_, count| count >= 3 } && tally.any? { |_, count| count >= 2 }
+    three_count = tally.values.count(3)
+    pair_count = tally.values.count(2)
+    
+    # Must have exactly one three of a kind and one pair
+    three_count == 1 && pair_count == 1
   end
 
   def flush?(suits)
@@ -106,7 +114,12 @@ class GameCompletionService
   end
 
   def three_of_a_kind?(values)
-    values.tally.any? { |_, count| count >= 3 }
+    tally = values.tally
+    # Must have exactly one three of a kind and no pairs
+    three_count = tally.values.count(3)
+    pair_count = tally.values.count(2)
+    
+    three_count == 1 && pair_count == 0
   end
 
   def two_pair?(values)
