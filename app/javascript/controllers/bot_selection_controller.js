@@ -18,9 +18,9 @@ export default class extends Controller {
 
     // Update card styles
     this.botCardTargets.forEach(card => {
-      card.classList.remove('shadow-xl', 'bg-white')
+      card.classList.remove('shadow-xl', '!bg-white', 'text-slate-700')
       card.classList.add('bg-transparent', 'border', 'border-slate-500/60')
-      card.querySelector('h2').classList.remove('dark:text-slate-700')
+      card.querySelector('h2').classList.remove('text-slate-700')
       card.querySelector('h2').classList.add('text-white')
     })
     
@@ -28,9 +28,9 @@ export default class extends Controller {
     const selectedCard = this.botCardTargets.find(card => 
       card.dataset.difficulty === difficulty
     )
-    selectedCard.classList.add('shadow-xl', 'bg-white')
+    selectedCard.classList.add('shadow-xl', '!bg-white', 'text-slate-700')
     selectedCard.classList.remove('bg-transparent', 'border', 'border-slate-500/60')
-    selectedCard.querySelector('h2').classList.add('dark:text-slate-700')
+    selectedCard.querySelector('h2').classList.add('text-slate-700')
     selectedCard.querySelector('h2').classList.remove('text-white')
   }
   
