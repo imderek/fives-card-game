@@ -7,12 +7,12 @@
     <!-- modal init -->
     <div class="hidden" data-modal-target="small-modal" data-modal-toggle="small-modal"></div>
     <div class="bg-[#141822]/70 fixed inset-0 z-40"></div>
-    <div id="small-modal" tabindex="-1" class="animate-enter-scale fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
+    <div id="small-modal" tabindex="-1" class="animate-enter-scale fixed top-0 left-0 right-0 z-50 w-full p-6 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
         <div class="relative w-full max-w-md max-h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow-2xl">
                 <!-- Modal body -->
-                <div class="px-4 pt-5 pb-6">
+                <div class="px-4 pt-5 pb-8">
                   <h1 class="text-2xl font-bold text-slate-900 text-center mb-5"><%= game.winner_id == game.player1_id ? "You Won!" : "You Lost" %></h1>
                   <!-- scoreboard -->
                   <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
@@ -40,10 +40,10 @@
                         <% board_state = GameBoardSerializer.new(game).as_json %>
                         <% board_state[:player_1][:columns].each do |column| %>
                           <% if column[:hand_name].present? %>
-                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2 line-clamp-1">
-                              <%= column[:hand_name] %>
+                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2">
+                              <div class="text-left line-clamp-1"><%= column[:hand_name] %></div>
                               <% if column[:score] && column[:score] > 0 %>
-                                <span class="float-right">+<%= column[:score] %></span>
+                                <div class="text-right">+<%= column[:score] %></div>
                               <% end %>
                             </div>
                           <% end %>
@@ -56,10 +56,10 @@
                       <div class="flex flex-col gap-1">
                         <% board_state[:player_2][:columns].each do |column| %>
                           <% if column[:hand_name].present? %>
-                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2 line-clamp-1">
-                              <%= column[:hand_name] %>
+                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2">
+                              <div class="text-left line-clamp-1"><%= column[:hand_name] %></div>
                               <% if column[:score] && column[:score] > 0 %>
-                                <span class="float-right">+<%= column[:score] %></span>
+                                <div class="text-right">+<%= column[:score] %></div>
                               <% end %>
                             </div>
                           <% end %>
