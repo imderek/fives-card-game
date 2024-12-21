@@ -57,13 +57,15 @@
       <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
       <div class="flex items-center justify-center gap-4 py-2 px-6 bg-white rounded-lg">
         <div class="relative flex flex-1 flex-col items-center justify-center">
-          <div class="text-xl font-bold <%= player1_score >= player2_score ? 'text-slate-900' : 'text-slate-500' %>"><%= number_with_delimiter(player1_score) %></div>
-          <div class="text-xs font-medium <%= player1_score >= player2_score ? 'text-slate-900' : 'text-slate-500' %>">My Score</div>
+          <div class="text-xl font-bold text-slate-900 transition-all duration-300">
+            <%= number_with_delimiter(player1_score) %>
+          </div>
+          <div class="text-xs font-medium text-slate-600">My Score</div>
         </div>
-        <div class="w-px h-12 bg-slate-500/50"></div>
+        <div class="w-px h-10 bg-slate-500/50"></div>
         <div class="relative flex flex-1 flex-col items-center justify-center">
-          <div class="text-xl font-bold <%= player2_score > player1_score ? 'text-slate-900' : 'text-slate-500' %>"><%= number_with_delimiter(player2_score) %></div>
-          <div class="text-xs font-medium <%= player2_score > player1_score ? 'text-slate-900' : 'text-slate-500' %>"><%= game.player2.email.titleize %></div>
+          <div class="text-xl font-bold text-slate-900"><%= number_with_delimiter(player2_score) %></div>
+          <div class="text-xs font-medium text-slate-600"><%= game.player2.email.titleize %></div>
         </div>
       </div>
     </div>

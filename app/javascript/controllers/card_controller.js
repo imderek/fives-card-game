@@ -4,11 +4,11 @@ export default class extends Controller {
   static targets = ["cardElement"]
   
   connect() {
-    console.log("Card controller connected")
+    // console.log("Card controller connected")
   }
 
   selectCard(event) {
-    console.log("Card selected", this.element.dataset.card)
+    // console.log("Card selected", this.element.dataset.card)
     
     // Remove selected class from any previously selected card
     document.querySelectorAll('.selected-card').forEach(el => {
@@ -39,12 +39,12 @@ export default class extends Controller {
     const column = event.currentTarget
     column.classList.add('ring-2', 'ring-amber-500')
     setTimeout(() => {
-      console.log('resetting column')
+      // console.log('resetting column')
       column.classList.remove('ring-2', 'ring-amber-500')
     }, 500)
 
     const columnIndex = event.currentTarget.dataset.columnIndex
-    console.log("Playing card", window.selectedCard, "to column", columnIndex)
+    // console.log("Playing card", window.selectedCard, "to column", columnIndex)
 
     const card = {
       ...window.selectedCard,
@@ -68,7 +68,7 @@ export default class extends Controller {
       return response.text()
     })
     .then(html => {
-      console.log("Move successful")
+      // console.log("Move successful")
       // Clear the selection
       window.selectedCard = null
       document.querySelectorAll('.selected-card').forEach(el => {
