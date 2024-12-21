@@ -1,6 +1,6 @@
 <% board_state = GameBoardSerializer.new(game).as_json %>
 
-<div id="game-state" class="w-full flex flex-col items-center gap-4">
+<div id="game-state" class="w-full flex flex-col items-center gap-2">
   <div class="px-2 w-full flex flex-row justify-center gap-2">
     <!-- player hand -->
     <div class="player-hand flex flex-row -space-x-[1rem]">
@@ -15,23 +15,7 @@
         } %>
       <% end %>
     </div>
-    <!-- player score -->
-    <div class="flex flex-col justify-center items-center border border-slate-500/50 rounded-lg py-2 w-20">
-      <% player_total_score = (game.column_scores || {}).select { |col, _| 
-        (current_user.id == game.player1_id && col.to_i < 4) || 
-        (current_user.id == game.player2_id && col.to_i >= 4) 
-      }.values.sum %>
-      <div class="text-base font-semibold text-white"><%= number_with_delimiter(player_total_score) %></div>
-      <div class="text-xs text-slate-500">My Score</div>
-    </div>
   </div>
-
-
-  <div class="hidden opponent-hand">
-    <% opponent_card_count = current_user.id == game.player1_id ? game.player2_hand.size : game.player1_hand.size %>
-    <%= render "games/card_back", count: opponent_card_count %>
-  </div>
-
   <div class="board w-full flex flex-col">
     <div>
       <!-- Player's board area -->
@@ -39,7 +23,7 @@
         <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
         <% player_data[:columns].each_with_index do |column, index| %>
           <!-- Column -->
-          <div class="<%= column[:cards].length >= 5 ? 'ring-1 ring-slate-500/50' : 'bg-slate-600/60' %> min-w-[4.5rem] min-h-[16rem] p-2 relative column rounded-xl shadow-lg transition-all duration-150"
+          <div class=" min-w-[4.5rem] min-h-[16rem] p-2 relative column bg-slate-600/60 rounded-xl shadow-lg transition-all duration-150"
               data-controller="card"
               data-action="click->card#playColumn"
               data-column-index="<%= index %>">
@@ -66,12 +50,25 @@
           </div>
         <% end %>
       </div>
-      <div class="py-1.5 text-center text-slate-500 text-xs font-medium uppercase"><%= game.player1.email %></div>
     </div>
-
+    <!-- middle scoreboard -->
+    <div class="my-2 px-7">
+      <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
+      <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
+      <div class="flex items-center justify-center gap-4 py-2 px-6 bg-white rounded-lg">
+        <div class="relative flex flex-1 flex-col items-center justify-center">
+          <div class="text-xl font-bold <%= player1_score >= player2_score ? 'text-slate-900' : 'text-slate-500' %>"><%= number_with_delimiter(player1_score) %></div>
+          <div class="text-xs font-medium <%= player1_score >= player2_score ? 'text-slate-900' : 'text-slate-500' %>">My Score</div>
+        </div>
+        <div class="w-px h-12 bg-slate-500/50"></div>
+        <div class="relative flex flex-1 flex-col items-center justify-center">
+          <div class="text-xl font-bold <%= player2_score > player1_score ? 'text-slate-900' : 'text-slate-500' %>"><%= number_with_delimiter(player2_score) %></div>
+          <div class="text-xs font-medium <%= player2_score > player1_score ? 'text-slate-900' : 'text-slate-500' %>"><%= game.player2.email.titleize %></div>
+        </div>
+      </div>
+    </div>
     <!-- Opponent's board area -->
     <div class="">
-      <div class="py-1.5 border-t border-slate-700/65 text-center text-slate-500 text-xs font-medium uppercase"><%= game.player2.email %></div>
       <div class="px-7 opponent-board grid grid-cols-4 gap-2">
         <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
         <% opponent_data[:columns].each do |column| %>
@@ -116,15 +113,6 @@
           facedown: !game.winner_id.present?
         } %>
       <% end %>
-    </div>
-    <!-- opponent score -->
-    <div class="flex flex-col justify-center items-center border border-slate-500/50 rounded-lg py-2 w-20">
-      <% opponent_total_score = (game.column_scores || {}).select { |col, _| 
-        (current_user.id == game.player2_id && col.to_i < 4) || 
-        (current_user.id == game.player1_id && col.to_i >= 4) 
-      }.values.sum %>
-      <div class="text-base font-semibold text-white"><%= number_with_delimiter(opponent_total_score) %></div>
-      <div class="text-xs text-slate-500">Opponent</div>
     </div>
   </div>
 </div> 
