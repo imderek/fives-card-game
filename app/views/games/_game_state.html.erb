@@ -39,7 +39,7 @@
         <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
         <% player_data[:columns].each_with_index do |column, index| %>
           <!-- Column -->
-          <div class="<%= game.winner_id.nil? && column[:cards].length >= 5 ? 'ring-1 ring-slate-500/50' : 'bg-slate-600/60' %> min-w-[4.5rem] min-h-[16rem] p-2 relative column rounded-xl shadow-lg transition-all duration-150"
+          <div class="<%= column[:cards].length >= 5 ? 'ring-1 ring-slate-500/50' : 'bg-slate-600/60' %> min-w-[4.5rem] min-h-[16rem] p-2 relative column rounded-xl shadow-lg transition-all duration-150"
               data-controller="card"
               data-action="click->card#playColumn"
               data-column-index="<%= index %>">

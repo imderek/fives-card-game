@@ -13,7 +13,7 @@
             <div class="relative bg-white rounded-lg shadow-2xl">
                 <!-- Modal body -->
                 <div class="px-4 pt-5 pb-6">
-                  <h1 class="text-2xl font-bold text-slate-900 text-center mb-5"><%= game.winner_id == game.player1_id ? "You Won!" : "Game Over" %></h1>
+                  <h1 class="text-2xl font-bold text-slate-900 text-center mb-5"><%= game.winner_id == game.player1_id ? "You Won!" : "You Lost" %></h1>
                   <!-- scoreboard -->
                   <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
                   <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
                       <% if player2_score > player1_score %>
-                        <div class="absolute -top-4 bg-white z-1 p-1 px-2"><i class="fa fa-trophy text-amber-500 text-xl animate-bounce relative top-1"></i></div>
+                        <div class="absolute -top-4 bg-white z-1 p-1 px-2"><i class="fa fa-trophy text-amber-500 text-xl"></i></div>
                       <% end %>
                       <div class="text-2xl font-bold <%= player2_score > player1_score ? 'text-slate-900' : 'text-slate-400' %>"><%= number_with_delimiter(player2_score) %></div>
                       <div class="text-sm font-medium <%= player2_score > player1_score ? 'text-slate-900' : 'text-slate-400' %>"><%= game.player2.email.titleize %></div>
