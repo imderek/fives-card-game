@@ -1,5 +1,5 @@
 <%= content_tag :div,
-  class: "w-14 h-[4.5rem] md:w-20 md:h-28 #{(defined?(last) && last && game.winner_id.nil?) ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''} relative #{playable ? 'cursor-pointer' : ''} transition-transform #{defined?(facedown) && facedown ? 'bg-gradient-to-br from-slate-600 to-slate-800' : 'border border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'} rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]",
+  class: "w-12 h-[4rem] md:w-20 md:h-28 #{(defined?(last) && last && game.winner_id.nil?) ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''} relative #{playable ? 'cursor-pointer' : ''} transition-transform #{defined?(facedown) && facedown ? 'bg-gradient-to-br from-slate-600 to-slate-800' : 'border border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'} rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]",
   data: {
     controller: playable ? "card" : nil,
     card: card&.merge(gameId: game.id)&.to_json,
