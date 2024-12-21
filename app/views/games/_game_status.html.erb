@@ -17,7 +17,7 @@
                   <!-- scoreboard -->
                   <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
                   <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
-                  <div class="flex items-center justify-center gap-4 mb-4">
+                  <div class="flex items-center justify-center gap-4 mb-6">
                     <div class="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
                       <% if player1_score >= player2_score %>
                         <div class="absolute -top-4 bg-white z-1 p-1 px-2"><i class="fa fa-trophy text-amber-500 text-xl animate-bounce relative top-1"></i></div>
@@ -40,10 +40,10 @@
                         <% board_state = GameBoardSerializer.new(game).as_json %>
                         <% board_state[:player_1][:columns].each do |column| %>
                           <% if column[:hand_name].present? %>
-                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2">
-                              <div class="text-left line-clamp-1"><%= column[:hand_name] %></div>
+                            <div class="flex flex-row justify-between text-sm text-slate-600 bg-slate-100 rounded p-1 px-2">
+                              <div class="text-left line-clamp-1 font-medium text-slate-900"><%= column[:hand_name] %></div>
                               <% if column[:score] && column[:score] > 0 %>
-                                <div class="text-right">+<%= column[:score] %></div>
+                                <div class="text-right"><%= column[:score] %></div>
                               <% end %>
                             </div>
                           <% end %>
@@ -56,10 +56,10 @@
                       <div class="flex flex-col gap-1">
                         <% board_state[:player_2][:columns].each do |column| %>
                           <% if column[:hand_name].present? %>
-                            <div class="flex flex-row justify-between text-sm text-slate-600 border border-slate-500/50 rounded p-1 px-2">
-                              <div class="text-left line-clamp-1"><%= column[:hand_name] %></div>
+                            <div class="flex flex-row justify-between text-sm text-slate-600 bg-slate-100 rounded p-1 px-2">
+                              <div class="text-left line-clamp-1 font-medium text-slate-900"><%= column[:hand_name] %></div>
                               <% if column[:score] && column[:score] > 0 %>
-                                <div class="text-right">+<%= column[:score] %></div>
+                                <div class="text-right"><%= column[:score] %></div>
                               <% end %>
                             </div>
                           <% end %>
