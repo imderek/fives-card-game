@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     member do
       post :play_card
       post :draw_card
+      post :discard_card
     end
   end
 end

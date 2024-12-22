@@ -1,7 +1,7 @@
 <% board_state = GameBoardSerializer.new(game).as_json %>
 
 <div id="game-state" class="w-full flex flex-col items-center gap-4">
-  <div class="px-2 w-full flex flex-row justify-center gap-2">
+  <div class="px-2 w-full flex flex-col items-center justify-center gap-2">
     <!-- player hand -->
     <div class="player-hand flex flex-row -space-x-[.3rem]">
       <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
@@ -14,6 +14,14 @@
           last: index == player_hand.size - 1
         } %>
       <% end %>
+    </div>
+    <!-- discard button -->
+    <div class="discard-area">
+      <button data-controller="card" 
+              data-action="click->card#discardCard" 
+              class="px-4 py-2 border border-red-500/50 text-red-500/70 hover:bg-red-500/10 rounded-lg transition-colors <%= game.current_turn == current_user.id && game.turn_phase == 'play_card' ? '' : 'hidden' %>">
+        Discard
+      </button>
     </div>
   </div>
   <div class="board w-full flex flex-col">

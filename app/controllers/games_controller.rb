@@ -103,6 +103,57 @@ class GamesController < ApplicationController
     render_error(e.message)
   end
 
+  def discard_card
+    respond_to do |format|
+      format.turbo_stream do
+        @game.skip_broadcast = true
+        
+        if valid_turn?
+          # Initialize discard piles if they're nil
+          @game.player1_discard_pile ||= []
+          @game.player2_discard_pile ||= []
+          
+          discarded_card = {
+            suit: params[:card][:suit],
+            value: params[:card][:value]
+          }
+          
+          if current_user.id == @game.player1_id
+            @game.player1_hand.delete_if { |card| card[:suit] == discarded_card[:suit] && card[:value] == discarded_card[:value] }
+            @game.player1_discard_pile << discarded_card
+            drawn_card = @game.deck.pop
+            @game.player1_hand << drawn_card if drawn_card
+            @game.current_turn = @game.player2_id
+          else
+            @game.player2_hand.delete_if { |card| card[:suit] == discarded_card[:suit] && card[:value] == discarded_card[:value] }
+            @game.player2_discard_pile << discarded_card
+            drawn_card = @game.deck.pop
+            @game.player2_hand << drawn_card if drawn_card
+            @game.current_turn = @game.player1_id
+          end
+          
+          if @game.save
+            @game.broadcast_game_state
+            
+            if bot_turn?
+              make_bot_move
+            end
+            
+            @game.skip_broadcast = false
+            @game.broadcast_game_state
+            head :ok
+          else
+            render_error("Failed to save game state")
+          end
+        else
+          render_error("Invalid turn")
+        end
+      end
+    end
+  rescue => e
+    Rails.logger.error "Error in discard_card: #{e.message}\n#{e.backtrace.join("\n")}"
+    render_error(e.message)
+  end
 
   def destroy
     @game = Game.find(params[:id])

@@ -7,6 +7,8 @@ class Game < ApplicationRecord
   serialize :player2_hand, coder: YAML
   serialize :board_cards, coder: YAML
   serialize :deck, coder: YAML
+  serialize :player1_discard_pile, coder: YAML
+  serialize :player2_discard_pile, coder: YAML
   
   enum :status, [:waiting, :in_progress, :completed]
   enum :game_type, [:pvp, :bot]
@@ -121,6 +123,8 @@ class Game < ApplicationRecord
     self.player1_hand = draw_initial_hand
     self.player2_hand = draw_initial_hand
     self.board_cards = [] # Each card will now need: { suit:, value:, player_id:, column: }
+    self.player1_discard_pile = []  # Initialize empty discard piles
+    self.player2_discard_pile = []
     self.current_turn = player1_id
     self.turn_phase = :play_card
   end

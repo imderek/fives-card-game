@@ -79,4 +79,43 @@ export default class extends Controller {
       console.error('Error playing card:', error)
     })
   }
+
+  discardCard(event) {
+    // console.log("Discarding card", this.element.dataset.card)
+    if (!window.selectedCard) {
+      console.log('No card selected')
+      return
+    }
+
+    const card = {
+      ...window.selectedCard
+    }
+
+    // Submit the discard
+    fetch(`/games/${window.selectedCard.gameId}/discard_card`, {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'text/vnd.turbo-stream.html',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ card: card })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      return response.text()
+    })
+    .then(html => {
+      // Clear the selection
+      window.selectedCard = null
+      document.querySelectorAll('.selected-card').forEach(el => {
+        el.classList.remove('selected-card', 'ring-2', 'ring-blue-500')
+      })
+    })
+    .catch(error => {
+      console.error('Error discarding card:', error)
+    })
+  }
 }

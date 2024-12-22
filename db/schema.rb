@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_19_000000) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_22_165142) do
   create_table "contact_deals", force: :cascade do |t|
     t.integer "contact_id", null: false
     t.integer "deal_id", null: false
@@ -62,6 +62,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_000000) do
     t.datetime "updated_at", null: false
     t.integer "turn_phase", default: 0
     t.json "column_scores", default: {}
+    t.text "player1_discard_pile"
+    t.text "player2_discard_pile"
     t.index ["player1_id"], name: "index_games_on_player1_id"
     t.index ["player2_id"], name: "index_games_on_player2_id"
   end
