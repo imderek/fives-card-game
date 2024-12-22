@@ -1,7 +1,8 @@
 <% board_state = GameBoardSerializer.new(game).as_json %>
 
-<div id="game-state" class="w-full flex flex-col items-center gap-4">
-  <div class="px-2 w-full flex flex-col items-center justify-center gap-2">
+<div id="game-state" class="w-full flex flex-col items-center gap-2">
+  <!-- top row (player hand and discard button) -->
+  <div class="px-2 w-full flex flex-col items-center justify-center gap-3">
     <!-- player hand -->
     <div class="player-hand flex flex-row -space-x-[.3rem]">
       <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
@@ -16,7 +17,7 @@
       <% end %>
     </div>
     <!-- discard button -->
-    <div class="discard-area">
+    <div class="discard-area w-full px-5">
       <% can_discard = game.current_turn == current_user.id && 
                        game.turn_phase == "play_card" && 
                        ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
@@ -24,11 +25,15 @@
       
       <button data-controller="card" 
               data-action="click->card#discardCard" 
-              class="px-4 py-2 border border-red-500/50 text-red-500/70 hover:bg-red-500/10 rounded-lg transition-colors <%= can_discard ? '' : 'hidden' %>">
-        Discard
+              class="w-full px-4 py-2 mb-0.5 text-sm font-medium border border-red-500/50 text-white hover:bg-red-500/10 rounded-lg transition-colors <%= can_discard ? '' : 'hidden' %>">
+        Discard Selected
+        <span class="block text-xs font-normal text-red-500/80">
+          You can discard once per game
+        </span>
       </button>
     </div>
   </div>
+  <!-- middle row (board, scoreboard) -->
   <div class="board w-full flex flex-col">
     <div>
       <!-- Player's board area -->
@@ -64,7 +69,7 @@
         <% end %>
       </div>
     </div>
-    <!-- middle scoreboard -->
+    <!-- scoreboard -->
     <div class="my-4 px-7">
       <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
       <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
@@ -114,6 +119,7 @@
       </div>
     </div>
   </div>
+  <!-- bottom row (opponent hand) -->
   <div class="px-2 w-full flex flex-row justify-center gap-2">
     <!-- opponent hand -->
     <div class="opponent-hand flex flex-row -space-x-[1rem]">

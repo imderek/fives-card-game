@@ -1,4 +1,4 @@
-<div id="game-container" data-game-id="<%= @game.id %>" class="mx-auto py-3" data-turbo-cache="false">
+<div id="game-container" data-game-id="<%= @game.id %>" class="mx-auto py-4" data-turbo-cache="false">
   <%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
 
   <div id="game_error" class="hidden text-white/50 text-center mb-4"></div>
