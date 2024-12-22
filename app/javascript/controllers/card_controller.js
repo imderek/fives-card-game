@@ -12,14 +12,20 @@ export default class extends Controller {
     
     // Remove selected class from any previously selected card
     document.querySelectorAll('.selected-card').forEach(el => {
-      el.classList.remove('selected-card', 'ring', 'ring-yellow-500', 'top-[-6px]', 'shadow-xl')
+      el.classList.remove('selected-card', 'ring', 'ring-yellow-500', 'top-[-5px]', 'shadow-xl')
     })
     
     // Add selected class to this card
-    this.element.classList.add('selected-card', 'ring', 'ring-yellow-500', 'top-[-6px]', 'shadow-xl')
+    this.element.classList.add('selected-card', 'ring', 'ring-yellow-500', 'top-[-5px]', 'shadow-xl')
     
     // Store the selected card data globally
     window.selectedCard = JSON.parse(this.element.dataset.card)
+
+    // Show discard area if it's hidden
+    const discardArea = document.querySelector('.discard-area')
+    if (discardArea && discardArea.classList.contains('hidden') && discardArea.dataset.canDiscard === 'true') {
+      discardArea.classList.remove('hidden')
+    }
   }
 
   playColumn(event) {

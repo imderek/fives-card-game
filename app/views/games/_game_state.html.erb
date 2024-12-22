@@ -2,7 +2,7 @@
 
 <div id="game-state" class="w-full flex flex-col items-center gap-2">
   <!-- top row (player hand and discard button) -->
-  <div class="px-2 w-full flex flex-col items-center justify-center gap-3">
+  <div class="px-2 w-full flex flex-col items-center justify-center gap-2">
     <!-- player hand -->
     <div class="player-hand flex flex-row -space-x-[.3rem]">
       <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
@@ -17,20 +17,19 @@
       <% end %>
     </div>
     <!-- discard button -->
-    <div class="discard-area w-full px-5">
-      <% can_discard = game.current_turn == current_user.id && 
-                       game.turn_phase == "play_card" && 
-                       ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
-                        (current_user.id == game.player2_id && game.player2_discard_pile.empty?)) %>
-      
-      <button data-controller="card" 
-              data-action="click->card#discardCard" 
-              class="w-full px-4 py-2 mb-0.5 text-sm font-medium border border-red-500/50 text-white hover:bg-red-500/10 rounded-lg transition-colors <%= can_discard ? '' : 'hidden' %>">
-        Discard Selected
-        <span class="block text-xs font-normal text-red-500/80">
-          You can discard once per game
-        </span>
-      </button>
+    <% can_discard = game.current_turn == current_user.id && 
+                      game.turn_phase == "play_card" && 
+                      ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
+                      (current_user.id == game.player2_id && game.player2_discard_pile.empty?)) %>
+    <div class="discard-area w-full px-5 hidden" data-can-discard="<%= can_discard %>">
+      <div class="flex flex-row items-center justify-center gap-2">
+        <div class="block text-xs font-normal text-slate-500">You can discard once per game</div>
+        <button data-controller="card" 
+                data-action="click->card#discardCard" 
+                class="px-2 py-2 mb-0.5 text-xs font-medium bg-red-500/80 text-white hover:bg-red-500/10 rounded-lg transition-colors">
+          Discard Selected
+        </button>
+      </div>
     </div>
   </div>
   <!-- middle row (board, scoreboard) -->
@@ -70,7 +69,7 @@
       </div>
     </div>
     <!-- scoreboard -->
-    <div class="my-4 px-7">
+    <div class="my-3 px-7">
       <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
       <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
       <div class="flex items-center justify-center gap-4 pt-1 pb-2 px-6 bg-white rounded-lg">
@@ -122,7 +121,7 @@
   <!-- bottom row (opponent hand) -->
   <div class="px-2 w-full flex flex-row justify-center gap-2">
     <!-- opponent hand -->
-    <div class="opponent-hand flex flex-row -space-x-[1rem]">
+    <div class="opponent-hand flex flex-row -space-x-[.3rem]">
       <% opponent_hand = current_user.id == game.player1_id ? game.player2_hand : game.player1_hand %>
       <% opponent_hand.each_with_index do |card, index| %>
         <%= render partial: "games/card", locals: { 
