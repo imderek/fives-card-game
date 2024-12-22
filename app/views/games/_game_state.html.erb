@@ -17,9 +17,14 @@
     </div>
     <!-- discard button -->
     <div class="discard-area">
+      <% can_discard = game.current_turn == current_user.id && 
+                       game.turn_phase == "play_card" && 
+                       ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
+                        (current_user.id == game.player2_id && game.player2_discard_pile.empty?)) %>
+      
       <button data-controller="card" 
               data-action="click->card#discardCard" 
-              class="px-4 py-2 border border-red-500/50 text-red-500/70 hover:bg-red-500/10 rounded-lg transition-colors <%= game.current_turn == current_user.id && game.turn_phase == 'play_card' ? '' : 'hidden' %>">
+              class="px-4 py-2 border border-red-500/50 text-red-500/70 hover:bg-red-500/10 rounded-lg transition-colors <%= can_discard ? '' : 'hidden' %>">
         Discard
       </button>
     </div>

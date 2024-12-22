@@ -109,6 +109,13 @@ class GamesController < ApplicationController
         @game.skip_broadcast = true
         
         if valid_turn?
+          # Check if player has already discarded by looking at their discard pile
+          if (current_user.id == @game.player1_id && !@game.player1_discard_pile.empty?) ||
+             (current_user.id == @game.player2_id && !@game.player2_discard_pile.empty?)
+            render_error("You can only discard one card per game")
+            return
+          end
+
           # Initialize discard piles if they're nil
           @game.player1_discard_pile ||= []
           @game.player2_discard_pile ||= []
