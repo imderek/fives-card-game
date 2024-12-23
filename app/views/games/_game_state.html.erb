@@ -3,8 +3,12 @@
 <div id="game-state" class="w-full flex flex-col items-center gap-2">
   <!-- top row (player hand and discard button) -->
   <div class="px-2 w-full flex flex-col items-center justify-center gap-2">
+    <% can_discard = game.current_turn == current_user.id && 
+                      game.turn_phase == "play_card" && 
+                      ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
+                      (current_user.id == game.player2_id && game.player2_discard_pile.empty?)) %>
     <!-- player hand -->
-    <div class="player-hand flex flex-row -space-x-[.3rem]">
+    <div class="player-hand flex flex-row -space-x-[.3rem] <%= can_discard ? '' : 'mb-1' %>">
       <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
       <% player_hand.each_with_index do |card, index| %>
         <%= render partial: "games/card", locals: { 
@@ -17,10 +21,6 @@
       <% end %>
     </div>
     <!-- discard -->
-    <% can_discard = game.current_turn == current_user.id && 
-                      game.turn_phase == "play_card" && 
-                      ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
-                      (current_user.id == game.player2_id && game.player2_discard_pile.empty?)) %>
     <div class="discard-area w-full px-5 <%= can_discard ? '' : 'hidden' %>" data-can-discard="<%= can_discard %>">
       <div class="flex flex-row items-center justify-center gap-2">
         <div class="block text-xs font-normal text-slate-500">You can discard once per game</div>
