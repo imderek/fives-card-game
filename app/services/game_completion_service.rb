@@ -11,27 +11,44 @@ class GameCompletionService
   def check_for_winner
     return unless board_full?
     
-    player1_score = calculate_player_score(@game.player1_id)
-    player2_score = calculate_player_score(@game.player2_id)
+    # Calculate board scores
+    player1_board_score = calculate_player_score(@game.player1_id)
+    player2_board_score = calculate_player_score(@game.player2_id)
     
+    # Calculate hand scores
+    player1_hand_score = score_poker_hand(@game.player1_hand || [])
+    player2_hand_score = score_poker_hand(@game.player2_hand || [])
+    
+    # Calculate total scores
+    player1_total = player1_board_score + player1_hand_score
+    player2_total = player2_board_score + player2_hand_score
+    
+    # Determine winner
+    winner_id = if player1_total > player2_total
+      @game.player1_id
+    elsif player2_total > player1_total
+      @game.player2_id
+    end
+    
+    # Update game with final scores and winner
     @game.update(
       status: :completed,
-      winner_id: determine_winner(player1_score, player2_score)
+      winner_id: winner_id,
+      player1_total_score: player1_total,
+      player2_total_score: player2_total
     )
   end
 
   def board_full?
-    # Check player 1's columns (0-3)
-    player1_full = (0..3).all? do |column|
-      @game.board_cards.count { |card| card[:player_id] == @game.player1_id && card[:column] == column } >= 5
+    player1_columns_full = (0..3).all? do |col|
+      @game.board_cards_for_player(@game.player1_id, col).length == 5
     end
-
-    # Check player 2's columns (4-7)
-    player2_full = (4..7).all? do |column|
-      @game.board_cards.count { |card| card[:player_id] == @game.player2_id && card[:column] == column } >= 5
+    
+    player2_columns_full = (4..7).all? do |col|
+      @game.board_cards_for_player(@game.player2_id, col).length == 5
     end
-
-    player1_full && player2_full
+    
+    player1_columns_full && player2_columns_full
   end
 
   def calculate_player_score(player_id)
