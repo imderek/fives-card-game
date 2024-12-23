@@ -22,9 +22,10 @@ export default class extends Controller {
     window.selectedCard = JSON.parse(this.element.dataset.card)
 
     // Show discard area if it's hidden
-    const discardArea = document.querySelector('.discard-area')
-    if (discardArea && discardArea.classList.contains('hidden') && discardArea.dataset.canDiscard === 'true') {
-      discardArea.classList.remove('hidden')
+    const discardBtn = document.querySelector('.discard-area button')
+    if (discardBtn) {
+      discardBtn.classList.remove('border-slate-500', 'text-slate-500')
+      discardBtn.classList.add('bg-red-500/80', 'hover:bg-red-500/30', '!border-red-500/80', 'text-white')
     }
   }
 
