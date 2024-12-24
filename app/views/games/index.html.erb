@@ -5,11 +5,11 @@
     <h1 class="text-3xl font-bold text-white dark:text-white">Lobby</h1>
     <!-- Modal toggle -->
     <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="text-sm text-slate-400 hover:text-slate-300">
-      <i class="fa-solid fa-book-open"></i> How to Play
+      <i class="fa-solid fa-book-open mr-0.5"></i> How to Play
     </button>
 
     <!-- Instructions modal -->
-    <div id="instructions-modal" tabindex="-1" aria-hidden="true" data-modal-placement="center" class="hidden fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="instructions-modal" tabindex="-1" aria-hidden="true" data-modal-placement="center" class="hidden fixed top-0 left-0 right-0 z-50 w-full p-5 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-2xl max-h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow dark:bg-white">
@@ -28,7 +28,7 @@
                 <!-- Modal body -->
                 <div class="p-4 pt-0 space-y-6">
                     <div class="text-sm text-slate-900">
-                      <ol class="list-disc relative">                  
+                      <ol class="list-disc relative ml-1">                  
                           <li class="ms-4">
                               <p class="mb-2">Each player is dealt <strong>6 cards</strong>.</p>
                           </li>
@@ -36,16 +36,16 @@
                               <p class="mb-2">When it's your turn, <strong>place one card</strong> from your hand <strong>onto the board</strong> in any column.</p>
                           </li>
                           <li class="ms-4">
-                              <p class="mb-2">Each column <strong> represents a poker hand</strong>. The better the hand, the more points you score.</p>
+                              <p class="mb-2">Each column <strong> represents a poker hand</strong>. The better the hand, the more points you earn.</p>
                           </li>
                           <li class="ms-4">
                               <p class="mb-2">At the end of your turn, <strong>you will be given a new card</strong> from the deck automatically.</p>
                           </li>
                           <li class="ms-4">
-                              <p class="mb-2"><strong>Score more points</strong> than your opponent to win.</p>
+                              <p class="mb-2">Score more points than your opponent to win.</p>
                           </li>
                       </ol>
-                      <div class="mt-4 mb-2 border-t border-slate-300 pt-4">
+                      <div class="mt-4 mb-2 border-t border-slate-300 pt-4 px-1">
                         <p class="text-lg font-semibold text-slate-900 mb-3">Poker Hands</p>
                         <div class="grid grid-cols-1 gap-x-8 gap-y-1 text-sm text-slate-600">
                           <div class="flex justify-between">
