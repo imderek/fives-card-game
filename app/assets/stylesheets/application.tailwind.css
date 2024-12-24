@@ -15,3 +15,9 @@
 .turbo-progress-bar {
   background: theme('colors.amber.500');
 }
+
+/* override background color flowbite modal backdrop */
+.fixed.inset-0.z-40 {
+  background-color: #141822 !important;
+  opacity: 0.7;
+}
