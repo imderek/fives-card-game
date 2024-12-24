@@ -23,13 +23,13 @@
     <!-- discard -->
     <div class="discard-area w-full px-5 <%= can_discard ? '' : 'hidden' %>" data-can-discard="<%= can_discard %>">
       <div class="flex flex-row items-center justify-center gap-2">
-        <div class="block text-xs font-normal text-slate-400">You can choose to</div>
+        <div class="block text-xs font-normal text-slate-400">Once per game you may</div>
         <button data-controller="card" 
                 data-action="click->card#discardCard" 
-                class="px-2 py-2 mb-0.5 text-xs font-medium border border-slate-600 text-slate-400 rounded-lg transition-colors">
-          Discard
+                class="w-28 px-2 py-2 mb-0.5 text-xs font-medium border border-slate-600 text-slate-400 rounded-lg transition-colors">
+          Discard & Draw
         </button>
-        <div class="block text-xs font-normal text-slate-400 mr-[1.8rem]">one time only</div>
+        <%# <div class="block text-xs font-normal text-slate-400 mr-[0rem]">once per game</div> %>
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@
               <div class="text-xs mb-1 text-center text-slate-300/90 relative top-[-0.1rem]">
                 <div class="line-clamp-1"><%= column[:hand_name] %></div>
                 <% if column[:score] && column[:score] > 0 %>
-                  <div class="text-amber-400">+<%= column[:score] %></div>
+                  <div class="column-score text-amber-400">+<%= column[:score] %></div>
                 <% end %>
               </div>
             <% end %>
