@@ -1,7 +1,7 @@
 module PokerHandDetector
   def detect_hand(cards)
     return nil if cards.length < 5
-    return nil if cards.length > 5
+    # return nil if cards.length > 5 # temp disabling this because final hand may contain 6 cards
 
     values = cards.map { |code| code[0..-2] }
     suits = cards.map { |code| code[-1] }
@@ -41,6 +41,7 @@ module PokerHandDetector
   end
 
   def detect_partial_hand(cards)
+    puts "cards: " + cards.inspect
     return nil if cards.empty?
     
     values = cards.map { |code| code[0..-2] }
