@@ -31,40 +31,12 @@
                       <div class="text-sm font-medium <%= game.player2_total_score > game.player1_total_score ? 'text-slate-900' : 'text-slate-400' %>"><%= game.player2.email.titleize %></div>
                     </div>
                   </div>
-                  <!-- Final Hands -->
-                  <div class="flex gap-4 mb-4">
-                    <div class="flex-1">
-                      <div class="text-sm text-slate-500 mb-1 text-center">Final Hand</div>
-                      <div class="flex flex-row -space-x-3 justify-center">
-                        <% game.player1_hand.each do |card| %>
-                          <%= render partial: "games/card", locals: { 
-                            card: card,
-                            current_user: current_user, 
-                            playable: false,
-                            game: game
-                          } %>
-                        <% end %>
-                      </div>
-                    </div>
-                    <div class="flex-1">
-                      <div class="text-sm text-slate-500 mb-1 text-center">Final Hand</div>
-                      <div class="flex flex-row -space-x-3 justify-center">
-                        <% game.player2_hand.each do |card| %>
-                          <%= render partial: "games/card", locals: { 
-                            card: card,
-                            current_user: current_user, 
-                            playable: false,
-                            game: game
-                          } %>
-                        <% end %>
-                      </div>
-                    </div>
-                  </div>
                   <!-- Board Hands -->
                   <div class="flex gap-4 mb-4">
                     <div class="flex-1">
                       <div class="flex flex-col gap-1">
                         <% board_state = GameBoardSerializer.new(game).as_json %>
+                        <!-- First show the board columns -->
                         <% board_state[:player_1][:columns].each do |column| %>
                           <% if column[:hand_name].present? %>
                             <div class="flex flex-row justify-between text-sm text-slate-600 bg-slate-100 rounded p-1 px-2">
@@ -75,12 +47,22 @@
                             </div>
                           <% end %>
                         <% end %>
+                        <!-- Then show the hand if it exists -->
+                        <% if board_state[:player_1][:hand].present? %>
+                          <div class="flex flex-row justify-between text-sm text-slate-600 bg-slate-100 rounded p-1 px-2">
+                            <div class="text-left line-clamp-1 font-medium text-slate-900"><%= board_state[:player_1][:hand][:hand_name] %></div>
+                            <% if board_state[:player_1][:hand][:score] && board_state[:player_1][:hand][:score] > 0 %>
+                              <div class="text-right"><%= board_state[:player_1][:hand][:score] %></div>
+                            <% end %>
+                          </div>
+                        <% end %>
                       </div>
                     </div>
 
                     <!-- Player 2's hands -->
                     <div class="flex-1 mb-2">
                       <div class="flex flex-col gap-1">
+                        <!-- First show the board columns -->
                         <% board_state[:player_2][:columns].each do |column| %>
                           <% if column[:hand_name].present? %>
                             <div class="flex flex-row justify-between text-sm text-slate-600 bg-slate-100 rounded p-1 px-2">
@@ -90,6 +72,15 @@
                               <% end %>
                             </div>
                           <% end %>
+                        <% end %>
+                        <!-- Then show the hand if it exists -->
+                        <% if board_state[:player_2][:hand].present? %>
+                          <div class="flex flex-row justify-between text-sm text-slate-600 bg-slate-100 rounded p-1 px-2">
+                            <div class="text-left line-clamp-1 font-medium text-slate-900"><%= board_state[:player_2][:hand][:hand_name] %></div>
+                            <% if board_state[:player_2][:hand][:score] && board_state[:player_2][:hand][:score] > 0 %>
+                              <div class="text-right"><%= board_state[:player_2][:hand][:score] %></div>
+                            <% end %>
+                          </div>
                         <% end %>
                       </div>
                     </div>

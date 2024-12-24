@@ -23,19 +23,18 @@ class GameCompletionService
     player1_total = player1_board_score + player1_hand_score
     player2_total = player2_board_score + player2_hand_score
     
-    # Determine winner
-    winner_id = if player1_total > player2_total
-      @game.player1_id
-    elsif player2_total > player1_total
-      @game.player2_id
-    end
+    # Add hand scores to column_scores
+    column_scores = @game.column_scores || {}
+    column_scores["player1_hand"] = player1_hand_score
+    column_scores["player2_hand"] = player2_hand_score
     
     # Update game with final scores and winner
     @game.update(
       status: :completed,
-      winner_id: winner_id,
+      winner_id: player1_total > player2_total ? @game.player1_id : @game.player2_id,
       player1_total_score: player1_total,
-      player2_total_score: player2_total
+      player2_total_score: player2_total,
+      column_scores: column_scores
     )
   end
 
