@@ -92,7 +92,7 @@
   </div>
 
   <!-- Start New Game -->
-  <div class="mb-4 text-center bg-slate-700 dark:text-white py-6 rounded-xl shadow-xl">
+  <div class="mb-4 text-center bg-gradient-to-br from-slate-700 to-slate-800 text-white py-6 rounded-xl shadow-xl">
     <h2 class="text-xl font-medium mb-4">Welcome, <%= current_user.email.titleize %>!</h2>
     <div class="flex justify-center gap-4 text-sm">
       <%= link_to "<i class='fa-solid fa-play mr-0.5'></i> Play vs Bot".html_safe,
@@ -110,7 +110,7 @@
   <!-- Leaderboard -->
   <h1 class="text-xl font-medium mb-3 dark:text-white">Top Scores</h1>
   <div class="grid gap-4 mb-6">
-    <div class="text-sm flex flex-col gap-3 justify-between dark:text-white p-4 bg-slate-700 rounded-lg shadow-xl">
+    <div class="text-sm flex flex-col gap-3 justify-between text-white p-4 bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg shadow-xl">
       <% @high_scores.each_with_index do |game, index| %>
         <!-- User row -->
         <div class="flex flex-row justify-between items-center">
