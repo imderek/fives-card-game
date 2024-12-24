@@ -23,13 +23,13 @@
     <!-- discard -->
     <div class="discard-area w-full px-5 <%= can_discard ? '' : 'hidden' %>" data-can-discard="<%= can_discard %>">
       <div class="flex flex-row items-center justify-center gap-2">
-        <div class="block text-xs font-normal text-slate-500">You're allowed to</div>
+        <div class="block text-xs font-normal text-slate-400">You can choose to</div>
         <button data-controller="card" 
                 data-action="click->card#discardCard" 
-                class="px-2 py-2 mb-0.5 text-xs font-medium border border-slate-700 text-slate-500 rounded-lg transition-colors">
+                class="px-2 py-2 mb-0.5 text-xs font-medium border border-slate-600 text-slate-400 rounded-lg transition-colors">
           Discard
         </button>
-        <div class="block text-xs font-normal text-slate-500 mr-[1.2rem]">one time only</div>
+        <div class="block text-xs font-normal text-slate-400 mr-[1.8rem]">one time only</div>
       </div>
     </div>
   </div>

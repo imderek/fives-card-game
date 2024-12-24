@@ -24,8 +24,8 @@ export default class extends Controller {
     // Show discard area if it's hidden
     const discardBtn = document.querySelector('.discard-area button')
     if (discardBtn) {
-      discardBtn.classList.remove('border-slate-500', 'text-slate-500')
-      discardBtn.classList.add('bg-red-500/80', 'hover:bg-red-500/30', '!border-red-500/80', 'text-white')
+      discardBtn.classList.remove('border-slate-600', 'text-slate-400')
+      discardBtn.classList.add('bg-red-500', 'hover:bg-red-400', '!border-red-500', 'text-white')
     }
   }
 
