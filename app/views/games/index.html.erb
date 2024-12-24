@@ -110,20 +110,20 @@
   </div>
 
   <!-- Leaderboard -->
-  <h1 class="text-xl font-medium mb-4 dark:text-white">Leaderboard</h1>
+  <h1 class="text-xl font-medium mb-3 dark:text-white">Top Scores</h1>
   <div class="grid gap-4 mb-6">
-    <div class="text-sm flex flex-col gap-2 justify-between dark:text-white">
-      <% @leaderboard.each_with_index do |user, index| %>
+    <div class="text-sm flex flex-col gap-3 justify-between dark:text-white p-4 bg-slate-700 rounded-lg shadow-xl">
+      <% @high_scores.each_with_index do |game, index| %>
         <!-- User row -->
-        <div class="flex flex-row justify-between items-center p-3 bg-slate-700 rounded-lg shadow-xl">
+        <div class="flex flex-row justify-between items-center">
           <!-- Left column -->
           <div class="flex flex-row gap-1 items-center">
             <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
-            <div class="mr-1 w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= user.email.first.upcase %></div>
-            <div class="font-medium"><%= user.email.capitalize %></div>
+            <div class="mr-1 w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.player1.email.first.upcase %></div>
+            <div class="font-medium"><%= game.player1.email.titleize %></div>
           </div>
           <!-- Right column -->
-          <div class="hidden"><%= user.wins %></div>
+          <div class=""><%= game.high_score %></div>
         </div>
       <% end %>
     </div>

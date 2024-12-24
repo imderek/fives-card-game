@@ -15,6 +15,7 @@ class GamesController < ApplicationController
                       .group('users.id')
                       .order('wins DESC')
                       .limit(5)
+    @high_scores = Game.select('player1_id, player1_total_score as high_score').group('player1_id').where('player1_total_score > 0').includes(:player1).order('high_score DESC').limit(10)
   end
 
   def show
