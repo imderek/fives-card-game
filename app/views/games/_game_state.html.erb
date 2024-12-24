@@ -8,28 +8,49 @@
                       ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
                       (current_user.id == game.player2_id && game.player2_discard_pile.empty?)) %>
     <!-- player hand -->
-    <div class="player-hand flex flex-row -space-x-[.3rem] <%= can_discard ? '' : 'mb-1' %>">
+    <div class="player-hand mb-1 relative top-[1.8rem] flex items-end justify-center space-x-[-1.5rem]">
       <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
       <% player_hand.each_with_index do |card, index| %>
-        <%= render partial: "games/card", locals: { 
-          card: card, 
-          current_user: current_user, 
-          playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"), 
-          game: game, 
-          last: index == player_hand.size - 1
-        } %>
+        <% 
+          # Get total number of cards in player's hand
+          total_cards = player_hand.size
+
+          # Calculate rotation angle between -25 and +25 degrees based on card position
+          # When there's only 1 card, avoid division by zero by using max(1, total_cards-1)
+          angle = -15 + (30.0 / [1, total_cards - 1].max) * index
+
+          # Normalize angle to value between -1 and 1 for offset calculations
+          normalized_angle = angle / 25.0
+
+          # Calculate vertical offset using quadratic function
+          # Cards rise more in the middle of the hand (-20px max)
+          y_offset = -30 * (1 - normalized_angle * normalized_angle)
+
+          # Calculate slight horizontal offset to bring cards closer together
+          # Negative angle multiplier keeps cards from spreading too far
+          x_offset = -angle * 0.15
+        %>
+        <div class="" style="transform-origin: bottom center; transform: rotate(<%= angle %>deg) translate(<%= x_offset %>px, <%= y_offset %>px)">
+          <%= render partial: "games/card", locals: { 
+            card: card, 
+            current_user: current_user, 
+            playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"), 
+            game: game, 
+            last: index == player_hand.size - 1
+          } %>
+        </div>
       <% end %>
     </div>
     <!-- discard -->
     <div class="discard-area w-full px-5 <%= can_discard ? '' : 'hidden' %>" data-can-discard="<%= can_discard %>">
       <div class="flex flex-row items-center justify-center gap-2">
-        <div class="block text-xs font-normal text-slate-400">Once per game you may</div>
+        <div class="ml-3 block text-xs font-normal text-slate-400">You can</div>
         <button data-controller="card" 
                 data-action="click->card#discardCard" 
                 class="w-28 px-2 py-2 mb-0.5 text-xs font-medium border border-slate-600 text-slate-400 rounded-lg transition-colors">
           Discard & Draw
         </button>
-        <%# <div class="block text-xs font-normal text-slate-400 mr-[0rem]">once per game</div> %>
+        <div class="block text-xs font-normal text-slate-400 mr-[0rem]">only once</div>
       </div>
     </div>
   </div>
