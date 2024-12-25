@@ -95,14 +95,21 @@
   </div>
 
   <!-- Welcome -->
-  <div class="mb-4 text-center bg-gradient-to-br from-slate-700 to-slate-800 text-white py-8 rounded-xl shadow-xl">
-    <h2 class="text-xl font-medium mb-4">Welcome, <%= current_user.email.titleize %>.</h2>
-    <div class="flex justify-center gap-3 text-sm">
-      <%= link_to "<i class='fa-solid fa-play mr-0.5'></i> Play vs Bot".html_safe,
-        new_game_path(type: :bot), 
-        class: "px-4 py-3 rounded-lg font-medium text-white bg-amber-500 hover:bg-amber-600 shadow-xl" %>
-      <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="px-4 border border-slate-500 text-slate-300 hover:text-slate-300 rounded-lg shadow-xl">
-        <i class="fa fa-info-circle mr-0.5"></i> How to Play
+  <div class="mb-4 text-center bg-gradient-to-br from-slate-700 to-slate-800 text-white py-4 rounded-xl shadow-xl">
+    <h2 class="text-xl font-medium mb-3">Welcome, <%= current_user.email.titleize %>.</h2>
+    <div class="flex flex-col justify-center gap-4 text-sm">
+      <!-- Play buttons -->
+      <div class="flex flex-row justify-center gap-3 px-3">
+        <%= link_to "<i class='fa-solid fa-play mr-0.5'></i> Play vs Bot<span class='inline-block text-xs text-amber-200 font-normal'>Available Now!</span>".html_safe,
+          new_game_path(type: :bot),
+          class: "w-full px-2 py-3 leading-[1.1rem] pt-[.8rem] rounded-lg font-semibold text-white bg-amber-500 hover:bg-amber-600 border border-transparent shadow-xl" %>
+        <%= link_to "<i class='fa-solid fa-user mr-0.5'></i> Play vs Human<span class='inline-block text-xs text-slate-400/80 font-normal'>Coming Soon</span>".html_safe,
+          '#',
+          class: "w-full px-2 py-3 leading-[1.1rem] pt-[.8rem] rounded-lg font-semibold text-slate-300 border border-slate-500" %>
+      </div>
+      <!-- How to play -->
+      <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="text-slate-400 hover:text-slate-300 rounded-lg">
+        <i class="fa-solid fa-circle-question mr-0.5 opacity-70"></i> Learn How to Play
       </button>
     </div>
   </div>
