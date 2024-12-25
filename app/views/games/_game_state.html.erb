@@ -2,13 +2,14 @@
 
 <div id="game-state" class="w-full flex flex-col items-center gap-2">
   <!-- top row (player hand and discard button) -->
-  <div class="px-2 w-full flex flex-col items-center justify-center gap-2">
-    <% can_discard = game.current_turn == current_user.id && 
+  <div class="px-2 w-full flex flex-col items-center justify-center gap-2 relative z-40">
+    <% can_discard = game.winner_id.nil? && 
+                      game.current_turn == current_user.id && 
                       game.turn_phase == "play_card" && 
                       ((current_user.id == game.player1_id && game.player1_discard_pile&.empty?) || 
                       (current_user.id == game.player2_id && game.player2_discard_pile&.empty?)) %>
     <!-- player hand -->
-    <div class="player-hand <%= can_discard ? 'mb-1' : 'mb-6' %> relative top-[1.8rem] flex items-end justify-center space-x-[-1.5rem]">
+    <div class="player-hand <%= can_discard || game.winner_id.present? ? 'mb-1' : 'mb-6' %> relative top-[1.8rem] flex items-end justify-center space-x-[-1.5rem]">
       <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
       <% player_hand.each_with_index do |card, index| %>
         <% 
@@ -34,13 +35,22 @@
           <%= render partial: "games/card", locals: { 
             card: card, 
             current_user: current_user, 
-            playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"), 
+            playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"),
             game: game, 
             last: index == player_hand.size - 1
           } %>
         </div>
       <% end %>
     </div>
+    <!-- final hand score -->
+    <% if game.winner_id.present? %>
+      <% player_hand_score = current_user.id == game.player1_id ? game.column_scores["player1_hand"] : game.column_scores["player2_hand"] %>
+      <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
+      <div class="text-center text-sm text-slate-400/70">
+        <span class=""><%= player_data[:hand][:hand_name] %></span>
+        <span class="">+<%= player_hand_score %></span>
+      </div>
+    <% end %>
     <!-- discard -->
     <div class="discard-area w-full px-5 <%= can_discard ? '' : 'hidden' %>" data-can-discard="<%= can_discard %>">
       <div class="flex flex-row items-center justify-center gap-2">
