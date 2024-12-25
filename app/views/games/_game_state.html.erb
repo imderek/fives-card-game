@@ -5,8 +5,8 @@
   <div class="px-2 w-full flex flex-col items-center justify-center gap-2">
     <% can_discard = game.current_turn == current_user.id && 
                       game.turn_phase == "play_card" && 
-                      ((current_user.id == game.player1_id && game.player1_discard_pile.empty?) || 
-                      (current_user.id == game.player2_id && game.player2_discard_pile.empty?)) %>
+                      ((current_user.id == game.player1_id && game.player1_discard_pile&.empty?) || 
+                      (current_user.id == game.player2_id && game.player2_discard_pile&.empty?)) %>
     <!-- player hand -->
     <div class="player-hand <%= can_discard ? 'mb-1' : 'mb-6' %> relative top-[1.8rem] flex items-end justify-center space-x-[-1.5rem]">
       <% player_hand = current_user.id == game.player1_id ? game.player1_hand : game.player2_hand %>
