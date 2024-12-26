@@ -35,22 +35,13 @@
           <%= render partial: "games/card", locals: { 
             card: card, 
             current_user: current_user, 
-            playable: (game.current_turn == current_user.id && game.turn_phase == "play_card"),
+            playable: ((game.current_turn == current_user.id && game.turn_phase == "play_card") || game.winner_id.present?),
             game: game, 
             last: index == player_hand.size - 1
           } %>
         </div>
       <% end %>
     </div>
-    <!-- final hand score -->
-    <% if game.winner_id.present? %>
-      <% player_hand_score = current_user.id == game.player1_id ? game.column_scores["player1_hand"] : game.column_scores["player2_hand"] %>
-      <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
-      <div class="text-center text-sm text-slate-400/70">
-        <span class=""><%= player_data[:hand][:hand_name] %></span>
-        <span class="">+<%= player_hand_score %></span>
-      </div>
-    <% end %>
     <!-- discard -->
     <div class="discard-area w-full px-5 <%= can_discard ? '' : 'hidden' %>" data-can-discard="<%= can_discard %>">
       <div class="flex flex-row items-center justify-center gap-2">
@@ -64,11 +55,43 @@
       </div>
     </div>
   </div>
+  <!-- winner declaration -->
+  <% if game.winner_id %>
+    <div class="mt-2 w-full flex flex-col animate-enter-scale">
+      <div class="my-3 mx-7 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
+        <!-- heading -->
+        <h1 class="mt-1 mb-4 text-xl font-bold text-slate-900 text-center">
+          <%= game.winner_id == game.player1_id ? "You Won!" : "You Lost" %>
+        </h1>
+        <!-- scores -->
+        <div class="flex items-center justify-center gap-4 mb-3">
+          <div class="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
+            <% if game.player1_total_score >= game.player2_total_score %>
+              <div class="absolute -top-4 bg-white z-1 p-1 px-2"><i class="fa fa-trophy text-amber-500 text-xl animate-bounce relative top-1"></i></div>
+            <% end %>
+            <div class="text-2xl font-bold <%= game.player1_total_score >= game.player2_total_score ? 'text-slate-900' : 'text-slate-400' %>"><%= number_with_delimiter(game.player1_total_score) %></div>
+            <div class="text-sm font-medium <%= game.player1_total_score >= game.player2_total_score ? 'text-slate-900' : 'text-slate-400' %>"><%= game.player1.email.titleize %></div>
+          </div>
+          <div class="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
+            <% if game.player2_total_score > game.player1_total_score %>
+              <div class="absolute -top-4 bg-white z-1 p-1 px-2"><i class="fa fa-trophy text-amber-500 text-xl"></i></div>
+            <% end %>
+            <div class="text-2xl font-bold <%= game.player2_total_score > game.player1_total_score ? 'text-slate-900' : 'text-slate-400' %>"><%= number_with_delimiter(game.player2_total_score) %></div>
+            <div class="text-sm font-medium <%= game.player2_total_score > game.player1_total_score ? 'text-slate-900' : 'text-slate-400' %>"><%= game.player2.email.titleize %></div>
+          </div>
+        </div>
+        <!-- back to lobby -->
+        <div class="mt-4 flex flex-col items-center justify-center">
+          <%= link_to "Back to Lobby", games_path, class: "py-2 w-full block text-center bg-slate-500 text-white rounded-lg text-sm" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
   <!-- middle row (board, scoreboard) -->
   <div class="board w-full flex flex-col">
     <div>
       <!-- Player's board area -->
-      <div class="px-7 player-board grid grid-cols-4 gap-2">
+      <div class="<%= game.winner_id.present? ? 'mb-4' : '' %> px-7 player-board grid grid-cols-4 gap-2">
         <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
         <% player_data[:columns].each_with_index do |column, index| %>
           <!-- Column -->
@@ -101,23 +124,25 @@
       </div>
     </div>
     <!-- scoreboard -->
-    <div class="my-3 px-7">
-      <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
-      <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
-      <div class="flex items-center justify-center gap-4 pt-1 pb-2 px-6 bg-white rounded-lg">
-        <div class="relative flex flex-1 flex-col items-center justify-center">
-          <div class="text-xl font-bold text-slate-900 animate-enter-scale">
-            <%= number_with_delimiter(player1_score) %>
+    <% if game.winner_id.nil? %>
+      <div class="my-3 mx-7 px-7 pt-2 pb-3 bg-white rounded-lg relative z-40">
+        <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
+        <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
+        <div class="flex items-center justify-center gap-4 rounded-lg">
+          <div class="relative flex flex-1 flex-col items-center justify-center">
+            <div class="text-xl font-bold text-slate-900 animate-enter-scale">
+              <%= number_with_delimiter(player1_score) %>
+            </div>
+            <div class="text-xs font-medium text-slate-900">My Score</div>
           </div>
-          <div class="text-xs font-medium text-slate-900">My Score</div>
-        </div>
-        <div class="w-px h-10 bg-slate-500/50"></div>
-        <div class="relative flex flex-1 flex-col items-center justify-center">
-          <div class="text-xl font-bold text-slate-500"><%= number_with_delimiter(player2_score) %></div>
-          <div class="text-xs font-medium text-slate-500"><%= game.player2.email.titleize %></div>
+          <div class="w-px h-10 bg-slate-300"></div>
+          <div class="relative flex flex-1 flex-col items-center justify-center">
+            <div class="text-xl font-bold text-slate-500"><%= number_with_delimiter(player2_score) %></div>
+            <div class="text-xs font-medium text-slate-500"><%= game.player2.email.titleize %></div>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
     <!-- Opponent's board area -->
     <div class="mb-1">
       <div class="px-7 opponent-board grid grid-cols-4 gap-2">

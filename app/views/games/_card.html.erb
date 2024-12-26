@@ -1,6 +1,6 @@
 <% 
   # Set base classes for card size and interactivity
-  base_classes = playable || (defined?(facedown) && facedown) || (game.winner_id.present?) ? 
+  base_classes = (playable) || (defined?(facedown) && facedown) ? 
     'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28 cursor-pointer' : 
     'w-12 h-[4rem] md:w-20 md:h-28'
 
