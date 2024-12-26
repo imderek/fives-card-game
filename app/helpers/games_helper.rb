@@ -4,9 +4,9 @@ module GamesHelper
     
     strength_classes = case score
     when 1000, 700..999  # Royal Flush & Straight Flush & Quads
-      "bg-gradient-to-br from-purple-600/80 via-purple-800/30 via-35% to-purple-600/60 ring-1 ring-purple-500 bg-[length:200%_100%] shadow-[0_0_32px_10px_rgba(168,85,247,0.5)] "
+      "bg-gradient-to-br from-purple-600 via-purple-800/30 via-35% to-purple-600/60 ring-1 ring-purple-500 bg-[length:200%_100%] shadow-[0_0_14px_10px_rgba(168,85,247,0.5)] "
     when 600..699  # Full House
-      "bg-gradient-to-br from-red-600/80 via-red-800/30 via-35% to-red-600/60 ring-1 ring-red-500 bg-[length:200%_100%] shadow-[0_0_24px_10px_rgba(220,38,38,0.5)]"
+      "bg-gradient-to-br from-red-600/80 via-red-800/30 via-35% to-red-600/60 ring-1 ring-red-500 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]"
     when 500..599  # Flush
       "bg-gradient-to-br from-orange-600/80 via-orange-800/30 via-35% to-orange-600/60 ring-1 ring-orange-500 bg-[length:200%_100%]"
     when 400..499  # Straight
