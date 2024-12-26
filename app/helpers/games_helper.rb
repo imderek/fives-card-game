@@ -1,6 +1,6 @@
 module GamesHelper
   def column_strength_classes(score)
-    base_classes = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column shadow-lg transition-all duration-150 flex flex-col gap-1 w-full"
+    base_classes = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-all duration-150 flex flex-col gap-1 w-full"
     
     strength_classes = case score
     when 1000, 700..999  # Royal Flush & Straight Flush & Quads
