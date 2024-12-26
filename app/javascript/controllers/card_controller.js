@@ -44,10 +44,9 @@ export default class extends Controller {
 
     // Flash the selected column with a highlight
     const column = event.currentTarget
-    column.classList.add('ring-2', 'ring-amber-500')
+    column.classList.add('!bg-slate-500/60')
     setTimeout(() => {
-      // console.log('resetting column')
-      column.classList.remove('ring-2', 'ring-amber-500')
+      column.classList.remove('!bg-slate-500/80')
     }, 500)
 
     const columnIndex = event.currentTarget.dataset.columnIndex
