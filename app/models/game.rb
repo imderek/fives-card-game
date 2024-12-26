@@ -119,11 +119,13 @@ class Game < ApplicationRecord
   private
   
   def setup_initial_game_state
+    return if @skip_setup
+    
     self.deck = generate_deck
     self.player1_hand = draw_initial_hand
     self.player2_hand = draw_initial_hand
-    self.board_cards = [] # Each card will now need: { suit:, value:, player_id:, column: }
-    self.player1_discard_pile = []  # Initialize empty discard piles
+    self.board_cards = []
+    self.player1_discard_pile = []
     self.player2_discard_pile = []
     self.current_turn = player1_id
     self.turn_phase = :play_card

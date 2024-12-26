@@ -1,6 +1,6 @@
 module GamesHelper
   def column_strength_classes(score)
-    base_classes = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-all duration-150 flex flex-col gap-1 w-full"
+    base_classes = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full"
     
     strength_classes = case score
     when 1000, 700..999  # Royal Flush & Straight Flush & Quads
@@ -16,7 +16,7 @@ module GamesHelper
     when 101..299  # Two Pair
       "bg-cyan-700/50 ring-1 ring-cyan-600"
     when 50..100  # Pair
-      "bg-slate-600/60 ring-1 ring-slate-500"
+      "bg-slate-600/60"
     else # High Card or no hand
       "bg-slate-600/60"
     end

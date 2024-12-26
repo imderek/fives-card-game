@@ -44,9 +44,9 @@ export default class extends Controller {
 
     // Flash the selected column with a highlight
     const column = event.currentTarget
-    column.classList.add('!bg-slate-500/60')
+    column.classList.add('outline-slate-500/80', 'outline-2', 'outline', 'outline-offset-2')
     setTimeout(() => {
-      column.classList.remove('!bg-slate-500/80')
+      column.classList.remove('outline-slate-500/80', 'outline-2', 'outline', 'outline-offset-2')
     }, 500)
 
     const columnIndex = event.currentTarget.dataset.columnIndex
