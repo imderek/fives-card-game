@@ -1,5 +1,5 @@
 <div class="dark justify-center mx-auto mb-5 py-6 pt-10 px-3" data-controller="bot-selection">
-  <h1 class="mb-6 text-xl font-semibold text-center dark:text-white">Choose Your Bot</h1>
+  <h1 class="mb-6 text-xl font-semibold text-center dark:text-white">Choose Your Opponent</h1>
   <%= form_with(model: @game, local: true, class: "") do |f| %>
     <%= f.hidden_field :bot_difficulty, 
         data: { bot_selection_target: "difficulty" } %>
@@ -33,7 +33,7 @@
           <h2 class="text-white text-lg font-semibold leading-6">Hard</h2>
           <div class="text-xs text-slate-400/80">Coming soon</div>
         </div>
-        <p class="text-slate-300 text-xs">Tries to block opponent's strongest hands.</p>
+        <p class="text-slate-300 text-xs">Tries to block your strongest hands.</p>
       </div>
     </div>
     
