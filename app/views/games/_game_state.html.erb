@@ -91,7 +91,7 @@
   <div class="board w-full flex flex-col">
     <div>
       <!-- Player's board area -->
-      <div class="<%= game.winner_id.present? ? 'mb-4' : '' %> px-7 player-board grid grid-cols-4 gap-2">
+      <div class="<%= game.winner_id.present? ? 'mb-4' : '' %> px-6 player-board grid grid-cols-4 gap-3">
         <% player_data = current_user.id == game.player1_id ? board_state[:player_1] : board_state[:player_2] %>
         <% player_data[:columns].each_with_index do |column, index| %>
           <!-- Column -->
@@ -125,7 +125,7 @@
     </div>
     <!-- scoreboard -->
     <% if game.winner_id.nil? %>
-      <div class="my-3 mx-7 px-7 pt-2 pb-3 bg-white rounded-lg relative z-40">
+      <div class="my-3 mx-6 px-7 pt-2 pb-3 bg-white rounded-lg relative z-40">
         <% player1_score = (game.column_scores || {}).select { |col, _| col.to_i < 4 }.values.sum %>
         <% player2_score = (game.column_scores || {}).select { |col, _| col.to_i >= 4 }.values.sum %>
         <div class="flex items-center justify-center gap-4 rounded-lg">
@@ -145,7 +145,7 @@
     <% end %>
     <!-- Opponent's board area -->
     <div class="mb-1">
-      <div class="px-7 opponent-board grid grid-cols-4 gap-2">
+      <div class="px-6 opponent-board grid grid-cols-4 gap-3">
         <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
         <% opponent_data[:columns].each do |column| %>
           <!-- Column -->
