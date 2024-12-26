@@ -144,7 +144,7 @@
       </div>
     <% end %>
     <!-- Opponent's board area -->
-    <div class="mb-2">
+    <div class="<%= game.winner_id.present? ? 'mb-4' : 'mb-2' %>">
       <div class="px-6 opponent-board grid grid-cols-4 gap-3">
         <% opponent_data = current_user.id == game.player1_id ? board_state[:player_2] : board_state[:player_1] %>
         <% opponent_data[:columns].each do |column| %>
