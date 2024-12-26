@@ -78,7 +78,7 @@
                data-column-index="<%= index %>">
             <!-- Hand name and score -->
             <% if column[:hand_name].present? %>
-              <div class="text-xs mb-1 text-center text-white relative top-[-0.1rem]">
+              <div class="text-xs text-center text-white relative top-[-0.1rem]">
                 <div class="line-clamp-1"><%= column[:hand_name] %></div>
                 <% if column[:score] && column[:score] > 0 %>
                   <div class="<%= score_color_class(column[:score]) %>">+<%= column[:score] %></div>
@@ -127,7 +127,7 @@
           <div class="<%= column_strength_classes(column[:score]) %>">
             <!-- Hand name -->
             <% if column[:hand_name].present? %>
-              <div class="text-xs mb-1 text-center text-white relative top-[-0.1rem]">
+              <div class="text-xs text-center text-white relative top-[-0.1rem]">
                 <div class="line-clamp-1"><%= column[:hand_name] %></div>
                 <% if column[:score] && column[:score] > 0 %>
                   <div class="<%= score_color_class(column[:score]) %>">+<%= column[:score] %></div>
