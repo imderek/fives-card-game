@@ -20,11 +20,16 @@ module.exports = {
         'enter-scale': {
           '0%': { opacity: '0', transform: 'scale(60%)' },
           '100%': { opacity: '1', transform: 'scale(100%)' }
+        },
+        'shimmer': {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' }
         }
       },
       animation: {
         'card-enter': 'card-enter 500ms ease-out forwards',
-        'enter-scale': 'enter-scale 200ms ease-out forwards'
+        'enter-scale': 'enter-scale 200ms ease-out forwards',
+        'shimmer': 'shimmer 4s linear infinite'
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
