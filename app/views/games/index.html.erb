@@ -2,7 +2,7 @@
 
 <div class="max-w-7xl mx-auto px-4 py-6 pb-20">
   <!-- Header -->
-  <div class="flex flex-row justify-between mb-2">
+  <div class="flex flex-row justify-between mb-1">
     <h1 class="text-3xl font-bold text-white dark:text-white">Lobby</h1>
     <!-- Instructions modal -->
     <div id="instructions-modal" tabindex="-1" aria-hidden="true" data-modal-placement="center" class="hidden fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -97,8 +97,8 @@
 
   <!-- Welcome -->
   <div class="mb-2 text-center text-white py-1">
-    <h2 class="text-lg font-semibold mb-3">Welcome, <%= current_user.email.titleize %>.</h2>
-    <div class="flex flex-col justify-center gap-3 text-[.925rem]">
+    <h2 class="text-lg font-semibold mb-3.5">Welcome, <%= current_user.email.titleize %>.</h2>
+    <div class="flex flex-col justify-center gap-5 text-[.925rem]">
       <!-- Play buttons -->
       <div class="flex flex-row items-stretch justify-center gap-2.5">
         <a href="<%= new_game_path(type: :bot) %>" class="flex flex-col justify-center w-full px-2 py-4 rounded-lg font-semibold text-white bg-gradient-to-l from-amber-600 to-amber-300 hover:bg-amber-700">
