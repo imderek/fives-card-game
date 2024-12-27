@@ -8,11 +8,11 @@ module GamesHelper
     when 600..699  # Full House
       "bg-gradient-to-br from-red-600/80 via-red-800/30 via-35% to-red-600/60 ring-1 ring-red-500 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]"
     when 500..599  # Flush
-      "bg-gradient-to-br from-orange-600/80 via-orange-800/30 via-35% to-orange-600/60 ring-1 ring-orange-500 bg-[length:200%_100%]"
+      "bg-gradient-to-br from-amber-600/80 via-amber-800/30 via-35% to-amber-600/60 ring-1 ring-amber-500 bg-[length:200%_100%]"
     when 400..499  # Straight
-      "bg-amber-600/40 ring-1 ring-amber-500"
+      "bg-gradient-to-br from-lime-600/80 via-lime-800/30 via-35% to-lime-600/60 ring-1 ring-lime-500 bg-[length:200%_100%]"
     when 300..399  # Trips
-      "bg-green-600/40 ring-1 ring-green-500"
+      "bg-cyan-600/40 ring-1 ring-cyan-500"
     when 101..299  # Two Pair
       "bg-slate-600/60"
     when 50..100  # Pair
@@ -31,11 +31,11 @@ module GamesHelper
     when 600..699  # Full House
       "text-red-400"
     when 500..599  # Flush
-      "text-orange-400"
-    when 400..499  # Straight
       "text-amber-400"
+    when 400..499  # Straight
+      "text-lime-300"
     when 300..399  # Trips
-      "text-green-400"
+      "text-cyan-400"
     when 101..299  # Two Pair
       "text-cyan-400"
     when 50..100  # Pair
