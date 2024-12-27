@@ -8,8 +8,12 @@ export default class extends Controller {
   }
 
   selectCard(event) {
-    // console.log("Card selected", this.element.dataset.card)
-    
+    // If this card is already selected, deselect it and return
+    if (this.element.classList.contains('selected-card')) {
+      this.deselect()
+      return
+    }
+
     // Remove selected class from any previously selected card
     document.querySelectorAll('.selected-card').forEach(el => {
       el.classList.remove('selected-card', 'ring', 'ring-yellow-500', 'top-[-5px]', 'shadow-xl')
@@ -21,11 +25,28 @@ export default class extends Controller {
     // Store the selected card data globally
     window.selectedCard = JSON.parse(this.element.dataset.card)
 
-    // Show discard area if it's hidden
+    // Enable discard
     const discardBtn = document.querySelector('.discard-area button')
     if (discardBtn) {
       discardBtn.classList.remove('border-slate-600', 'text-slate-400')
       discardBtn.classList.add('bg-red-500', 'hover:bg-red-400', '!border-red-500', 'text-white')
+    }
+  }
+
+  deselect() {
+    // Remove selected class from any selected card
+    document.querySelectorAll('.selected-card').forEach(el => {
+      el.classList.remove('selected-card', 'ring', 'ring-yellow-500', 'top-[-5px]', 'shadow-xl')
+    })
+    
+    // Clear the selected card data
+    window.selectedCard = null
+
+    // Disable discard
+    const discardBtn = document.querySelector('.discard-area button')
+    if (discardBtn) {
+      discardBtn.classList.add('border-slate-600', 'text-slate-400')
+      discardBtn.classList.remove('bg-red-500', 'hover:bg-red-400', '!border-red-500', 'text-white')
     }
   }
 
