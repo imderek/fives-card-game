@@ -11,7 +11,7 @@
 
   <!-- Welcome -->
   <div class="mb-2 text-center text-white py-1">
-    <h2 class="text-xl font-semibold mb-3.5">Welcome, <%= current_user.email.titleize %>.</h2>
+    <h2 class="text-xl font-medium mb-3.5">Welcome, <%= current_user.email.titleize %>.</h2>
     <div class="flex flex-col justify-center gap-4 text-[.925rem]">
       <!-- Play buttons -->
       <div class="flex flex-row items-stretch justify-center gap-2.5">
@@ -138,7 +138,7 @@
   </div>
 
   <!-- Recent Games -->
-  <h1 class="text-xl font-semibold <%= @games.any? ? 'mb-4' : 'mb-2' %> dark:text-white">My Recent Games</h1>
+  <h1 class="text-xl font-medium <%= @games.any? ? 'mb-4' : 'mb-2' %> dark:text-white">My Recent Games</h1>
   <% if @games.any? %>
     <div id="games_list" class="grid gap-4">
       <% @games.each do |game| %>
