@@ -131,31 +131,32 @@ game = Game.new(
 
     # Player 2's columns (4-7)
     # Three of a Kind in column 4
-    {suit: "♠", value: "Q", player_id: bot.id, column: 4},
-    {suit: "♦", value: "Q", player_id: bot.id, column: 4},
-    {suit: "♣", value: "Q", player_id: bot.id, column: 4},
-    {suit: "♥", value: "4", player_id: bot.id, column: 4},
-    {suit: "♦", value: "7", player_id: bot.id, column: 4},
+    # High Card in column 4 (4 cards only)
+    {suit: "♦", value: "K", player_id: bot.id, column: 4},
+    {suit: "♣", value: "2", player_id: bot.id, column: 4},
+    {suit: "♠", value: "3", player_id: bot.id, column: 4},
+    {suit: "♥", value: "9", player_id: bot.id, column: 4},
 
-    # Two Pair in column 5
-    {suit: "♠", value: "8", player_id: bot.id, column: 5},
-    {suit: "♣", value: "8", player_id: bot.id, column: 5},
-    {suit: "♥", value: "7", player_id: bot.id, column: 5},
-    {suit: "♣", value: "7", player_id: bot.id, column: 5},
-    {suit: "♦", value: "3", player_id: bot.id, column: 5},
+    # Pair in column 5
+    {suit: "♠", value: "10", player_id: bot.id, column: 5},
+    {suit: "♥", value: "10", player_id: bot.id, column: 5},
+    {suit: "♦", value: "5", player_id: bot.id, column: 5},
+    {suit: "♣", value: "6", player_id: bot.id, column: 5},
+    {suit: "♠", value: "9", player_id: bot.id, column: 5},
 
-    # Pair in column 6
-    {suit: "♠", value: "10", player_id: bot.id, column: 6},
-    {suit: "♥", value: "10", player_id: bot.id, column: 6},
-    {suit: "♦", value: "5", player_id: bot.id, column: 6},
-    {suit: "♣", value: "6", player_id: bot.id, column: 6},
-    {suit: "♠", value: "9", player_id: bot.id, column: 6},
+    # Two Pair in column 6
+    {suit: "♠", value: "8", player_id: bot.id, column: 6},
+    {suit: "♣", value: "8", player_id: bot.id, column: 6},
+    {suit: "♥", value: "7", player_id: bot.id, column: 6},
+    {suit: "♣", value: "7", player_id: bot.id, column: 6},
+    {suit: "♦", value: "3", player_id: bot.id, column: 6},
 
-    # High Card in column 7 (4 cards only)
-    {suit: "♦", value: "K", player_id: bot.id, column: 7},
-    {suit: "♣", value: "2", player_id: bot.id, column: 7},
-    {suit: "♠", value: "3", player_id: bot.id, column: 7},
-    {suit: "♥", value: "9", player_id: bot.id, column: 7}
+    # Three of a Kind in column 7
+    {suit: "♠", value: "Q", player_id: bot.id, column: 7},
+    {suit: "♦", value: "Q", player_id: bot.id, column: 7},
+    {suit: "♣", value: "Q", player_id: bot.id, column: 7},
+    {suit: "♥", value: "4", player_id: bot.id, column: 7},
+    {suit: "♦", value: "7", player_id: bot.id, column: 7}
   ]
 )
 
