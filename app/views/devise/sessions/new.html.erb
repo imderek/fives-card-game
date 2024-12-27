@@ -3,7 +3,7 @@
         <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "flex flex-col gap-4" }) do |f| %>
             <%#= f.label :email, class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
             <%= f.text_field :email, autofocus: true, autocomplete: "name", class: "bg-white text-slate-900 border-0 rounded-lg focus:ring-slate-400 block w-full p-2.5 placeholder-slate-400 focus:ring-slate-500 focus:ring-2", placeholder: "Enter your name", required: true %>
-            <%= f.submit "Start Playing", class: "font-medium w-full rounded-lg font-medium text-base text-white rounded-lg bg-amber-500 hover:bg-amber-600 px-5 py-2.5" %>
+            <%= f.submit "Sign In", class: "font-medium w-full rounded-lg font-medium text-base text-white rounded-lg bg-amber-500 hover:bg-amber-400 px-5 py-2.5 cursor-pointer" %>
         <% end %>
     </div>
 </div>
