@@ -8,6 +8,7 @@ export default class extends Controller {
   }
 
   selectCard(event) {
+    console.log("selectCard", this.element.dataset.card)
     // If this card is already selected, deselect it and return
     if (this.element.classList.contains('selected-card')) {
       this.deselect()
