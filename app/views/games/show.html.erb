@@ -1,5 +1,5 @@
 <div id="game-container" data-game-id="<%= @game.id %>" class="mx-auto py-3" data-turbo-temporary>
-  <div id="react-test"></div>
+  <div id="react-game-root" data-game="<%= @game.to_json %>" data-current-user="<%= current_user.id %>"></div>
 
   <%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
 
