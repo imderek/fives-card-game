@@ -7,6 +7,9 @@ yarn install
 # Clean up any previous builds
 bundle exec rails assets:clobber
 
+# Build JavaScript with esbuild
+yarn build
+
 # Precompile assets
 bundle exec rails assets:precompile
 
