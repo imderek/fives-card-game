@@ -1,22 +1,24 @@
 import "@hotwired/turbo-rails"
-import { Application } from "@hotwired/stimulus"
-import { initFlowbite } from 'flowbite'
-import "./components/GameState.js"
+import "./controllers"
 
-// Initialize Flowbite on both regular page load and Turbo navigation
-document.addEventListener('DOMContentLoaded', () => initFlowbite())
-document.addEventListener('turbo:render', () => initFlowbite())
-document.addEventListener('turbo:load', () => initFlowbite())
+// Add React setup
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import GameState from './components/GameState'
 
-// Initialize Stimulus
-const application = Application.start()
-
-// Register controllers manually
-import CardController from "./controllers/card_controller"
-import BotSelectionController from "./controllers/bot_selection_controller"
-
-application.register("card", CardController)
-application.register("bot-selection", BotSelectionController)
-
-// Export for use elsewhere
-window.Stimulus = application
+document.addEventListener('turbo:load', () => {
+  const gameContainer = document.getElementById('game-container')
+  
+  if (gameContainer) {
+    const gameData = JSON.parse(gameContainer.dataset.game)
+    const currentUser = JSON.parse(gameContainer.dataset.currentUser)
+    
+    const root = createRoot(gameContainer)
+    root.render(
+      <GameState 
+        game={gameData} 
+        currentUser={currentUser} 
+      />
+    )
+  }
+})
