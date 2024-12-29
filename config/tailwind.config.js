@@ -24,12 +24,18 @@ module.exports = {
         'shimmer': {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' }
+        },
+        'scale-up': {
+          '0%': { transform: 'scale(1.0)' },
+          '50%': { transform: 'scale(1.05)' },
+          '100%': { transform: 'scale(1.0)' }
         }
       },
       animation: {
         'card-enter': 'card-enter 500ms ease-out forwards',
         'enter-scale': 'enter-scale 200ms ease-out forwards',
-        'shimmer': 'shimmer 4s linear infinite'
+        'shimmer': 'shimmer 4s linear infinite',
+        'scale-up': 'scale-up 500ms ease-in-out forwards'
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],

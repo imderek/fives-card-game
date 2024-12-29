@@ -8,7 +8,7 @@ const Card = ({ card, isSelected, onClick }) => {
     <div 
       onClick={onClick}
       className={`
-        w-16 h-24 rounded-lg cursor-pointer transition-all
+        w-12 h-16 rounded-lg cursor-pointer transition-all
         ${isSelected ? 'transform -translate-y-4' : ''}
         ${isSelected ? 'ring-2 ring-blue-500' : ''}
         flex flex-col items-start p-2
@@ -27,21 +27,21 @@ const Card = ({ card, isSelected, onClick }) => {
 const Column = ({ cards, onSelect }) => {
   // Calculate glow intensity based on number of cards
   const glowClasses = [
-    'shadow-none',                                          // 0 cards
-    'shadow-[0_0_15px_10px_rgba(59,130,246,0.4)]',             // 1 card
-    'shadow-[0_0_30px_10px_rgba(59,130,246,0.6)]',             // 2 cards
-    'shadow-[0_0_45px_10px_rgba(59,130,246,0.8)]',             // 3 cards
-    'shadow-[0_0_60px_10px_rgba(59,130,246,1)]',             // 4 cards
-    'shadow-[0_0_75px_10px_rgba(59,130,246,1)]'              // 5 cards
+    'shadow-none',
+    'bg-cyan-600/40 ring-1 ring-cyan-500',
+    'bg-gradient-to-br from-lime-600/80 via-lime-800/30 via-35% to-lime-600/60 ring-1 ring-lime-500 bg-[length:200%_100%]',
+    'bg-gradient-to-br from-amber-600/80 via-amber-800/30 via-35% to-amber-600/60 ring-1 ring-amber-500 bg-[length:200%_100%]',
+    'bg-gradient-to-br from-red-600/80 via-red-800/30 via-35% to-red-600/60 ring-1 ring-red-500 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)] animate-shimmer',
+    'bg-gradient-to-br from-purple-600 via-purple-800/30 via-35% to-purple-600/60 ring-1 ring-purple-500 bg-[length:200%_100%] shadow-[0_0_14px_10px_rgba(168,85,247,0.5)] animate-scale-up'
   ]
 
   return (
     <div 
       onClick={onSelect}
       className={`
-        w-16 min-h-32 border-2 border-dashed border-slate-600 
-        rounded-lg flex flex-col -space-y-12 items-center p-2 gap-1
-        transition-shadow duration-300
+        w-20 min-h-32 bg-slate-600/60 
+        rounded-lg flex flex-col -space-y-8 items-center p-2 gap-1
+        transition-all duration-150
         ${glowClasses[Math.min(cards.length, 5)]}
       `}
     >
@@ -86,8 +86,18 @@ const GameState = ({ game, currentUser }) => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-8 p-4 bg-slate-800 text-white">
+    <div className="w-full flex flex-col items-center gap-8 p-4 py-8 mb-8 bg-slate-800 text-white">
       <h2 className="text-xl font-bold">Game State React Test</h2>
+      {/* Columns */}
+      <div className="flex gap-4">
+        {columns.map((columnCards, i) => (
+          <Column 
+            key={i} 
+            cards={columnCards}
+            onSelect={() => handleColumnSelect(i)}
+          />
+        ))}
+      </div>
       {/* Hand */}
       <div className="flex gap-4">
         {hand.map((card, i) => (
@@ -96,17 +106,6 @@ const GameState = ({ game, currentUser }) => {
             card={card}
             isSelected={selectedCard && selectedCard.suit === card.suit && selectedCard.value === card.value}
             onClick={() => handleCardSelect(card)}
-          />
-        ))}
-      </div>
-
-      {/* Columns */}
-      <div className="flex gap-4">
-        {columns.map((columnCards, i) => (
-          <Column 
-            key={i} 
-            cards={columnCards}
-            onSelect={() => handleColumnSelect(i)}
           />
         ))}
       </div>
