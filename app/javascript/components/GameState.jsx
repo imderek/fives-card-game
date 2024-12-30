@@ -6,15 +6,6 @@ import PlayerInfo from './PlayerInfo';
 import { useGameChannel } from '../hooks/useGameChannel';
 
 const GameState = ({ game: initialGame, currentUser }) => {
-  // Add debug logging at the very start of the component
-  console.log('GameState props:', {
-    initialGame,
-    currentUser,
-    currentUserType: typeof currentUser,
-    currentUserId: currentUser?.id,
-    currentUserIdType: typeof currentUser?.id
-  });
-
   const [selectedCard, setSelectedCard] = React.useState(null);
   
   // Use the WebSocket hook
@@ -22,15 +13,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
   
   // Merge initial game state with live updates
   const game = liveGameState || initialGame;
-  
-  // Add debug logging
-  console.log('currentUser:', currentUser);
-  console.log('game:', game);
-  console.log('isPlayer1 check:', {
-    'currentUser?.id': currentUser?.id,
-    'game?.player1_id': game?.player1_id,
-    'isPlayer1': currentUser?.id === game?.player1_id
-  });
   
   const isPlayer1 = currentUser?.id === game?.player1_id;
   const playerHand = isPlayer1 ? game?.player1_hand || [] : game?.player2_hand || [];
@@ -70,8 +52,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
     }
   };
 
-  console.log('Rendering GameState with selectedCard:', selectedCard);
-
   if (!game || !currentUser) {
     return <div>Loading game...</div>;
   }
@@ -98,9 +78,8 @@ const GameState = ({ game: initialGame, currentUser }) => {
       />
 
       {/* Game board */}
-      <GameBoard 
-        centerPile={game.center_pile || []}
-        lastPlayedCard={game.last_played_card}
+      <GameBoard
+        cards={game.board_cards || []}
       />
 
       {/* Player info */}
