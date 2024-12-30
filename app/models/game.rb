@@ -18,14 +18,16 @@ class Game < ApplicationRecord
   
   def broadcast_game_state
     return if skip_broadcast
-    Rails.logger.debug "Broadcasting game state for game #{id}"
+    
+    # Broadcast through GameChannel
+    GameChannel.broadcast_update(self)
+    
+    # Your existing Turbo broadcasts
     [player1_id, player2_id].compact.each do |player_id|
+      stream_name = "game_#{id}_player_#{player_id}"
       Rails.logger.debug "Broadcasting to player #{player_id}"
       
       current_user = User.find(player_id)
-      
-      # Create a dedicated stream name for each player
-      stream_name = "game_#{id}_player_#{player_id}"
       
       # Wrap broadcasts in a transaction to ensure they're sent together
       Turbo::StreamsChannel.broadcast_update_to(

@@ -4,7 +4,21 @@ class GameChannel < ApplicationCable::Channel
     stream_for game
   end
 
+  def self.broadcast_update(game)
+    broadcast_to(game, {
+      game: game.as_json(
+        methods: [
+          :player1_hand, 
+          :player2_hand, 
+          :board_cards,
+          :player1_discard_pile,
+          :player2_discard_pile
+        ]
+      )
+    })
+  end
+
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
+    # Cleanup when channel is unsubscribed
   end
 end 

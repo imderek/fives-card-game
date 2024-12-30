@@ -2,6 +2,9 @@ import "@hotwired/turbo-rails"
 import { Application } from "@hotwired/stimulus"
 import 'flowbite'
 
+// Add this line to import channels
+import "./channels"
+
 // Initialize Stimulus
 const application = Application.start()
 application.debug = false
@@ -47,7 +50,7 @@ document.addEventListener('turbo:load', () => {
       }
 
       const gameData = JSON.parse(gameDataStr)
-      const currentUser = JSON.parse(currentUserStr)
+      const currentUser = parseInt(currentUserStr)
       
       const root = createRoot(gameContainer)
       root.render(

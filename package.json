@@ -5,7 +5,8 @@
     "esbuild": "^0.19.11",
     "flowbite": "^2.2.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@rails/actioncable": "^7.1.0"
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx",

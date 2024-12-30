@@ -1,9 +1,6 @@
 <%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
 
-<div id="react-game-root" 
-      data-game="<%= @game.to_json %>" 
-      data-current-user="<%= current_user.id %>"
-      class="text-white text-center">
+<div id="react-game-root" data-game="<%= @game.to_json %>" data-current-user="<%= current_user.id %>" class="text-white text-center">
   Hello erb
 </div>
 
