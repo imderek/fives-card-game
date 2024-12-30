@@ -27,21 +27,22 @@ class Game < ApplicationRecord
       # Create a dedicated stream name for each player
       stream_name = "game_#{id}_player_#{player_id}"
       
-      broadcast_replace_to(
+      # Wrap broadcasts in a transaction to ensure they're sent together
+      Turbo::StreamsChannel.broadcast_update_to(
         stream_name,
         target: "game-state",
         partial: "games/game_state",
         locals: { game: self, current_user: current_user }
       )
 
-      broadcast_replace_to(
+      Turbo::StreamsChannel.broadcast_update_to(
         stream_name,
         target: "game-status",
         partial: "games/game_status",
         locals: { game: self, current_user: current_user }
       )
 
-      broadcast_replace_to(
+      Turbo::StreamsChannel.broadcast_update_to(
         stream_name,
         target: "player-controls",
         partial: "games/player_controls",

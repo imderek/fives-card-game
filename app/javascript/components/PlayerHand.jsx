@@ -19,6 +19,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard }) => {
               transform: `rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)`,
               zIndex: index
             }}
+            onClick={() => isCurrentPlayer && canPlay && onPlayCard(card)}
           >
             <Card
               card={card}

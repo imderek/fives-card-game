@@ -1,17 +1,27 @@
-<div id="game-container" data-game="<%= @game.to_json %>" data-current-user="<%= current_user.to_json %>" class="mx-auto py-3" data-turbo-temporary>
-  <div id="react-game-root" data-game="<%= @game.to_json %>" data-current-user="<%= current_user.id %>"></div>
+<%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
 
-  <%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
+<div id="react-game-root" 
+      data-game="<%= @game.to_json %>" 
+      data-current-user="<%= current_user.id %>"
+      class="text-white text-center">
+  Hello erb
+</div>
 
+<div id="game-container" class="mx-auto py-3" data-turbo-temporary>
   <div id="game_error" class="hidden text-white/50 text-center mb-4"></div>
 
-  <div id="game_status" class="">
-    <%= render "game_status", game: @game, current_user: current_user %>
-  </div>
+  <div class="game-container">
+    <div id="game-state">
+      <%= render partial: "games/game_state", locals: { game: @game, current_user: current_user } %>
+    </div>
 
+    <div id="game-status">
+      <%= render partial: "games/game_status", locals: { game: @game, current_user: current_user } %>
+    </div>
 
-  <div id="game_state" class="mb-8">
-    <%= render "game_state", game: @game, current_user: current_user %>
+    <div id="player-controls">
+      <%= render partial: "games/player_controls", locals: { game: @game, current_user: current_user } %>
+    </div>
   </div>
 
   <% unless @game.winner.present? %>
