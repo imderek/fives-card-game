@@ -50,7 +50,7 @@ document.addEventListener('turbo:load', () => {
       }
 
       const gameData = JSON.parse(gameDataStr)
-      const currentUser = parseInt(currentUserStr)
+      const currentUser = JSON.parse(currentUserStr)
       
       const root = createRoot(gameContainer)
       root.render(

@@ -4,7 +4,7 @@ import Card from './Card';
 const GameBoard = ({ centerPile = [], lastPlayedCard }) => {
   return (
     <div className="game-board relative w-full max-w-2xl mx-auto">
-      <div className="center-pile flex justify-center items-center h-48">
+      <div className="center-pile flex justify-center items-center">
         {(centerPile?.length > 0) && (
           <div className="played-cards-stack relative">
             {lastPlayedCard && (

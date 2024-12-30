@@ -6,6 +6,15 @@ import PlayerInfo from './PlayerInfo';
 import { useGameChannel } from '../hooks/useGameChannel';
 
 const GameState = ({ game: initialGame, currentUser }) => {
+  // Add debug logging at the very start of the component
+  console.log('GameState props:', {
+    initialGame,
+    currentUser,
+    currentUserType: typeof currentUser,
+    currentUserId: currentUser?.id,
+    currentUserIdType: typeof currentUser?.id
+  });
+
   const [selectedCard, setSelectedCard] = React.useState(null);
   
   // Use the WebSocket hook
@@ -13,6 +22,15 @@ const GameState = ({ game: initialGame, currentUser }) => {
   
   // Merge initial game state with live updates
   const game = liveGameState || initialGame;
+  
+  // Add debug logging
+  console.log('currentUser:', currentUser);
+  console.log('game:', game);
+  console.log('isPlayer1 check:', {
+    'currentUser?.id': currentUser?.id,
+    'game?.player1_id': game?.player1_id,
+    'isPlayer1': currentUser?.id === game?.player1_id
+  });
   
   const isPlayer1 = currentUser?.id === game?.player1_id;
   const playerHand = isPlayer1 ? game?.player1_hand || [] : game?.player2_hand || [];
@@ -60,7 +78,53 @@ const GameState = ({ game: initialGame, currentUser }) => {
 
   return (
     <div id="react-game-state" className="w-full flex flex-col items-center gap-4">
-      <div className="text-white">React: board cards: {game.board_cards.length}</div>
+        <div className="text-white">React: board cards: {game.board_cards.length}</div>
+      {/* Opponent info */}
+      <PlayerInfo 
+        player={isPlayer1 ? game.player2 : game.player1}
+        isCurrentTurn={game.current_turn !== currentUser.id}
+        cardCount={opponentHand.length}
+      />
+
+      {/* Player's hand */}
+      <PlayerHand 
+        cards={playerHand.map(card => ({
+          ...card,
+          isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
+        }))}
+        isCurrentPlayer={game.current_turn === currentUser.id}
+        canPlay={game.turn_phase === "play_card"}
+        onPlayCard={handlePlayCard}
+      />
+
+      {/* Game board */}
+      <GameBoard 
+        centerPile={game.center_pile || []}
+        lastPlayedCard={game.last_played_card}
+      />
+
+      {/* Player info */}
+      {/* <PlayerInfo 
+        player={currentUser}
+        isCurrentTurn={game.current_turn === currentUser.id}
+        cardCount={playerHand.length}
+      /> */}
+
+      {/* Discard button */}
+      {canDiscard && (
+        <div className="discard-area">
+          <div className="flex flex-row items-center justify-center gap-2">
+            <div className="block text-xs font-normal text-slate-400">You can opt to</div>
+            <button 
+              onClick={handleDiscard}
+              className="w-28 px-2 py-2 mb-0.5 text-xs font-medium border border-slate-600 text-slate-400 rounded-lg transition-colors"
+            >
+              Discard & Draw
+            </button>
+            <div className="block text-xs font-normal text-slate-400 mr-[0.3rem]">but only once</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
