@@ -8,7 +8,7 @@ class GamesController < ApplicationController
     @games = Game.where('(player1_id = ? OR player2_id = ?)', current_user.id, current_user.id)
                  .order(created_at: :desc)
                  .includes(:player1, :player2)
-                 .limit(5)
+                 .limit(7)
     @high_scores = Game.select('player1_id, MAX(player1_total_score) as high_score')
                       .where('player1_total_score > 0')
                       .includes(:player1)
