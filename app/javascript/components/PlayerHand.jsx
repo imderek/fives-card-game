@@ -1,36 +1,39 @@
 import React from 'react';
 import Card from './Card';
 
-const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard }) => {
+const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false }) => {
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className={`${canDiscard ? 'mb-3' : 'mb-4'} relative top-[1.8rem] flex items-end justify-center space-x-[-1.5rem]`}>
+      <div className={`${canDiscard ? 'mb-3' : 'mb-4'} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
         {cards.map((card, index) => {
-          const totalCards = cards.length;
-          const angle = -15 + (30.0 / Math.max(1, totalCards - 1)) * index;
-          const normalizedAngle = angle / 25.0;
-          const yOffset = -30 * (1 - normalizedAngle * normalizedAngle);
-          const xOffset = -angle * 0.15;
+          // Only calculate angles and offsets if not stacked
+          const style = facedown ? {
+            zIndex: index,
+            opacity: card.isPlaceholder ? '0.0' : '1',
+            pointerEvents: card.isPlaceholder ? 'none' : 'auto'
+          } : {
+            transformOrigin: 'bottom center',
+            transform: `rotate(${-15 + (30.0 / Math.max(1, cards.length - 1)) * index}deg) translate(${-(-15 + (30.0 / Math.max(1, cards.length - 1)) * index) * 0.15}px, ${-30 * (1 - ((-15 + (30.0 / Math.max(1, cards.length - 1)) * index) / 25.0) ** 2)}px)`,
+            zIndex: index,
+            opacity: card.isPlaceholder ? '0.0' : '1',
+            pointerEvents: card.isPlaceholder ? 'none' : 'auto'
+          };
+
           const isLastCard = index === cards.length - 1;
 
           return (
             <div
               key={`${card.suit}-${card.value}-${index}`}
-              style={{
-                transformOrigin: 'bottom center',
-                transform: `rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)`,
-                zIndex: index,
-                opacity: card.isPlaceholder ? '0.0' : '1',
-                pointerEvents: card.isPlaceholder ? 'none' : 'auto'
-              }}
+              style={style}
             >
-              <div className={isLastCard ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''}>
+              <div className={isLastCard && !facedown ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''}>
                 <Card
                   card={card}
                   playable={isCurrentPlayer && canPlay && !card.isPlaceholder}
                   playersHand={true}
                   onPlay={onPlayCard}
                   isSelected={card.isSelected}
+                  facedown={facedown}
                 />
               </div>
             </div>
@@ -39,7 +42,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
       </div>
 
       {/* Discard button */}
-      {canDiscard && (
+      {canDiscard && !facedown && (
         <div className="discard-area w-full px-5">
           <div className="flex flex-row items-center justify-center gap-2">
             <div className="block text-xs font-normal text-slate-400">You can opt to</div>

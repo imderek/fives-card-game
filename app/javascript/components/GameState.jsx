@@ -142,6 +142,20 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 selectedCard={selectedCard}
                 onPlayCardToColumn={handlePlayCardToColumn}
             />
+
+            {/* Opponent's hand */}
+            <PlayerHand 
+                cards={opponentHand.map(card => ({
+                    ...card,
+                    isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
+                }))}
+                isCurrentPlayer={false}
+                canPlay={false}
+                onPlayCard={() => {}}
+                onDiscard={() => {}}
+                canDiscard={false}
+                facedown={true}
+            />
         </div>
     );
 };
