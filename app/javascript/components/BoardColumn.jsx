@@ -1,7 +1,16 @@
 import React from 'react';
 import Card from './Card';
+import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
 const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn }) => {
+  const { name: handName, score } = evaluatePokerHand(cards);
+  
+  const scoreColorClass = (score) => {
+    if (score >= 1000) return 'text-yellow-400';
+    if (score >= 500) return 'text-purple-400';
+    return 'text-cyan-400';
+  };
+
   return (
     <div
       key={index}
@@ -11,10 +20,15 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
       style={{ pointerEvents: isPlayerColumn ? 'all' : 'none' }}
     >
       {/* Hand name and score */}
-      <div className="text-xs text-center text-white relative top-[-0.1rem]">
-        <div className="line-clamp-1">Two Pair</div>
-        <div className="text-cyan-400">+250</div>
-      </div>
+      {handName && (
+        <div className="text-xs text-center text-white relative top-[-0.1rem]">
+          <div className="line-clamp-1">{handName}</div>
+          {score > 0 && (
+            <div className={scoreColorClass(score)}>+{score}</div>
+          )}
+        </div>
+      )}
+      
       {/* Cards vertically stacked */}
       <div 
         className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center"

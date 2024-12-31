@@ -12,12 +12,43 @@ const GameState = ({ game: initialGame, currentUser }) => {
     // Use the WebSocket hook
     const liveGameState = useGameChannel(initialGame?.id, currentUser);
     
-    // Merge initial game state with live updates and optimistic updates
-    const game = optimisticState || liveGameState || initialGame;
+    // Merge initial game state with live updates and optimistic updates, preserving player info
+    const game = {
+        ...(optimisticState || liveGameState || initialGame),
+        player1: initialGame?.player1,
+        player2: initialGame?.player2
+    };
     
     const isPlayer1 = currentUser?.id === game?.player1_id;
     const playerHand = isPlayer1 ? game?.player1_hand || [] : game?.player2_hand || [];
     const opponentHand = isPlayer1 ? game?.player2_hand || [] : game?.player1_hand || [];
+    
+    // Format the opponent's email (titleize and remove domain if it's an email)
+    const formatPlayerName = (email) => {
+        if (!email) return 'Opponent';
+        
+        // Remove email domain if present
+        const name = email.split('@')[0];
+        
+        // Titleize: capitalize each word, replace underscores/dots with spaces
+        return name
+            .replace(/[._]/g, ' ')
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+    };
+
+    const opponentName = formatPlayerName(isPlayer1 ? game?.player2?.email : game?.player1?.email);
+    const playerName = formatPlayerName(currentUser?.email);
+    
+    console.log('Game State Debug:', {
+        currentUser,
+        game,
+        isPlayer1,
+        opponentName,
+        player1: game?.player1,
+        player2: game?.player2
+    });
 
     // When we receive a new server state, clear optimistic state if it matches
     React.useEffect(() => {
@@ -136,11 +167,13 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 canDiscard={canDiscard}
             />
 
-            {/* Game board */}
+            {/* GameBoard with formatted names */}
             <GameBoard
                 cards={game.board_cards || []}
                 selectedCard={selectedCard}
                 onPlayCardToColumn={handlePlayCardToColumn}
+                opponentName={opponentName}
+                playerName={playerName}
             />
 
             {/* Opponent's hand */}
