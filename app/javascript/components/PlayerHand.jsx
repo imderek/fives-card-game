@@ -11,23 +11,25 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard }) => {
         const yOffset = -30 * (1 - normalizedAngle * normalizedAngle);
         const xOffset = -angle * 0.15;
 
+        const isLastCard = index === cards.length - 1;
+
         return (
           <div
-            key={`card-${index}`}
+            key={`${card.suit}-${card.value}-${index}`}
             style={{
               transformOrigin: 'bottom center',
               transform: `rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)`,
-              zIndex: index,
-              opacity: card.isPlaceholder ? '0.3' : '1',
-              pointerEvents: card.isPlaceholder ? 'none' : 'auto'
+              zIndex: index
             }}
           >
-            <Card
-              card={card}
-              playable={isCurrentPlayer && canPlay && !card.isPlaceholder}
-              onPlay={onPlayCard}
-              isSelected={card.isSelected}
-            />
+            <div className={isLastCard ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''}>
+              <Card
+                card={card}
+                playable={isCurrentPlayer && canPlay && !card.isPlaceholder}
+                onPlay={onPlayCard}
+                isSelected={card.isSelected}
+              />
+            </div>
           </div>
         );
       })}

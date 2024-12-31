@@ -9,7 +9,6 @@ const Card = ({ card, playable = false, onPlay, isSelected = false }) => {
     rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
     border border-white 
     bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400
-    transition-all duration-200
   `.trim();
 
   const handleClick = (e) => {
