@@ -14,7 +14,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   return (
     <div
       key={index}
-      className={`min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 rounded-lg bg-slate-700 
+      className={`min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full rounded-lg bg-slate-700 
         ${selectedCard && isPlayerColumn ? 'cursor-pointer hover:bg-slate-600' : ''}`}
       onClick={() => isPlayerColumn && selectedCard && onPlayCardToColumn(index)}
       style={{ pointerEvents: isPlayerColumn ? 'all' : 'none' }}
