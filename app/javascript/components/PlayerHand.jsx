@@ -19,7 +19,9 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard }) => {
             style={{
               transformOrigin: 'bottom center',
               transform: `rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)`,
-              zIndex: index
+              zIndex: index,
+              opacity: card.isPlaceholder ? '0.0' : '1',
+              pointerEvents: card.isPlaceholder ? 'none' : 'auto'
             }}
           >
             <div className={isLastCard ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''}>
