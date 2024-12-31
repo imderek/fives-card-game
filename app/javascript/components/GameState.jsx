@@ -7,17 +7,32 @@ import { useGameChannel } from '../hooks/useGameChannel';
 
 const GameState = ({ game: initialGame, currentUser }) => {
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [optimisticState, setOptimisticState] = React.useState(null);
   
   // Use the WebSocket hook
   const liveGameState = useGameChannel(initialGame?.id, currentUser);
   
-  // Merge initial game state with live updates
-  const game = liveGameState || initialGame;
+  // Merge initial game state with live updates and optimistic updates
+  const game = optimisticState || liveGameState || initialGame;
   
   const isPlayer1 = currentUser?.id === game?.player1_id;
   const playerHand = isPlayer1 ? game?.player1_hand || [] : game?.player2_hand || [];
   const opponentHand = isPlayer1 ? game?.player2_hand || [] : game?.player1_hand || [];
-  
+
+  console.log('GameState render:', {
+    selectedCard,
+    boardCards: game.board_cards,
+    optimisticState: optimisticState?.board_cards
+  });
+
+  // When we receive a new server state, clear optimistic state if it matches
+  React.useEffect(() => {
+    if (liveGameState && optimisticState) {
+      // Clear optimistic state since server has caught up
+      setOptimisticState(null);
+    }
+  }, [liveGameState]);
+
   const canDiscard = game?.winner_id === null && 
     game?.current_turn === currentUser?.id && 
     game?.turn_phase === "play_card" && 
@@ -52,13 +67,58 @@ const GameState = ({ game: initialGame, currentUser }) => {
     }
   };
 
+  const handlePlayCardToColumn = (columnIndex) => {
+    if (!selectedCard) return;
+
+    console.log('Before update:', {
+      selectedCard,
+      columnIndex,
+      currentBoardCards: game.board_cards
+    });
+
+    // Make optimistic update
+    setOptimisticState(prevState => {
+      const currentState = prevState || game;
+      const handKey = isPlayer1 ? 'player1_hand' : 'player2_hand';
+      
+      // Create a deep copy of the current state
+      const newState = {
+        ...currentState,
+        board_cards: [...(currentState.board_cards || [])],
+        player1_hand: [...(currentState.player1_hand || [])],
+        player2_hand: [...(currentState.player2_hand || [])]
+      };
+
+      // Remove card from player's hand
+      newState[handKey] = newState[handKey].filter(
+        card => !(card.suit === selectedCard.suit && card.value === selectedCard.value)
+      );
+
+      // Add card to board
+      newState.board_cards.push({ ...selectedCard, column: columnIndex });
+
+      console.log('New optimistic state:', {
+        oldBoardCards: currentState.board_cards?.length,
+        newBoardCards: newState.board_cards.length,
+        oldHand: currentState[handKey]?.length,
+        newHand: newState[handKey].length
+      });
+
+      return newState;
+    });
+
+    // Clear selected card immediately for better UX
+    setSelectedCard(null);
+  };
+
   if (!game || !currentUser) {
     return <div>Loading game...</div>;
   }
 
   return (
     <div id="react-game-state" className="w-full flex flex-col items-center gap-4">
-        <div className="text-white">React: board cards: {game.board_cards.length}</div>
+      <div className="text-white">Debug - Board Cards: {game.board_cards?.length || 0}</div>
+      
       {/* Opponent info */}
       <PlayerInfo 
         player={isPlayer1 ? game.player2 : game.player1}
@@ -80,6 +140,8 @@ const GameState = ({ game: initialGame, currentUser }) => {
       {/* Game board */}
       <GameBoard
         cards={game.board_cards || []}
+        selectedCard={selectedCard}
+        onPlayCardToColumn={handlePlayCardToColumn}
       />
 
       {/* Player info */}

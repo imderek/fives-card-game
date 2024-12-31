@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-const GameBoard = ({ cards = [] }) => {
+const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn }) => {
   // Group cards by column
   const groupedCards = cards.reduce((acc, card) => {
     if (!acc[card.column]) {
@@ -26,15 +26,20 @@ const GameBoard = ({ cards = [] }) => {
           {playerCards.map((column, index) => (
             <div
               key={index}
-              className="relative flex flex-col items-center pt-2 pb-1 rounded-lg bg-slate-700"
-              data-controller="card"
-              data-action="click->card#playColumn"
-              data-column-index={index}
+              className={`relative flex flex-col items-center pt-2 pb-1 rounded-lg bg-slate-700 
+                ${selectedCard ? 'cursor-pointer hover:bg-slate-600' : ''}`}
+              onClick={() => selectedCard && onPlayCardToColumn(index)}
+              style={{ pointerEvents: 'all' }}
             >
               {/* Cards vertically stacked */}
-              <div className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center">
+              <div 
+                className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center"
+                style={{ pointerEvents: 'none' }}
+              >
                 {column.map((card, cardIndex) => (
-                  <Card key={cardIndex} card={card} />
+                  <div key={cardIndex} style={{ pointerEvents: 'none' }}>
+                    <Card card={card} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -50,7 +55,6 @@ const GameBoard = ({ cards = [] }) => {
               key={index}
               className="relative flex flex-col items-center pt-2 pb-1 rounded-lg bg-slate-700"
             >
-              {/* Cards vertically stacked */}
               <div className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center">
                 {column.map((card, cardIndex) => (
                   <Card key={cardIndex} card={card} />
