@@ -3,8 +3,19 @@ import Card from './Card';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
 const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn }) => {
-  const { name: handName, score } = evaluatePokerHand(cards);
+  const [prevScore, setPrevScore] = React.useState(0);
+  const [shouldAnimate, setShouldAnimate] = React.useState(false);
   
+  const { name: handName, score } = evaluatePokerHand(cards);
+
+  React.useEffect(() => {
+    if (isPlayerColumn && score > prevScore && score >= 200) {
+      setShouldAnimate(true);
+      setTimeout(() => setShouldAnimate(false), 500);
+    }
+    setPrevScore(score);
+  }, [score, isPlayerColumn]);
+
   const getColumnStrengthClasses = (score) => {
     const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full";
     
@@ -27,7 +38,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     }
     // Trips (300-399)
     else if (score >= 300 && score <= 399) {
-      strengthClasses = "bg-cyan-600/20 ring-1 ring-cyan-500";
+      strengthClasses = "bg-cyan-600/30 ring-1 ring-cyan-500";
     }
     // Two Pair (101-299), Pair (50-100), High Card
     else {
@@ -58,7 +69,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   return (
     <div
       key={index}
-      className={`${getColumnStrengthClasses(score)} ${selectedCard && isPlayerColumn ? 'cursor-pointer hover:bg-slate-600' : ''}`}
+      className={`${getColumnStrengthClasses(score)} ${selectedCard && isPlayerColumn ? 'cursor-pointer hover:bg-slate-600' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
       onClick={() => isPlayerColumn && selectedCard && onPlayCardToColumn(index)}
       style={{ pointerEvents: isPlayerColumn ? 'all' : 'none' }}
     >
