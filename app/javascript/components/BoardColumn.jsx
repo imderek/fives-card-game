@@ -75,7 +75,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   return (
     <div
       key={index}
-      className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-600' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
+      className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
       onClick={() => isPlayerColumn && selectedCard && !isColumnFull && onPlayCardToColumn(index)}
       style={{ pointerEvents: isPlayerColumn && !isColumnFull ? 'all' : 'none' }}
     >

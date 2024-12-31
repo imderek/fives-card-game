@@ -6,5 +6,7 @@
   data-game="<%= @game_with_players.to_json %>"
   data-current-user="<%= current_user.to_json %>"
   class="text-white text-center">
-    <div class="pt-4">Loading game...</div>
+    <div class="pt-8">
+      <i class="fa fa-spinner fa-spin text-4xl text-slate-500"></i>
+    </div>
 </div>
