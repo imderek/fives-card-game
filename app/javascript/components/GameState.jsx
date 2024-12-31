@@ -19,12 +19,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
   const playerHand = isPlayer1 ? game?.player1_hand || [] : game?.player2_hand || [];
   const opponentHand = isPlayer1 ? game?.player2_hand || [] : game?.player1_hand || [];
 
-  console.log('GameState render:', {
-    selectedCard,
-    boardCards: game.board_cards,
-    optimisticState: optimisticState?.board_cards
-  });
-
   // When we receive a new server state, clear optimistic state if it matches
   React.useEffect(() => {
     if (liveGameState && optimisticState) {
@@ -123,13 +117,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
 
   return (
     <div id="react-game-state" className="w-full py-3 flex flex-col items-center gap-4">
-      {/* Opponent info */}
-      {/* <PlayerInfo 
-        player={isPlayer1 ? game.player2 : game.player1}
-        isCurrentTurn={game.current_turn !== currentUser.id}
-        cardCount={opponentHand.length}
-      /> */}
-
       {/* Player's hand */}
       <PlayerHand 
         cards={playerHand.map(card => ({
@@ -140,20 +127,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
         canPlay={game.turn_phase === "play_card"}
         onPlayCard={handlePlayCard}
       />
-
-      {/* Game board */}
-      <GameBoard
-        cards={game.board_cards || []}
-        selectedCard={selectedCard}
-        onPlayCardToColumn={handlePlayCardToColumn}
-      />
-
-      {/* Player info */}
-      {/* <PlayerInfo 
-        player={currentUser}
-        isCurrentTurn={game.current_turn === currentUser.id}
-        cardCount={playerHand.length}
-      /> */}
 
       {/* Discard button */}
       {canDiscard && (
@@ -170,6 +143,13 @@ const GameState = ({ game: initialGame, currentUser }) => {
           </div>
         </div>
       )}
+
+      {/* Game board */}
+      <GameBoard
+        cards={game.board_cards || []}
+        selectedCard={selectedCard}
+        onPlayCardToColumn={handlePlayCardToColumn}
+      />
     </div>
   );
 };

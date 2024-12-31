@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from './Card';
+import BoardColumn from './BoardColumn';
 
 const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn }) => {
   // Group cards by column
@@ -24,30 +24,14 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn }) => {
         {/* Player's board area */}
         <div className="mb-4 px-6 player-board grid grid-cols-4 gap-3">
           {playerCards.map((column, index) => (
-            <div
+            <BoardColumn
               key={index}
-              className={`min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 rounded-lg bg-slate-700 
-                ${selectedCard ? 'cursor-pointer hover:bg-slate-600' : ''}`}
-              onClick={() => selectedCard && onPlayCardToColumn(index)}
-              style={{ pointerEvents: 'all' }}
-            >
-              {/* Hand name and score */}
-              <div className="text-xs text-center text-white relative top-[-0.1rem]">
-                <div className="line-clamp-1">Two Pair</div>
-                <div className="text-cyan-400">+250</div>
-              </div>
-              {/* Cards vertically stacked */}
-              <div 
-                className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center"
-                style={{ pointerEvents: 'none' }}
-              >
-                {column.map((card, cardIndex) => (
-                  <div key={cardIndex} style={{ pointerEvents: 'none' }}>
-                    <Card card={card} />
-                  </div>
-                ))}
-              </div>
-            </div>
+              cards={column}
+              index={index}
+              selectedCard={selectedCard}
+              onPlayCardToColumn={onPlayCardToColumn}
+              isPlayerColumn={true}
+            />
           ))}
         </div>
       </div>
@@ -56,21 +40,14 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn }) => {
       <div className="mb-2">
         <div className="px-6 opponent-board grid grid-cols-4 gap-3">
           {opponentCards.map((column, index) => (
-            <div
+            <BoardColumn
               key={index}
-              className={`min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 rounded-lg bg-slate-700`}
-            >
-            {/* Hand name and score */}
-            <div className="text-xs text-center text-white relative top-[-0.1rem]">
-                <div className="line-clamp-1">Two Pair</div>
-                <div className="text-cyan-400">+250</div>
-            </div>
-              <div className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center">
-                {column.map((card, cardIndex) => (
-                  <Card key={cardIndex} card={card} />
-                ))}
-              </div>
-            </div>
+              cards={column}
+              index={index}
+              selectedCard={selectedCard}
+              onPlayCardToColumn={onPlayCardToColumn}
+              isPlayerColumn={false}
+            />
           ))}
         </div>
       </div>
