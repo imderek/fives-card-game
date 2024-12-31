@@ -3,7 +3,8 @@ import React from 'react';
 const Card = ({ card, playable = false, onPlay, isSelected = false }) => {
   const cardStyles = `
     relative 
-    ${playable ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28 cursor-pointer' : 'w-12 h-[4rem] md:w-20 md:h-28'}
+    ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' :
+      playable ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' : 'w-12 h-[4rem] md:w-20 md:h-28'}
     ${isSelected ? 'ring-4 ring-blue-500 -translate-y-6' : ''}
     rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
     border border-white 
@@ -13,7 +14,7 @@ const Card = ({ card, playable = false, onPlay, isSelected = false }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (playable && onPlay) {
+    if (playable && onPlay && !card.isPlaceholder) {
       onPlay(card);
     }
   };

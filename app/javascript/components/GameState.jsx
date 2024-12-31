@@ -77,8 +77,10 @@ const GameState = ({ game: initialGame, currentUser }) => {
       
       return {
         ...currentState,
-        [handKey]: currentState[handKey].filter(
-          card => !(card.suit === selectedCard.suit && card.value === selectedCard.value)
+        [handKey]: currentState[handKey].map(card => 
+          card.suit === selectedCard.suit && card.value === selectedCard.value
+            ? { ...card, isPlaceholder: true } // Instead of removing, mark as placeholder
+            : card
         ),
         board_cards: [
           ...(currentState.board_cards || []),
@@ -87,7 +89,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
       };
     });
 
-    // Clear selected card immediately for better UX
     setSelectedCard(null);
 
     try {
@@ -108,12 +109,10 @@ const GameState = ({ game: initialGame, currentUser }) => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-        // If we get here, we might want to revert the optimistic update
         setOptimisticState(null);
       }
     } catch (error) {
       console.error('Error playing card:', error);
-      // Revert optimistic update on error
       setOptimisticState(null);
     }
   };

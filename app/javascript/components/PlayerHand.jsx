@@ -17,12 +17,14 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard }) => {
             style={{
               transformOrigin: 'bottom center',
               transform: `rotate(${angle}deg) translate(${xOffset}px, ${yOffset}px)`,
-              zIndex: index
+              zIndex: index,
+              opacity: card.isPlaceholder ? '0.3' : '1',
+              pointerEvents: card.isPlaceholder ? 'none' : 'auto'
             }}
           >
             <Card
               card={card}
-              playable={isCurrentPlayer && canPlay}
+              playable={isCurrentPlayer && canPlay && !card.isPlaceholder}
               onPlay={onPlayCard}
               isSelected={card.isSelected}
             />
