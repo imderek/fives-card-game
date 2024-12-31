@@ -67,48 +67,55 @@ const GameState = ({ game: initialGame, currentUser }) => {
     }
   };
 
-  const handlePlayCardToColumn = (columnIndex) => {
-    if (!selectedCard) return;
-
-    console.log('Before update:', {
-      selectedCard,
-      columnIndex,
-      currentBoardCards: game.board_cards
-    });
+  const handlePlayCardToColumn = async (columnIndex) => {
+    if (!selectedCard || !game?.id) return;
 
     // Make optimistic update
     setOptimisticState(prevState => {
       const currentState = prevState || game;
       const handKey = isPlayer1 ? 'player1_hand' : 'player2_hand';
       
-      // Create a deep copy of the current state
-      const newState = {
+      return {
         ...currentState,
-        board_cards: [...(currentState.board_cards || [])],
-        player1_hand: [...(currentState.player1_hand || [])],
-        player2_hand: [...(currentState.player2_hand || [])]
+        [handKey]: currentState[handKey].filter(
+          card => !(card.suit === selectedCard.suit && card.value === selectedCard.value)
+        ),
+        board_cards: [
+          ...(currentState.board_cards || []),
+          { ...selectedCard, column: columnIndex }
+        ]
       };
-
-      // Remove card from player's hand
-      newState[handKey] = newState[handKey].filter(
-        card => !(card.suit === selectedCard.suit && card.value === selectedCard.value)
-      );
-
-      // Add card to board
-      newState.board_cards.push({ ...selectedCard, column: columnIndex });
-
-      console.log('New optimistic state:', {
-        oldBoardCards: currentState.board_cards?.length,
-        newBoardCards: newState.board_cards.length,
-        oldHand: currentState[handKey]?.length,
-        newHand: newState[handKey].length
-      });
-
-      return newState;
     });
 
     // Clear selected card immediately for better UX
     setSelectedCard(null);
+
+    try {
+      const response = await fetch(`/games/${game.id}/play_card`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/vnd.turbo-stream.html',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({
+          card: {
+            ...selectedCard,
+            column: columnIndex
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+        // If we get here, we might want to revert the optimistic update
+        setOptimisticState(null);
+      }
+    } catch (error) {
+      console.error('Error playing card:', error);
+      // Revert optimistic update on error
+      setOptimisticState(null);
+    }
   };
 
   if (!game || !currentUser) {
