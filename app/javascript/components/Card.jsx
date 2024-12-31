@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Card = ({ card, playable = false, onPlay, isSelected = false }) => {
+const Card = ({ card, playable = false, playersHand = false, onPlay, isSelected = false }) => {
   const cardStyles = `
     relative 
     ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' :
-      playable ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' : 'w-12 h-[4rem] md:w-20 md:h-28'}
-    ${isSelected ? 'ring-4 ring-blue-500 -translate-y-6' : ''}
+      playable || playersHand ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' : 'w-12 h-[4rem] md:w-20 md:h-28'}
+    ${isSelected ? 'selected-card ring ring-yellow-500 top-[-5px] shadow-xl' : ''}
     rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
     border border-white 
     bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400

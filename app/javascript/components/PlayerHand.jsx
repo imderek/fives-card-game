@@ -28,6 +28,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard }) => {
               <Card
                 card={card}
                 playable={isCurrentPlayer && canPlay && !card.isPlaceholder}
+                playersHand={true}
                 onPlay={onPlayCard}
                 isSelected={card.isSelected}
               />

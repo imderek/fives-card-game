@@ -122,7 +122,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
   }
 
   return (
-    <div id="react-game-state" className="w-full py-8 flex flex-col items-center gap-4">
+    <div id="react-game-state" className="w-full py-3 flex flex-col items-center gap-4">
       {/* Opponent info */}
       {/* <PlayerInfo 
         player={isPlayer1 ? game.player2 : game.player1}

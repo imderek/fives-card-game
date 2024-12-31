@@ -1,7 +1,11 @@
 <%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
 
-<div id="react-game-root" data-game="<%= @game.to_json %>" data-current-user="<%= current_user.to_json %>" class="text-white text-center">
-  Hello erb
+<div
+  id="react-game-root"
+  data-game="<%= @game.to_json %>"
+  data-current-user="<%= current_user.to_json %>"
+  class="text-white text-center">
+    <div class="pt-4">Loading game...</div>
 </div>
 
 <div id="game-container" class="hidden mx-auto py-3" data-turbo-temporary>
