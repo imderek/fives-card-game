@@ -1,5 +1,0 @@
-<div id="game-status" class="<%= current_user.id != game.player1_id || game.winner_id ? 'w-full text-center' : 'hidden' %>">
-  <% if current_user.id != game.player1_id && game.winner_id.nil? %>
-    <div class="mx-6 mb-4 bg-slate-800 text-white text-sm p-2 rounded-lg">Spectator mode</div>
-  <% end %>
-</div> 
