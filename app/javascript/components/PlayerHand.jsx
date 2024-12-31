@@ -11,7 +11,6 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
           const normalizedAngle = angle / 25.0;
           const yOffset = -30 * (1 - normalizedAngle * normalizedAngle);
           const xOffset = -angle * 0.15;
-
           const isLastCard = index === cards.length - 1;
 
           return (
