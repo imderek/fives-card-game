@@ -76,18 +76,18 @@ export const evaluatePokerHand = (cards) => {
   if (cards.length === 5) {
     if (isRoyalFlush(values, suits)) return { name: 'Royal Flush', score: 1000 };
     if (isStraightFlush(values, suits)) return { name: 'Straight Flush', score: 800 };
-    if (isFourOfAKind(values)) return { name: 'Four of a Kind', score: 700 };
+    if (isFourOfAKind(values)) return { name: 'Quads', score: 700 };
     if (isFullHouse(values)) return { name: 'Full House', score: 600 };
     if (isFlush(suits)) return { name: 'Flush', score: 500 };
     if (isStraight(values)) return { name: 'Straight', score: 400 };
-    if (isThreeOfAKind(values)) return { name: 'Three of a Kind', score: 300 };
+    if (isThreeOfAKind(values)) return { name: 'Trips', score: 300 };
     if (isTwoPair(values)) return { name: 'Two Pair', score: 200 };
     if (isOnePair(values)) return { name: 'Pair', score: 100 };
   }
 
   // For partial hands
-  if (isFourOfAKind(values)) return { name: 'Four of a Kind', score: 700 };
-  if (isThreeOfAKind(values)) return { name: 'Three of a Kind', score: 300 };
+  if (isFourOfAKind(values)) return { name: 'Quads', score: 700 };
+  if (isThreeOfAKind(values)) return { name: 'Trips', score: 300 };
   if (isTwoPair(values)) return { name: 'Two Pair', score: 200 };
   if (isOnePair(values)) return { name: 'Pair', score: 100 };
   

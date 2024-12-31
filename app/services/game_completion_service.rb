@@ -115,7 +115,7 @@ class GameCompletionService
     three_count = tally.values.count(3)
     pair_count = tally.values.count(2)
     
-    # Must have exactly one three of a kind and one pair
+    # Must have exactly one Trips and one pair
     three_count == 1 && pair_count == 1
   end
 
@@ -131,7 +131,7 @@ class GameCompletionService
 
   def three_of_a_kind?(values)
     tally = values.tally
-    # Must have exactly one three of a kind and no pairs
+    # Must have exactly one Trips and no pairs
     three_count = tally.values.count(3)
     pair_count = tally.values.count(2)
     

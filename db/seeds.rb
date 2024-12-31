@@ -130,7 +130,7 @@ game = Game.new(
     {suit: "♣", value: "A", player_id: derek.id, column: 3},
 
     # Player 2's columns (4-7)
-    # Three of a Kind in column 4
+    # Trips in column 4
     # High Card in column 4 (4 cards only)
     {suit: "♦", value: "K", player_id: bot.id, column: 4},
     {suit: "♣", value: "2", player_id: bot.id, column: 4},
@@ -151,7 +151,7 @@ game = Game.new(
     {suit: "♣", value: "7", player_id: bot.id, column: 6},
     {suit: "♦", value: "3", player_id: bot.id, column: 6},
 
-    # Three of a Kind in column 7
+    # Trips in column 7
     {suit: "♠", value: "Q", player_id: bot.id, column: 7},
     {suit: "♦", value: "Q", player_id: bot.id, column: 7},
     {suit: "♣", value: "Q", player_id: bot.id, column: 7},
