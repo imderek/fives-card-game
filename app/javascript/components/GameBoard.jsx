@@ -22,15 +22,20 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn }) => {
     <div className="board w-full flex flex-col">
       <div>
         {/* Player's board area */}
-        <div className="px-6 player-board grid grid-cols-4 gap-3">
+        <div className="mb-4 px-6 player-board grid grid-cols-4 gap-3">
           {playerCards.map((column, index) => (
             <div
               key={index}
-              className={`relative flex flex-col items-center pt-2 pb-1 rounded-lg bg-slate-700 
+              className={`min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 rounded-lg bg-slate-700 
                 ${selectedCard ? 'cursor-pointer hover:bg-slate-600' : ''}`}
               onClick={() => selectedCard && onPlayCardToColumn(index)}
               style={{ pointerEvents: 'all' }}
             >
+              {/* Hand name and score */}
+              <div className="text-xs text-center text-white relative top-[-0.1rem]">
+                <div className="line-clamp-1">Two Pair</div>
+                <div className="text-cyan-400">+250</div>
+              </div>
               {/* Cards vertically stacked */}
               <div 
                 className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center"
@@ -53,8 +58,13 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn }) => {
           {opponentCards.map((column, index) => (
             <div
               key={index}
-              className="relative flex flex-col items-center pt-2 pb-1 rounded-lg bg-slate-700"
+              className={`min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 rounded-lg bg-slate-700`}
             >
+            {/* Hand name and score */}
+            <div className="text-xs text-center text-white relative top-[-0.1rem]">
+                <div className="line-clamp-1">Two Pair</div>
+                <div className="text-cyan-400">+250</div>
+            </div>
               <div className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center">
                 {column.map((card, cardIndex) => (
                   <Card key={cardIndex} card={card} />
