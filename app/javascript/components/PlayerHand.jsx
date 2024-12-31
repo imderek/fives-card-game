@@ -3,7 +3,7 @@ import Card from './Card';
 
 const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard }) => {
   return (
-    <div className="player-hand relative flex items-end justify-center space-x-[-1.5rem]">
+    <div className="player-hand mb-6 relative top-[1.8rem] flex items-end justify-center space-x-[-1.5rem]">
       {cards.map((card, index) => {
         const totalCards = cards.length;
         const angle = -15 + (30.0 / Math.max(1, totalCards - 1)) * index;

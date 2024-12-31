@@ -116,15 +116,13 @@ const GameState = ({ game: initialGame, currentUser }) => {
   }
 
   return (
-    <div id="react-game-state" className="w-full flex flex-col items-center gap-4">
-      <div className="text-white">Debug - Board Cards: {game.board_cards?.length || 0}</div>
-      
+    <div id="react-game-state" className="w-full py-8 flex flex-col items-center gap-4">
       {/* Opponent info */}
-      <PlayerInfo 
+      {/* <PlayerInfo 
         player={isPlayer1 ? game.player2 : game.player1}
         isCurrentTurn={game.current_turn !== currentUser.id}
         cardCount={opponentHand.length}
-      />
+      /> */}
 
       {/* Player's hand */}
       <PlayerHand 
