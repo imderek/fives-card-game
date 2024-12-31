@@ -2,7 +2,7 @@ import React from 'react';
 import BoardColumn from './BoardColumn';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
-const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName, playerName }) => {
+const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName, playerName, winner }) => {
   // Group cards by column
   const groupedCards = cards.reduce((acc, card) => {
     if (!acc[card.column]) {
@@ -47,21 +47,25 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
       </div>
 
       {/* Scoreboard */}
-      <div className="mb-4 mx-6 px-7 pt-2 pb-3 bg-white rounded-lg relative z-40">
-        <div className="flex items-center justify-center gap-4 rounded-lg">
-          <div className="relative flex flex-1 flex-col items-center justify-center">
-            <div className="text-xl font-bold text-slate-900">
-              {playerScore.toLocaleString()}
+      {winner ? (
+        <div className="mt-1 mb-5 h-px bg-slate-600/60"></div>
+      ) : (
+        <div className="mb-4 mx-6 px-7 pt-2 pb-3 bg-white rounded-lg relative z-40">
+            <div className="flex items-center justify-center gap-4 rounded-lg">
+            <div className="relative flex flex-1 flex-col items-center justify-center">
+                <div className="text-xl font-bold text-slate-900">
+                {playerScore.toLocaleString()}
+                </div>
+                <div className="text-xs font-medium text-slate-900">{playerName}</div>
             </div>
-            <div className="text-xs font-medium text-slate-900">{playerName}</div>
-          </div>
-          <div className="w-px h-10 bg-slate-300"></div>
-          <div className="relative flex flex-1 flex-col items-center justify-center">
-            <div className="text-xl font-bold text-slate-500">{opponentScore.toLocaleString()}</div>
-            <div className="text-xs font-medium text-slate-500">{opponentName}</div>
-          </div>
+            <div className="w-px h-10 bg-slate-300"></div>
+            <div className="relative flex flex-1 flex-col items-center justify-center">
+                <div className="text-xl font-bold text-slate-500">{opponentScore.toLocaleString()}</div>
+                <div className="text-xs font-medium text-slate-500">{opponentName}</div>
+            </div>
+            </div>
         </div>
-      </div>
+      )}
 
       {/* Opponent's board area */}
       <div className="mb-2 px-6 opponent-board grid grid-cols-4 gap-3">
