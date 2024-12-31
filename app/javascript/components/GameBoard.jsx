@@ -50,7 +50,7 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
       <div className="mb-4 mx-6 px-7 pt-2 pb-3 bg-white rounded-lg relative z-40">
         <div className="flex items-center justify-center gap-4 rounded-lg">
           <div className="relative flex flex-1 flex-col items-center justify-center">
-            <div className="text-xl font-bold text-slate-900 animate-enter-scale">
+            <div className="text-xl font-bold text-slate-900">
               {playerScore.toLocaleString()}
             </div>
             <div className="text-xs font-medium text-slate-900">{playerName}</div>

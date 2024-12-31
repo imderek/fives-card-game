@@ -16,7 +16,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     setPrevScore(score);
   }, [score, isPlayerColumn]);
 
-  const getColumnStrengthClasses = (score) => {
+  const getColumnStrengthClasses = (score, isPlayerColumn) => {
     const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full";
     
     let strengthClasses = "";
@@ -42,7 +42,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     }
     // Two Pair (101-299), Pair (50-100), High Card
     else {
-      strengthClasses = "bg-slate-600/60";
+      strengthClasses = isPlayerColumn ? "bg-slate-600/60" : "bg-slate-600/30";
     }
 
     return `${baseClasses} ${strengthClasses} rounded-lg`;
@@ -69,7 +69,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   return (
     <div
       key={index}
-      className={`${getColumnStrengthClasses(score)} ${selectedCard && isPlayerColumn ? 'cursor-pointer hover:bg-slate-600' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
+      className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn ? 'cursor-pointer hover:bg-slate-600' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
       onClick={() => isPlayerColumn && selectedCard && onPlayCardToColumn(index)}
       style={{ pointerEvents: isPlayerColumn ? 'all' : 'none' }}
     >
