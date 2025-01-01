@@ -28,7 +28,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     } 
     // Full House (600-699)
     else if (score >= 600 && score <= 699) {
-      strengthClasses = "bg-gradient-to-br from-red-600 via-red-900 via-35% to-red-700 ring-1 ring-red-400/80 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]";
+      strengthClasses = "bg-gradient-to-br from-red-600 via-red-900 via-35% to-red-700 ring-1 ring-red-400 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]";
     }
     // Flush (500-599)
     else if (score >= 500 && score <= 599) {
@@ -55,7 +55,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   };
   const scoreColorClass = (score) => {
     // Royal Flush (1000) & Straight Flush & Quads (700-999)
-    if (score === 1000 || (score >= 700 && score <= 999)) return 'text-purple-400';
+    if (score === 1000 || (score >= 700 && score <= 999)) return 'font-normal text-purple-400';
     // Full House (600-699)
     if (score >= 600 && score <= 699) return 'text-red-400';
     // Flush (500-599)
@@ -81,17 +81,17 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     
     return (
       <>
-        {[...Array(6)].map((_, i) => {
+        {[...Array(7)].map((_, i) => {
           const segmentWidth = 50 / 6;
           const segmentStart = 25 + (segmentWidth * i);
           
           return (
             <div
               key={`particle-${i}`}
-              className={`absolute w-[0.1rem] h-[0.1rem] rounded-full ${particleColor} animate-particle-float -z-20 shadow-[0_0_3px_1px_rgba(168,85,247,0.9)] ${glowColor}`}
+              className={`absolute w-[0.1rem] h-[0.1rem] rounded-full ${particleColor} animate-particle-float z-20 shadow-[0_0_3px_1px_rgba(168,85,247,0.9)] ${glowColor}`}
               style={{
                 left: `${segmentStart + (Math.random() * segmentWidth)}%`,
-                top: '0',
+                top: '0.5rem', // this is where the particles start relative to the column
                 '--x-drift': `${(Math.random() * 20 - 10)}px`,
                 animationDelay: `-${Math.random() * 2000}ms`,
               }}
@@ -105,7 +105,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   return (
     <div className="relative">
       {/* Particle container */}
-      <div className="particle-container absolute inset-0 -z-20">
+      <div className="particle-container absolute inset-0 z-20">
         {renderParticles()}
       </div>
 
