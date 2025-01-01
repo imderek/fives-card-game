@@ -21,38 +21,6 @@ class Game < ApplicationRecord
     
     # Broadcast through GameChannel
     GameChannel.broadcast_update(self)
-    
-    # Your existing Turbo broadcasts
-    [player1_id, player2_id].compact.each do |player_id|
-      stream_name = "game_#{id}_player_#{player_id}"
-      Rails.logger.debug "Broadcasting to player #{player_id}"
-      
-      current_user = User.find(player_id)
-      
-      # Wrap broadcasts in a transaction to ensure they're sent together
-      Turbo::StreamsChannel.broadcast_update_to(
-        stream_name,
-        target: "game-state",
-        partial: "games/game_state",
-        locals: { game: self, current_user: current_user }
-      )
-
-      Turbo::StreamsChannel.broadcast_update_to(
-        stream_name,
-        target: "game-status",
-        partial: "games/game_status",
-        locals: { game: self, current_user: current_user }
-      )
-
-      Turbo::StreamsChannel.broadcast_update_to(
-        stream_name,
-        target: "player-controls",
-        partial: "games/player_controls",
-        locals: { game: self, current_user: current_user }
-      )
-      
-      Rails.logger.debug "Finished broadcasting to player #{player_id}"
-    end
   end
   
   after_update_commit :broadcast_game_state
