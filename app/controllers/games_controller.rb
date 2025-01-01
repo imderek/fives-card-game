@@ -18,14 +18,16 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.includes(:player1, :player2).find(params[:id])
-    @player_hand = @game.player1_id == current_user.id ? @game.player1_hand : @game.player2_hand
-    
-    # Create game data with player information
-    @game_with_players = @game.as_json.merge(
-      player1: { email: @game.player1.email },
-      player2: { email: @game.player2.email }
+    @game = Game.find(params[:id])
+    @game_with_players = @game.as_json(
+      include: [:player1, :player2],
+      methods: [:player1_hand, :player2_hand, :board_cards]
     )
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { game: @game_with_players } }
+    end
   end
 
   def new

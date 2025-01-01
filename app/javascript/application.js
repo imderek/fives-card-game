@@ -67,3 +67,15 @@ document.addEventListener('turbo:load', () => {
     }
   }
 })
+
+document.addEventListener("turbo:before-render", (event) => {
+  const gameRoot = document.getElementById("react-game-root");
+  if (gameRoot) {
+    event.preventDefault();
+    
+    // Use the event's detail.resume callback instead
+    setTimeout(() => {
+      event.detail.resume();
+    }, 100);
+  }
+});

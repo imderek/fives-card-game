@@ -9,6 +9,13 @@ export const useGameChannel = (gameId, userId) => {
   useEffect(() => {
     if (!gameId || !userId) return;
 
+    // Cleanup any existing subscriptions for this game
+    consumer.subscriptions.subscriptions.forEach(sub => {
+      if (sub.identifier.includes(gameId)) {
+        sub.unsubscribe();
+      }
+    });
+
     const channel = consumer.subscriptions.create(
       { 
         channel: "GameChannel",
@@ -17,6 +24,19 @@ export const useGameChannel = (gameId, userId) => {
       {
         connected() {
           console.log(`Connected to game ${gameId} channel`);
+          // Request latest game state when reconnecting
+          fetch(`/games/${gameId}`, {
+            headers: {
+              'Accept': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.game) {
+              setGameState(data.game);
+            }
+          })
+          .catch(error => console.error('Error fetching game state:', error));
         },
 
         disconnected() {
@@ -24,7 +44,6 @@ export const useGameChannel = (gameId, userId) => {
         },
 
         received(data) {
-          console.log('Received game update:', data);
           if (data.game) {
             setGameState(data.game);
           }
@@ -34,6 +53,7 @@ export const useGameChannel = (gameId, userId) => {
 
     return () => {
       channel.unsubscribe();
+      setGameState(null);
     };
   }, [gameId, userId]);
 

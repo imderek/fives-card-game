@@ -9,8 +9,38 @@ const GameState = ({ game: initialGame, currentUser }) => {
     const [selectedCard, setSelectedCard] = React.useState(null);
     const [optimisticState, setOptimisticState] = React.useState(null);
     
-    // Use the WebSocket hook
+    // Try to get stored game state on mount
+    React.useEffect(() => {
+        if (initialGame?.id) {
+            const storedState = sessionStorage.getItem(`game_${initialGame.id}`);
+            if (storedState) {
+                try {
+                    const parsedState = JSON.parse(storedState);
+                    // Only use stored state if it's newer than initial state
+                    if (parsedState.updated_at > initialGame.updated_at) {
+                        setOptimisticState(parsedState);
+                    }
+                } catch (e) {
+                    console.error('Error parsing stored game state:', e);
+                }
+            }
+        }
+        
+        return () => {
+            setSelectedCard(null);
+            setOptimisticState(null);
+        };
+    }, [initialGame?.id]);
+
+    // Use the WebSocket hook with proper cleanup
     const liveGameState = useGameChannel(initialGame?.id, currentUser);
+    
+    // Store latest game state whenever it changes
+    React.useEffect(() => {
+        if (liveGameState && initialGame?.id) {
+            sessionStorage.setItem(`game_${initialGame.id}`, JSON.stringify(liveGameState));
+        }
+    }, [liveGameState, initialGame?.id]);
     
     // Merge initial game state with live updates and optimistic updates, preserving player info
     const game = {
