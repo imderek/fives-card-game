@@ -23,7 +23,7 @@ const Card = ({ card, playable = false, playersHand = false, onPlay, isSelected 
       onClick={handleClick}
       style={{ 
         position: 'relative',
-        zIndex: isSelected ? 50 : 'auto'
+        zIndex: isSelected ? 50 : 30
       }}
     >
       {facedown ? (

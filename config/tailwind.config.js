@@ -48,6 +48,20 @@ module.exports = {
             opacity: '0',
             transform: 'translateY(-39px) translateX(var(--x-drift))',
           }
+        },
+        'twinkle': {
+          '0%': { 
+            opacity: '0',
+            transform: 'scale(0)',
+          },
+          '50%': { 
+            opacity: '0.8',
+            transform: 'scale(1)',
+          },
+          '100%': { 
+            opacity: '0',
+            transform: 'scale(0)',
+          }
         }
       },
       animation: {
@@ -56,6 +70,7 @@ module.exports = {
         'shimmer': 'shimmer 4s linear infinite',
         'scale-up': 'scale-up 200ms ease-out forwards',
         'particle-float': 'float-up 3s linear infinite',
+        'twinkle': 'twinkle 3s ease-in-out infinite',
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],

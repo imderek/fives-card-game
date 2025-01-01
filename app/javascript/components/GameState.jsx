@@ -136,13 +136,17 @@ const GameState = ({ game: initialGame, currentUser }) => {
             const currentState = prevState || game;
             const handKey = isPlayer1 ? 'player1_hand' : 'player2_hand';
             
+            // Filter out the played card and add placeholder at the end
+            const updatedHand = [
+                ...currentState[handKey].filter(card => 
+                    !(card.suit === selectedCard.suit && card.value === selectedCard.value)
+                ),
+                { isPlaceholder: true, suit: '', value: '' }
+            ];
+            
             return {
                 ...currentState,
-                [handKey]: currentState[handKey].map(card => 
-                    card.suit === selectedCard.suit && card.value === selectedCard.value
-                        ? { ...card, isPlaceholder: true } // Instead of removing, mark as placeholder
-                        : card
-                ),
+                [handKey]: updatedHand,
                 board_cards: [
                     ...(currentState.board_cards || []),
                     { ...selectedCard, column: columnIndex }
