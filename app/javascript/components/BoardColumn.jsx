@@ -19,16 +19,16 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   const isColumnFull = cards.length >= 5;
 
   const getColumnStrengthClasses = (score, isPlayerColumn) => {
-    const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full";
+    const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full z-0";
     
     let strengthClasses = "";
-    // Royal Flush (1000) & Straight Flush & Quads (700-999)
+    // Quads & Straight Flush (700-999) & Royal Flush (1000)
     if (score === 1000 || (score >= 700 && score <= 999)) {
-      strengthClasses = "bg-gradient-to-br from-purple-600 via-purple-800/30 via-35% to-purple-600/60 ring-1 ring-purple-500 bg-[length:200%_100%] shadow-[0_0_14px_10px_rgba(168,85,247,0.5)]";
+      strengthClasses = "bg-gradient-to-br from-purple-500 via-purple-900 via-30% to-purple-700 ring-1 ring-purple-400/80 bg-[length:200%_100%] shadow-[0_0_15px_3px_rgba(168,85,247,0.9)]";
     } 
     // Full House (600-699)
     else if (score >= 600 && score <= 699) {
-      strengthClasses = "bg-gradient-to-br from-red-600/80 via-red-800/30 via-35% to-red-600/60 ring-1 ring-red-500 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]";
+      strengthClasses = "bg-gradient-to-br from-red-600 via-red-900 via-35% to-red-700 ring-1 ring-red-400/80 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]";
     }
     // Flush (500-599)
     else if (score >= 500 && score <= 599) {
@@ -73,57 +73,70 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   };
 
   const renderParticles = () => {
-    if (score < 600) return null;
+    if (score < 700) return null;
     
     const isHighTier = score >= 700;
-    const particleColor = isHighTier ? 'bg-purple-400' : 'bg-red-400';
+    const particleColor = isHighTier ? 'bg-purple-300' : 'bg-red-300';
+    const glowColor = isHighTier ? 'shadow-purple-400' : 'shadow-red-400';
     
     return (
       <>
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={`particle-${i}`}
-            className={`absolute w-1 h-1 rounded-full ${particleColor} animate-particle-float`}
-            style={{
-              left: `${25 + Math.random() * 50}%`,
-              top: '1.75rem',
-              '--x-drift': `${(Math.random() * 20 - 10)}px`,
-              animationDelay: `-${Math.random() * 2000}ms`,
-            }}
-          />
-        ))}
+        {[...Array(6)].map((_, i) => {
+          const segmentWidth = 50 / 6;
+          const segmentStart = 25 + (segmentWidth * i);
+          
+          return (
+            <div
+              key={`particle-${i}`}
+              className={`absolute w-[0.1rem] h-[0.1rem] rounded-full ${particleColor} animate-particle-float -z-20 shadow-[0_0_3px_1px_rgba(168,85,247,0.9)] ${glowColor}`}
+              style={{
+                left: `${segmentStart + (Math.random() * segmentWidth)}%`,
+                top: '0',
+                '--x-drift': `${(Math.random() * 20 - 10)}px`,
+                animationDelay: `-${Math.random() * 2000}ms`,
+              }}
+            />
+          );
+        })}
       </>
     );
   };
 
   return (
-    <div
-      key={index}
-      className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
-      onClick={() => isPlayerColumn && selectedCard && !isColumnFull && onPlayCardToColumn(index)}
-      style={{ pointerEvents: isPlayerColumn && !isColumnFull ? 'all' : 'none' }}
-    >
-      {renderParticles()}
-      {/* Hand name and score */}
-      {handName && (
-        <div className="text-xs text-center text-white relative top-[-0.1rem]">
-          <div className="line-clamp-1">{handName}</div>
-          {score > 0 && (
-            <div className={scoreColorClass(score)}>+{score}</div>
-          )}
-        </div>
-      )}
-      
-      {/* Cards vertically stacked */}
-      <div 
-        className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center"
-        style={{ pointerEvents: 'none' }}
+    <div className="relative">
+      {/* Particle container */}
+      <div className="particle-container absolute inset-0 -z-20">
+        {renderParticles()}
+      </div>
+
+      {/* Main column content */}
+      <div
+        key={index}
+        className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''} relative z-0`}
+        onClick={() => isPlayerColumn && selectedCard && !isColumnFull && onPlayCardToColumn(index)}
+        style={{ pointerEvents: isPlayerColumn && !isColumnFull ? 'all' : 'none' }}
       >
-        {cards.map((card, cardIndex) => (
-          <div key={cardIndex} style={{ pointerEvents: 'none' }}>
-            <Card card={card} />
+        {/* Hand name and score */}
+        {handName && (
+          <div className="text-xs text-center text-white relative top-[-0.1rem]">
+            <div className="line-clamp-1">{handName}</div>
+            {score > 0 && (
+              <div className={scoreColorClass(score)}>+{score}</div>
+            )}
           </div>
-        ))}
+        )}
+        
+        {/* Cards vertically stacked */}
+        <div 
+          className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center"
+          style={{ pointerEvents: 'none' }}
+        >
+          {cards.map((card, cardIndex) => (
+            <div key={cardIndex} style={{ pointerEvents: 'none' }}>
+              <Card card={card} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

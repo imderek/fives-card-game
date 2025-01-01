@@ -40,9 +40,13 @@ module.exports = {
             opacity: '0.8',
             transform: 'translateY(-10px) translateX(calc(var(--x-drift) * 0.1))',
           },
+          '60%': { 
+            opacity: '0',
+            transform: 'translateY(-39px) translateX(var(--x-drift))',
+          },
           '100%': { 
             opacity: '0',
-            transform: 'translateY(-75px) translateX(var(--x-drift))',
+            transform: 'translateY(-39px) translateX(var(--x-drift))',
           }
         }
       },
@@ -51,7 +55,7 @@ module.exports = {
         'enter-scale': 'enter-scale 200ms ease-out forwards',
         'shimmer': 'shimmer 4s linear infinite',
         'scale-up': 'scale-up 200ms ease-out forwards',
-        'particle-float': 'float-up 2s linear infinite',
+        'particle-float': 'float-up 1.5s linear infinite',
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
