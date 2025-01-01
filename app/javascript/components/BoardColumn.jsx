@@ -88,10 +88,10 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
           return (
             <div
               key={`particle-${i}`}
-              className={`absolute w-[0.1rem] h-[0.1rem] rounded-full ${particleColor} animate-particle-float z-20 shadow-[0_0_3px_1px_rgba(168,85,247,0.9)] ${glowColor}`}
+              className={`absolute w-[0.2rem] h-[0.2rem] rounded-full ${particleColor} ${glowColor} animate-particle-float z-20 shadow-[0_0_3px_1px_rgba(168,85,247,0.9)]`}
               style={{
                 left: `${segmentStart + (Math.random() * segmentWidth)}%`,
-                top: '0.5rem', // this is where the particles start relative to the column
+                top: '0.25rem', // this is where the particles start relative to the column
                 '--x-drift': `${(Math.random() * 20 - 10)}px`,
                 animationDelay: `-${Math.random() * 2000}ms`,
               }}
@@ -104,10 +104,8 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
 
   return (
     <div className="relative">
-      {/* Particle container */}
-      <div className="particle-container absolute inset-0 z-20">
-        {renderParticles()}
-      </div>
+      {/* Particles */}
+      {renderParticles()}
 
       {/* Main column content */}
       <div
