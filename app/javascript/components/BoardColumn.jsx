@@ -24,11 +24,11 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     let strengthClasses = "";
     // Quads & Straight Flush (700-999) & Royal Flush (1000)
     if (score === 1000 || (score >= 700 && score <= 999)) {
-      strengthClasses = "bg-gradient-to-br from-purple-500 via-[#2A0F40] via-40% to-purple-700 ring-1 ring-purple-400/80 bg-[length:200%_100%] shadow-[0_0_15px_3px_rgba(168,85,247,0.9)]";
+      strengthClasses = "bg-gradient-to-br from-purple-500 via-[#2A0F40] via-40% to-purple-700 ring-1 ring-purple-400/80 bg-[length:200%_100%] shadow-[0_0_16px_3px_rgba(168,85,247,0.9)]";
     } 
     // Full House (600-699)
     else if (score >= 600 && score <= 699) {
-      strengthClasses = "bg-gradient-to-br from-red-600 via-red-900 via-35% to-red-700 ring-1 ring-red-400 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]";
+      strengthClasses = "bg-gradient-to-br from-red-600 via-red-900/60 via-35% to-red-700 ring-1 ring-red-500 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]";
     }
     // Flush (500-599)
     else if (score >= 500 && score <= 599) {

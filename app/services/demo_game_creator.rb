@@ -10,14 +10,11 @@ class DemoGameCreator
 
   def create_game(scenario)
     game = Game.new(base_attributes)
-    
-    # Apply the selected scenario
     send("apply_#{scenario}_scenario", game)
     
     # Generate remaining deck
     populate_deck(game)
     
-    # Save and calculate scores
     game.instance_variable_set(:@skip_setup, true)
     game.save!
     calculate_scores(game)
@@ -42,147 +39,167 @@ class DemoGameCreator
   end
 
   def apply_powerful_hands_scenario(game)
+    # Player 1's hand - mix of high cards and potential straight/flush draws
     game.player1_hand = [
-      {suit: "♠", value: "2"},
-      {suit: "♥", value: "3"},
-      {suit: "♦", value: "4"},
-      {suit: "♣", value: "5"},
-      {suit: "♠", value: "6"},
-      {suit: "♦", value: "8"}
+      {suit: "♠", value: "K"},
+      {suit: "♥", value: "Q"},
+      {suit: "♦", value: "J"},
+      {suit: "♣", value: "10"},
+      {suit: "♠", value: "9"},
+      {suit: "♥", value: "8"}
     ]
     
+    # Player 2's hand - mix of high cards and pairs potential
     game.player2_hand = [
-      {suit: "♣", value: "10"},
-      {suit: "♦", value: "J"},
-      {suit: "♥", value: "Q"},
-      {suit: "♠", value: "K"},
-      {suit: "♣", value: "A"},
-      {suit: "♥", value: "7"}
+      {suit: "♦", value: "A"},
+      {suit: "♣", value: "K"},
+      {suit: "♥", value: "J"},
+      {suit: "♠", value: "A"},
+      {suit: "♦", value: "8"},
+      {suit: "♣", value: "7"}
     ]
 
     game.board_cards = [
-      # Player 1's columns
-      *straight_in_column(0, @player1.id),
-      *flush_in_column(1, @player1.id),
-      *full_house_in_column(2, @player1.id),
-      *quads_in_column(3, @player1.id),
+      # Player 1's columns (0-3)
+      # Straight in column 0
+      {suit: "♦", value: "2", player_id: @player1.id, column: 0},
+      {suit: "♠", value: "3", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "4", player_id: @player1.id, column: 0},
+      {suit: "♣", value: "5", player_id: @player1.id, column: 0},
+      {suit: "♦", value: "6", player_id: @player1.id, column: 0},
 
-      # Player 2's columns
-      *high_cards_in_column(4, @player2.id),
-      *pair_in_column(5, @player2.id),
-      *two_pair_in_column(6, @player2.id),
-      *trips_in_column(7, @player2.id)
+      # Flush in column 1
+      {suit: "♥", value: "2", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "5", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "7", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "9", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "K", player_id: @player1.id, column: 1},
+
+      # Full House in column 2
+      {suit: "♠", value: "4", player_id: @player1.id, column: 2},
+      {suit: "♦", value: "4", player_id: @player1.id, column: 2},
+      {suit: "♣", value: "4", player_id: @player1.id, column: 2},
+      {suit: "♠", value: "7", player_id: @player1.id, column: 2},
+      {suit: "♦", value: "7", player_id: @player1.id, column: 2},
+
+      # Quads in column 3
+      {suit: "♣", value: "8", player_id: @player1.id, column: 3},
+      {suit: "♦", value: "8", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "8", player_id: @player1.id, column: 3},
+      {suit: "♥", value: "8", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "Q", player_id: @player1.id, column: 3},
+
+      # Player 2's columns (4-7)
+
+      # High cards in column 4
+      {suit: "♦", value: "K", player_id: @player2.id, column: 4},
+      {suit: "♣", value: "J", player_id: @player2.id, column: 4},
+      {suit: "♠", value: "6", player_id: @player2.id, column: 4},
+      {suit: "♦", value: "9", player_id: @player2.id, column: 4},
+      {suit: "♣", value: "Q", player_id: @player2.id, column: 4},
+
+      # Pair in column 5
+      {suit: "♥", value: "3", player_id: @player2.id, column: 5},
+      {suit: "♦", value: "3", player_id: @player2.id, column: 5},
+      {suit: "♣", value: "6", player_id: @player2.id, column: 5},
+      {suit: "♠", value: "J", player_id: @player2.id, column: 5},
+      {suit: "♣", value: "9", player_id: @player2.id, column: 5},
+
+      # Two pair in column 6
+      {suit: "♣", value: "2", player_id: @player2.id, column: 6},
+      {suit: "♠", value: "2", player_id: @player2.id, column: 6},
+      {suit: "♠", value: "5", player_id: @player2.id, column: 6},
+      {suit: "♦", value: "5", player_id: @player2.id, column: 6},
+      {suit: "♥", value: "6", player_id: @player2.id, column: 6},
+
+      # Trips in column 7
+      {suit: "♦", value: "Q", player_id: @player2.id, column: 7},
+      {suit: "♣", value: "3", player_id: @player2.id, column: 7},
+      {suit: "♠", value: "10", player_id: @player2.id, column: 7},
+      {suit: "♥", value: "10", player_id: @player2.id, column: 7},
+      {suit: "♦", value: "10", player_id: @player2.id, column: 7}
     ]
   end
 
   def apply_beginner_scenario(game)
+    # Player 1's hand - mix of low and medium cards
     game.player1_hand = [
-      {suit: "♠", value: "2"},
-      {suit: "♥", value: "3"},
-      {suit: "♦", value: "4"},
-      {suit: "♣", value: "5"},
-      {suit: "♠", value: "6"},
-      {suit: "♣", value: "9"}
+      {suit: "♠", value: "4"},
+      {suit: "♥", value: "6"},
+      {suit: "♦", value: "8"},
+      {suit: "♣", value: "9"},
+      {suit: "♠", value: "J"},
+      {suit: "♥", value: "Q"}
     ]
     
+    # Player 2's hand - mix of medium cards
     game.player2_hand = [
-      {suit: "♣", value: "10"},
-      {suit: "♦", value: "J"},
-      {suit: "♥", value: "Q"},
-      {suit: "♠", value: "K"},
-      {suit: "♣", value: "A"},
-      {suit: "♦", value: "2"}
+      {suit: "♦", value: "5"},
+      {suit: "♣", value: "7"},
+      {suit: "♥", value: "9"},
+      {suit: "♠", value: "J"},
+      {suit: "♦", value: "Q"},
+      {suit: "♣", value: "K"}
     ]
 
     game.board_cards = [
-      *straight_in_column(0, @player1.id),
-      *high_cards_in_column(1, @player1.id),
-      *high_cards_in_column(2, @player1.id),
-      *high_cards_in_column(3, @player1.id),
-      
-      *trips_in_column(4, @player2.id),
-      *high_cards_in_column(5, @player2.id),
-      *high_cards_in_column(6, @player2.id),
-      *high_cards_in_column(7, @player2.id)
-    ]
-  end
+      # Player 1's columns (0-3)
+      # Pair in column 0
+      {suit: "♦", value: "2", player_id: @player1.id, column: 0},
+      {suit: "♠", value: "2", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "4", player_id: @player1.id, column: 0},
+      {suit: "♣", value: "8", player_id: @player1.id, column: 0},
+      {suit: "♦", value: "K", player_id: @player1.id, column: 0},
 
-  # Helper methods for different poker hands
-  def straight_in_column(column, player_id)
-    [
-      {suit: "♥", value: "2", player_id: player_id, column: column},
-      {suit: "♣", value: "3", player_id: player_id, column: column},
-      {suit: "♦", value: "4", player_id: player_id, column: column},
-      {suit: "♠", value: "5", player_id: player_id, column: column},
-      {suit: "♥", value: "6", player_id: player_id, column: column}
-    ]
-  end
+      # High cards in column 1
+      {suit: "♥", value: "2", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "5", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "7", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "10", player_id: @player1.id, column: 1},
+      {suit: "♥", value: "K", player_id: @player1.id, column: 1},
 
-  def flush_in_column(column, player_id)
-    [
-      {suit: "♥", value: "2", player_id: player_id, column: column},
-      {suit: "♥", value: "5", player_id: player_id, column: column},
-      {suit: "♥", value: "8", player_id: player_id, column: column},
-      {suit: "♥", value: "J", player_id: player_id, column: column},
-      {suit: "♥", value: "K", player_id: player_id, column: column}
-    ]
-  end
+      # High cards in column 2
+      {suit: "♠", value: "3", player_id: @player1.id, column: 2},
+      {suit: "♦", value: "6", player_id: @player1.id, column: 2},
+      {suit: "♣", value: "10", player_id: @player1.id, column: 2},
+      {suit: "♠", value: "Q", player_id: @player1.id, column: 2},
+      {suit: "♦", value: "A", player_id: @player1.id, column: 2},
 
-  def full_house_in_column(column, player_id)
-    [
-      {suit: "♠", value: "J", player_id: player_id, column: column},
-      {suit: "♥", value: "J", player_id: player_id, column: column},
-      {suit: "♦", value: "J", player_id: player_id, column: column},
-      {suit: "♣", value: "4", player_id: player_id, column: column},
-      {suit: "♦", value: "4", player_id: player_id, column: column}
-    ]
-  end
+      # High cards in column 3
+      {suit: "♣", value: "2", player_id: @player1.id, column: 3},
+      {suit: "♦", value: "7", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "8", player_id: @player1.id, column: 3},
+      {suit: "♣", value: "J", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "K", player_id: @player1.id, column: 3},
 
-  def quads_in_column(column, player_id)
-    [
-      {suit: "♠", value: "A", player_id: player_id, column: column},
-      {suit: "♥", value: "A", player_id: player_id, column: column},
-      {suit: "♦", value: "A", player_id: player_id, column: column},
-      {suit: "♣", value: "A", player_id: player_id, column: column}
-    ]
-  end
+      # Player 2's columns (4-7)
+      # High cards in column 4
+      {suit: "♣", value: "3", player_id: @player2.id, column: 4},
+      {suit: "♠", value: "5", player_id: @player2.id, column: 4},
+      {suit: "♦", value: "9", player_id: @player2.id, column: 4},
+      {suit: "♣", value: "Q", player_id: @player2.id, column: 4},
+      {suit: "♥", value: "A", player_id: @player2.id, column: 4},
 
-  def high_cards_in_column(column, player_id)
-    [
-      {suit: "♦", value: "K", player_id: player_id, column: column},
-      {suit: "♣", value: "2", player_id: player_id, column: column},
-      {suit: "♠", value: "3", player_id: player_id, column: column},
-      {suit: "♥", value: "9", player_id: player_id, column: column}
-    ]
-  end
+      # Pair in column 5
+      {suit: "♦", value: "3", player_id: @player2.id, column: 5},
+      {suit: "♣", value: "3", player_id: @player2.id, column: 5},
+      {suit: "♠", value: "6", player_id: @player2.id, column: 5},
+      {suit: "♥", value: "8", player_id: @player2.id, column: 5},
+      {suit: "♦", value: "J", player_id: @player2.id, column: 5},
 
-  def pair_in_column(column, player_id)
-    [
-      {suit: "♠", value: "10", player_id: player_id, column: column},
-      {suit: "♥", value: "10", player_id: player_id, column: column},
-      {suit: "♦", value: "5", player_id: player_id, column: column},
-      {suit: "♣", value: "6", player_id: player_id, column: column},
-      {suit: "♠", value: "9", player_id: player_id, column: column}
-    ]
-  end
+      # High cards in column 6
+      {suit: "♣", value: "4", player_id: @player2.id, column: 6},
+      {suit: "♠", value: "7", player_id: @player2.id, column: 6},
+      {suit: "♦", value: "10", player_id: @player2.id, column: 6},
+      {suit: "♣", value: "K", player_id: @player2.id, column: 6},
+      {suit: "♠", value: "A", player_id: @player2.id, column: 6},
 
-  def two_pair_in_column(column, player_id)
-    [
-      {suit: "♠", value: "8", player_id: player_id, column: column},
-      {suit: "♣", value: "8", player_id: player_id, column: column},
-      {suit: "♥", value: "7", player_id: player_id, column: column},
-      {suit: "♣", value: "7", player_id: player_id, column: column},
-      {suit: "♦", value: "3", player_id: player_id, column: column}
-    ]
-  end
-
-  def trips_in_column(column, player_id)
-    [
-      {suit: "♠", value: "Q", player_id: player_id, column: column},
-      {suit: "♦", value: "Q", player_id: player_id, column: column},
-      {suit: "♣", value: "Q", player_id: player_id, column: column},
-      {suit: "♥", value: "4", player_id: player_id, column: column},
-      {suit: "♦", value: "7", player_id: player_id, column: column}
+      # High cards in column 7
+      {suit: "♦", value: "4", player_id: @player2.id, column: 7},
+      {suit: "♣", value: "6", player_id: @player2.id, column: 7},
+      {suit: "♠", value: "9", player_id: @player2.id, column: 7},
+      {suit: "♥", value: "J", player_id: @player2.id, column: 7},
+      {suit: "♦", value: "Q", player_id: @player2.id, column: 7}
     ]
   end
 
