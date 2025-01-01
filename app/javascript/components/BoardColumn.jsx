@@ -44,7 +44,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     }
     // Two Pair (101-299), Pair (50-100), High Card
     else {
-      strengthClasses = isPlayerColumn ? "bg-slate-600/60" : "bg-slate-600/30";
+      strengthClasses = isPlayerColumn ? "bg-slate-700/80" : "bg-slate-800/80";
     }
 
     if (isColumnFull && isPlayerColumn) {
