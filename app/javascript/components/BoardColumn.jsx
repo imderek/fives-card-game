@@ -73,14 +73,17 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   };
 
   const renderParticles = () => {
-    if (score < 700) return null;
+    if (score < 600) return null;
+    
+    const isHighTier = score >= 700;
+    const particleColor = isHighTier ? 'bg-purple-400' : 'bg-red-400';
     
     return (
       <>
         {[...Array(4)].map((_, i) => (
           <div
             key={`particle-${i}`}
-            className="absolute w-1 h-1 rounded-full bg-purple-400 animate-particle-float"
+            className={`absolute w-1 h-1 rounded-full ${particleColor} animate-particle-float`}
             style={{
               left: `${25 + Math.random() * 50}%`,
               top: '1.75rem',
