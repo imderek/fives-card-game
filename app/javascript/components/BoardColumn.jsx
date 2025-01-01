@@ -72,6 +72,27 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     return 'text-slate-400';
   };
 
+  const renderParticles = () => {
+    if (score < 700) return null;
+    
+    return (
+      <>
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={`particle-${i}`}
+            className="absolute w-1 h-1 rounded-full bg-purple-400 animate-particle-float"
+            style={{
+              left: `${25 + Math.random() * 50}%`,
+              top: '1.75rem',
+              '--x-drift': `${(Math.random() * 20 - 10)}px`,
+              animationDelay: `-${Math.random() * 2000}ms`,
+            }}
+          />
+        ))}
+      </>
+    );
+  };
+
   return (
     <div
       key={index}
@@ -79,6 +100,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
       onClick={() => isPlayerColumn && selectedCard && !isColumnFull && onPlayCardToColumn(index)}
       style={{ pointerEvents: isPlayerColumn && !isColumnFull ? 'all' : 'none' }}
     >
+      {renderParticles()}
       {/* Hand name and score */}
       {handName && (
         <div className="text-xs text-center text-white relative top-[-0.1rem]">
