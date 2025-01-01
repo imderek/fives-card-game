@@ -47,7 +47,8 @@ class DemoGameCreator
       {suit: "♥", value: "3"},
       {suit: "♦", value: "4"},
       {suit: "♣", value: "5"},
-      {suit: "♠", value: "6"}
+      {suit: "♠", value: "6"},
+      {suit: "♦", value: "8"}
     ]
     
     game.player2_hand = [
@@ -55,7 +56,8 @@ class DemoGameCreator
       {suit: "♦", value: "J"},
       {suit: "♥", value: "Q"},
       {suit: "♠", value: "K"},
-      {suit: "♣", value: "A"}
+      {suit: "♣", value: "A"},
+      {suit: "♥", value: "7"}
     ]
 
     game.board_cards = [
@@ -74,13 +76,13 @@ class DemoGameCreator
   end
 
   def apply_beginner_scenario(game)
-    # Example: Only one strong hand per player
     game.player1_hand = [
       {suit: "♠", value: "2"},
       {suit: "♥", value: "3"},
       {suit: "♦", value: "4"},
       {suit: "♣", value: "5"},
-      {suit: "♠", value: "6"}
+      {suit: "♠", value: "6"},
+      {suit: "♣", value: "9"}
     ]
     
     game.player2_hand = [
@@ -88,7 +90,8 @@ class DemoGameCreator
       {suit: "♦", value: "J"},
       {suit: "♥", value: "Q"},
       {suit: "♠", value: "K"},
-      {suit: "♣", value: "A"}
+      {suit: "♣", value: "A"},
+      {suit: "♦", value: "2"}
     ]
 
     game.board_cards = [

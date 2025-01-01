@@ -52,7 +52,7 @@ OrganizationMembership.create!([
 ])
 
 # Create 3 completed games for each user
-User.where("email NOT LIKE ?", "%bot%").each do |user|
+User.where("email NOT LIKE ?", "%bot%").where("email NOT LIKE ?", "%derek%").each do |user|
   3.times do
     bot_player = User.where("email LIKE ?", "%bot%").sample
     
