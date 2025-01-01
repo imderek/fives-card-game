@@ -55,7 +55,7 @@ module.exports = {
         'enter-scale': 'enter-scale 200ms ease-out forwards',
         'shimmer': 'shimmer 4s linear infinite',
         'scale-up': 'scale-up 200ms ease-out forwards',
-        'particle-float': 'float-up 1.5s linear infinite',
+        'particle-float': 'float-up 3s linear infinite',
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
