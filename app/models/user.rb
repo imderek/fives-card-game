@@ -7,7 +7,7 @@ class User < ApplicationRecord
   # Remove the email validation
   validates :email, presence: true
 
-  has_many :owned_deals, class_name: 'Deal', foreign_key: 'owner_id'
+  has_many :games
   belongs_to :organization
 
   has_many :games_as_player1, class_name: 'Game', foreign_key: 'player1_id'

@@ -180,7 +180,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
 
       <div
         ref={columnRef}
-        className={`${getColumnStrengthClasses(delayedScore, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
+        className={`${getColumnStrengthClasses(delayedScore, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
         onClick={() => isPlayerColumn && selectedCard && !isColumnFull && handlePlayCard(index)}
         style={{ pointerEvents: isPlayerColumn && !isColumnFull ? 'all' : 'none' }}
       >
