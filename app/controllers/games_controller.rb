@@ -55,9 +55,15 @@ class GamesController < ApplicationController
         locals: { game: @game }
       )
       
-      redirect_to @game, notice: 'Game was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to @game, notice: 'Game was successfully created.' }
+        format.json { render json: { id: @game.id } }
+      end
     else
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: { errors: @game.errors }, status: :unprocessable_entity }
+      end
     end
   end
 

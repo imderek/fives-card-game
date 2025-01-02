@@ -5,8 +5,12 @@ export default class extends Controller {
   static classes = ["selected", "unselected"]
   
   connect() {
-    // Select Easy bot by default
-    this.selectBot('easy')
+    // Get difficulty from URL params if it exists
+    const urlParams = new URLSearchParams(window.location.search);
+    const difficultyParam = urlParams.get('difficulty');
+    
+    // Select difficulty from param or default to 'easy'
+    this.selectBot(difficultyParam || 'easy')
   }
   
   // Method for initial selection (without event)

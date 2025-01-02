@@ -182,6 +182,39 @@ const GameState = ({ game: initialGame, currentUser }) => {
         }
     };
 
+    const getBotDifficulty = (email) => {
+        if (!email?.includes('bot')) return null;
+        return email.split(' ')[0]; // Gets 'easy', 'medium', or 'hard'
+    };
+
+    const createNewGame = async (botEmail) => {
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            const difficulty = botEmail?.split(' ')[0]; // Gets 'easy', 'medium', or 'hard'
+            
+            const response = await fetch('/games', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
+                body: JSON.stringify({
+                    game: {
+                        bot_difficulty: difficulty
+                    }
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                window.location.href = `/games/${data.id}`;
+            }
+        } catch (error) {
+            console.error('Error creating new game:', error);
+        }
+    };
+
     if (!game || !currentUser) {
         return <div>Loading game...</div>;
     }
@@ -241,7 +274,13 @@ const GameState = ({ game: initialGame, currentUser }) => {
                         
                         {/* Back to Lobby Button */}
                         <div className="mt-4 flex flex-col items-center justify-center">
-                            <a href="/" className="py-4 w-full block text-center bg-slate-500 text-white rounded-lg text-sm">
+                            <button 
+                                onClick={() => createNewGame(game.player2?.email)}
+                                className="py-4 mb-2 font-medium w-full block text-center bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm"
+                            >
+                                Rematch
+                            </button>
+                            <a href="/" className="py-4 w-full block text-center bg-slate-500 hover:bg-slate-400 text-white rounded-lg text-sm">
                                 Back to Lobby
                             </a>
                         </div>
