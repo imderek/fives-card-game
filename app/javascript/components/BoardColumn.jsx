@@ -11,10 +11,16 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
 
   const { name: handName, score } = evaluatePokerHand(cards);
 
+  // Scale-up effect for significant hands
   React.useEffect(() => {
     if (isPlayerColumn && score > prevScore && score >= 200) {
-      setShouldAnimate(true);
-      setTimeout(() => setShouldAnimate(false), 500);
+      // Delay the scale-up until after the card lands
+      const timer = setTimeout(() => {
+        setShouldAnimate(true);
+        setTimeout(() => setShouldAnimate(false), 500);
+      }, 300); // Same timing as card animation
+
+      return () => clearTimeout(timer);
     }
     setPrevScore(score);
   }, [score, isPlayerColumn]);
@@ -108,19 +114,11 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   const handlePlayCard = (columnIndex) => {
     if (!selectedCard || !columnRef.current || !selectedCard.initialPosition) return;
 
+    // Immediately remove card from hand
+    onPlayCardToColumn(columnIndex);
+
     // Get the column's position
     const columnRect = columnRef.current.getBoundingClientRect();
-    
-    // Debug logs
-    console.log('Position Debug:', {
-      cardInitialPosition: selectedCard.initialPosition,
-      columnRect: {
-        left: columnRect.left + window.scrollX,
-        top: columnRect.top + window.scrollY,
-        width: columnRect.width,
-        height: columnRect.height
-      }
-    });
     
     setAnimatingCard({
       ...selectedCard,
@@ -134,7 +132,6 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
       }
     });
 
-    // Force a reflow
     requestAnimationFrame(() => {
       const targetX = columnRect.left + (columnRect.width / 2) - 29 + window.scrollX;
       const targetY = columnRect.top + (cards.length * 20) + window.scrollY;
@@ -150,7 +147,6 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
 
       setTimeout(() => {
         setAnimatingCard(null);
-        onPlayCardToColumn(columnIndex);
       }, 300);
     });
   };
