@@ -1,11 +1,14 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Card from './Card';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
 const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn }) => {
   const [prevScore, setPrevScore] = React.useState(0);
   const [shouldAnimate, setShouldAnimate] = React.useState(false);
-  
+  const [animatingCard, setAnimatingCard] = React.useState(null);
+  const columnRef = React.useRef(null);
+
   const { name: handName, score } = evaluatePokerHand(cards);
 
   React.useEffect(() => {
@@ -102,16 +105,77 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     );
   };
 
+  const handlePlayCard = (columnIndex) => {
+    if (!selectedCard || !columnRef.current || !selectedCard.initialPosition) return;
+
+    // Get the column's position
+    const columnRect = columnRef.current.getBoundingClientRect();
+    
+    // Debug logs
+    console.log('Position Debug:', {
+      cardInitialPosition: selectedCard.initialPosition,
+      columnRect: {
+        left: columnRect.left + window.scrollX,
+        top: columnRect.top + window.scrollY,
+        width: columnRect.width,
+        height: columnRect.height
+      }
+    });
+    
+    setAnimatingCard({
+      ...selectedCard,
+      style: {
+        position: 'fixed',
+        left: `${selectedCard.initialPosition.x}px`,
+        top: `${selectedCard.initialPosition.y}px`,
+        width: '3.7rem',
+        height: '4.7rem',
+        zIndex: 1000,
+      }
+    });
+
+    // Force a reflow
+    requestAnimationFrame(() => {
+      const targetX = columnRect.left + (columnRect.width / 2) - 29 + window.scrollX;
+      const targetY = columnRect.top + (cards.length * 20) + window.scrollY;
+
+      setAnimatingCard(prev => ({
+        ...prev,
+        style: {
+          ...prev.style,
+          transform: `translate(${targetX - selectedCard.initialPosition.x}px, ${targetY - selectedCard.initialPosition.y}px)`,
+          transition: 'transform 300ms ease-out'
+        }
+      }));
+
+      setTimeout(() => {
+        setAnimatingCard(null);
+        onPlayCardToColumn(columnIndex);
+      }, 300);
+    });
+  };
+
+  const renderAnimatingCard = () => {
+    if (!animatingCard) return null;
+
+    return ReactDOM.createPortal(
+      <Card
+        card={animatingCard}
+        isAnimating={true}
+        style={animatingCard.style}
+      />,
+      document.body
+    );
+  };
+
   return (
     <div className="relative">
-      {/* Particles */}
       {renderParticles()}
 
-      {/* Main column content */}
       <div
-        key={index}
-        className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''} relative z-0`}
-        onClick={() => isPlayerColumn && selectedCard && !isColumnFull && onPlayCardToColumn(index)}
+        ref={columnRef}
+        className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
+        onClick={() => isPlayerColumn && selectedCard && !isColumnFull && handlePlayCard(index)}
         style={{ pointerEvents: isPlayerColumn && !isColumnFull ? 'all' : 'none' }}
       >
         {/* Hand name and score */}
@@ -136,6 +200,8 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
           ))}
         </div>
       </div>
+
+      {renderAnimatingCard()}
     </div>
   );
 };

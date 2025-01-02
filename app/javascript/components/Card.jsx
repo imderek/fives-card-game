@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Card = ({ card, playable = false, playersHand = false, onPlay, isSelected = false, facedown = false }) => {
+const Card = React.forwardRef(({ card, playable = false, playersHand = false, onPlay, isSelected = false, facedown = false, isAnimating = false, style }, ref) => {
   const cardStyles = `
     relative 
     ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' :
@@ -8,6 +8,7 @@ const Card = ({ card, playable = false, playersHand = false, onPlay, isSelected 
     ${isSelected ? 'selected-card ring ring-yellow-500 top-[-5px] shadow-xl' : ''}
     rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
     ${facedown ? 'bg-gradient-to-br from-slate-600 to-slate-800' : 'border border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'}
+    ${isAnimating ? 'fixed transition-all duration-300 ease-out z-[100]' : ''}
   `.trim();
 
   const handleClick = (e) => {
@@ -19,11 +20,14 @@ const Card = ({ card, playable = false, playersHand = false, onPlay, isSelected 
 
   return (
     <div 
+      ref={ref}
+      data-card-id={`${card.suit}-${card.value}`}
       className={cardStyles} 
       onClick={handleClick}
       style={{ 
         position: 'relative',
-        zIndex: isSelected ? 50 : 30
+        zIndex: isSelected ? 50 : 30,
+        ...style
       }}
     >
       {facedown ? (
@@ -46,6 +50,6 @@ const Card = ({ card, playable = false, playersHand = false, onPlay, isSelected 
       )}
     </div>
   );
-};
+});
 
 export default Card; 

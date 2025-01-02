@@ -2,6 +2,35 @@ import React from 'react';
 import Card from './Card';
 
 const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false }) => {
+  const handlePlayCard = (card, cardElement) => {
+    if (!cardElement) return;
+    
+    // Get the card's current position in the hand
+    const cardRect = cardElement.getBoundingClientRect();
+    
+    // Debug logs
+    console.log('Card Element Debug:', {
+      element: cardElement,
+      tagName: cardElement.tagName,
+      classList: cardElement.className,
+      rect: cardRect
+    });
+    
+    // Convert to fixed position coordinates
+    const initialPosition = {
+      x: cardRect.left + window.scrollX,
+      y: cardRect.top + window.scrollY
+    };
+
+    // Debug log
+    console.log('Initial Position:', initialPosition);
+    
+    onPlayCard({
+      ...card,
+      initialPosition
+    });
+  };
+
   return (
     <div className="flex flex-col items-center gap-2">
       <div className={`${canDiscard ? 'mb-3' : 'mb-4'} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
@@ -31,7 +60,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
                   card={card}
                   playable={isCurrentPlayer && canPlay && !card.isPlaceholder}
                   playersHand={true}
-                  onPlay={onPlayCard}
+                  onPlay={(card) => handlePlayCard(card, document.querySelector(`[data-card-id="${card.suit}-${card.value}"]`))}
                   isSelected={card.isSelected}
                   facedown={facedown}
                 />
