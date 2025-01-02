@@ -27,7 +27,8 @@ class User < ApplicationRecord
     update_without_password(params, *options)
   end
 
-  def remember_me
-    (super == nil) ? true : super
-  end
+  # TODO: this doesn't work
+  # def remember_me
+  #   (super == nil) ? true : super
+  # end
 end
