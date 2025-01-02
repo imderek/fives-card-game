@@ -200,7 +200,11 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
           style={{ pointerEvents: 'none' }}
         >
           {cards.map((card, cardIndex) => (
-            <div key={cardIndex} style={{ pointerEvents: 'none' }}>
+            <div 
+              key={cardIndex} 
+              className="opacity-0 animate-fade-in [animation-delay:300ms]"
+              style={{ pointerEvents: 'none' }}
+            >
               <Card card={card} />
             </div>
           ))}
