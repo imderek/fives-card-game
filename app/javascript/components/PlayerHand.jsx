@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false }) => {
+const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0 }) => {
   const handlePlayCard = (card, cardElement) => {
     if (!cardElement) return;
     
@@ -32,7 +32,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
   };
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 relative">
       <div className={`${canDiscard ? 'mb-3' : 'mb-4'} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
         {cards.map((card, index) => {
           // Only calculate angles and offsets if not stacked
@@ -86,6 +86,14 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
               Discard & Draw
             </button>
             <div className="block text-xs font-normal text-slate-400 mr-[0.3rem]">but only once</div>
+          </div>
+        </div>
+      )}
+
+      {handScore > 0 && (
+        <div className="absolute -top-[.4rem] inset-0 flex items-center justify-center z-30">
+          <div className="p-2 py-1 bg-slate-500 rounded-md text-xs sm:text-lg font-normal shadow-lg text-white animate-enter-scale">
+            +{handScore}
           </div>
         </div>
       )}

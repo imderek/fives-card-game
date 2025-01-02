@@ -71,14 +71,14 @@ const GameState = ({ game: initialGame, currentUser }) => {
     const opponentName = formatPlayerName(isPlayer1 ? game?.player2?.email : game?.player1?.email);
     const playerName = formatPlayerName(currentUser?.email);
     
-    // console.log('Game State Debug:', {
-    //     currentUser,
-    //     game,
-    //     isPlayer1,
-    //     opponentName,
-    //     player1: game?.player1,
-    //     player2: game?.player2
-    // });
+    console.log('Game State Debug:', {
+        currentUser,
+        game,
+        isPlayer1,
+        opponentName,
+        player1: game?.player1,
+        player2: game?.player2
+    });
 
     // When we receive a new server state, clear optimistic state if it matches
     React.useEffect(() => {
@@ -232,6 +232,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 onPlayCard={handlePlayCard}
                 onDiscard={handleDiscard}
                 canDiscard={canDiscard}
+                handScore={game.column_scores["player1_hand"]}
             />
 
             {/* Winner Declaration */}
@@ -310,6 +311,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 onDiscard={() => {}}
                 canDiscard={false}
                 facedown={!game.winner_id}
+                handScore={game.column_scores["player2_hand"]}
             />
             <div className="w-full px-6">
                 <a href="/" className="block text-center border border-slate-500/50 rounded-lg mb-10 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70">
