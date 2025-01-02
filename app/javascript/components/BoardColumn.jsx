@@ -4,23 +4,36 @@ import Card from './Card';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
 const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn }) => {
-  const { name: handName, score } = evaluatePokerHand(cards);
-  
-  const [prevScore, setPrevScore] = React.useState(score);
-  const [delayedScore, setDelayedScore] = React.useState(score);
-  const [delayedHandName, setDelayedHandName] = React.useState(handName);
+  const [prevScore, setPrevScore] = React.useState(0);
+  const [delayedScore, setDelayedScore] = React.useState(0);
+  const [delayedHandName, setDelayedHandName] = React.useState('');
   const [shouldAnimate, setShouldAnimate] = React.useState(false);
   const [animatingCard, setAnimatingCard] = React.useState(null);
   const columnRef = React.useRef(null);
 
-  // Handle initial state and score decreases
+  const { name: handName, score } = evaluatePokerHand(cards);
+
+  // Delayed score and hand name update, plus scale-up effect for significant hands
   React.useEffect(() => {
-    if (score <= prevScore) {
+    if (isPlayerColumn && score > prevScore) {
+      // Delay both the score update and scale-up until after the card lands
+      const timer = setTimeout(() => {
+        setDelayedScore(score);
+        setDelayedHandName(handName);
+        if (score >= 200) {
+          setShouldAnimate(true);
+          setTimeout(() => setShouldAnimate(false), 500);
+        }
+      }, 300);
+
+      return () => clearTimeout(timer);
+    } else if (score <= prevScore) {
+      // Update immediately for non-increasing scores
       setDelayedScore(score);
       setDelayedHandName(handName);
-      setPrevScore(score);
     }
-  }, [score, handName]);
+    setPrevScore(score);
+  }, [score, handName, isPlayerColumn]);
 
   const isColumnFull = cards.length >= 5;
 
@@ -111,12 +124,11 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   const handlePlayCard = (columnIndex) => {
     if (!selectedCard || !columnRef.current || !selectedCard.initialPosition) return;
 
+    // Immediately remove card from hand
+    onPlayCardToColumn(columnIndex);
+
     // Get the column's position
     const columnRect = columnRef.current.getBoundingClientRect();
-    
-    // Pre-calculate the new score with the incoming card
-    const newCards = [...cards, selectedCard];
-    const { name: newHandName, score: newScore } = evaluatePokerHand(newCards);
     
     setAnimatingCard({
       ...selectedCard,
@@ -143,17 +155,8 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
         }
       }));
 
-      // All updates happen at exactly 300ms
       setTimeout(() => {
-        onPlayCardToColumn(columnIndex);
         setAnimatingCard(null);
-        setDelayedScore(newScore);
-        setDelayedHandName(newHandName);
-        if (newScore >= 200 && newScore > prevScore) {
-          setShouldAnimate(true);
-          setTimeout(() => setShouldAnimate(false), 500);
-        }
-        setPrevScore(newScore);
       }, 300);
     });
   };
