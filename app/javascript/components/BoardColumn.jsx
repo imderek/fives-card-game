@@ -15,7 +15,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
 
   // Delayed score and hand name update, plus scale-up effect for significant hands
   React.useEffect(() => {
-    if (isPlayerColumn && score > prevScore) {
+    if (score > prevScore) {
       // Delay both the score update and scale-up until after the card lands
       const timer = setTimeout(() => {
         setDelayedScore(score);
@@ -33,7 +33,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
       setDelayedHandName(handName);
     }
     setPrevScore(score);
-  }, [score, handName, isPlayerColumn]);
+  }, [score, handName]);
 
   const isColumnFull = cards.length >= 5;
 
