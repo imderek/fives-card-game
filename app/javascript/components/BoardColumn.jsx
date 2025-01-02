@@ -5,25 +5,35 @@ import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
 const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn }) => {
   const [prevScore, setPrevScore] = React.useState(0);
+  const [delayedScore, setDelayedScore] = React.useState(0);
+  const [delayedHandName, setDelayedHandName] = React.useState('');
   const [shouldAnimate, setShouldAnimate] = React.useState(false);
   const [animatingCard, setAnimatingCard] = React.useState(null);
   const columnRef = React.useRef(null);
 
   const { name: handName, score } = evaluatePokerHand(cards);
 
-  // Scale-up effect for significant hands
+  // Delayed score and hand name update, plus scale-up effect for significant hands
   React.useEffect(() => {
-    if (isPlayerColumn && score > prevScore && score >= 200) {
-      // Delay the scale-up until after the card lands
+    if (isPlayerColumn && score > prevScore) {
+      // Delay both the score update and scale-up until after the card lands
       const timer = setTimeout(() => {
-        setShouldAnimate(true);
-        setTimeout(() => setShouldAnimate(false), 500);
-      }, 300); // Same timing as card animation
+        setDelayedScore(score);
+        setDelayedHandName(handName);
+        if (score >= 200) {
+          setShouldAnimate(true);
+          setTimeout(() => setShouldAnimate(false), 500);
+        }
+      }, 300);
 
       return () => clearTimeout(timer);
+    } else if (score <= prevScore) {
+      // Update immediately for non-increasing scores
+      setDelayedScore(score);
+      setDelayedHandName(handName);
     }
     setPrevScore(score);
-  }, [score, isPlayerColumn]);
+  }, [score, handName, isPlayerColumn]);
 
   const isColumnFull = cards.length >= 5;
 
@@ -170,16 +180,16 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
 
       <div
         ref={columnRef}
-        className={`${getColumnStrengthClasses(score, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
+        className={`${getColumnStrengthClasses(delayedScore, isPlayerColumn)} ${selectedCard && isPlayerColumn && !isColumnFull ? 'cursor-pointer hover:bg-slate-500' : ''} ${shouldAnimate ? 'animate-scale-up' : ''}`}
         onClick={() => isPlayerColumn && selectedCard && !isColumnFull && handlePlayCard(index)}
         style={{ pointerEvents: isPlayerColumn && !isColumnFull ? 'all' : 'none' }}
       >
         {/* Hand name and score */}
-        {handName && (
+        {delayedHandName && (
           <div className="text-xs text-center text-white relative top-[-0.1rem]">
-            <div className="line-clamp-1">{handName}</div>
-            {score > 0 && (
-              <div className={scoreColorClass(score)}>+{score}</div>
+            <div className="line-clamp-1">{delayedHandName}</div>
+            {delayedScore > 0 && (
+              <div className={scoreColorClass(delayedScore)}>+{delayedScore}</div>
             )}
           </div>
         )}
