@@ -77,20 +77,20 @@ end
 
 # Create a specific game with Derek having powerful hands
 derek = User.find_by("LOWER(email) = ?", "derek")
-bot = User.where("email LIKE ?", "%bot%").first
+bot = User.where("email LIKE ?", "%easy%").first
+medium_bot = User.where("email LIKE ?", "%medium%").first
 
-# Create a game with powerful hands
+# Create a game with completed powerful hands
 DemoGameCreator.create_game(
   player1: derek,
-  player2: bot,
-  scenario: :powerful_hands
+  player2: medium_bot,
+  scenario: :completed_powerful
 )
 
-# Or create a game with beginner-friendly hands
 DemoGameCreator.create_game(
   player1: derek,
-  player2: bot,
-  scenario: :beginner
+  player2: medium_bot,
+  scenario: :incompleted_powerful
 )
 
 puts "DB seeding complete!"

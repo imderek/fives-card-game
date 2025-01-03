@@ -38,7 +38,7 @@ class DemoGameCreator
     }
   end
 
-  def apply_powerful_hands_scenario(game)
+  def apply_completed_powerful_scenario(game)
     # Player 1's hand - mix of high cards and potential straight/flush draws
     game.player1_hand = [
       {suit: "♠", value: "K"},
@@ -61,148 +61,140 @@ class DemoGameCreator
 
     game.board_cards = [
       # Player 1's columns (0-3)
-      # Straight in column 0
-      {suit: "♦", value: "2", player_id: @player1.id, column: 0},
-      {suit: "♠", value: "3", player_id: @player1.id, column: 0},
-      {suit: "♥", value: "4", player_id: @player1.id, column: 0},
-      {suit: "♣", value: "5", player_id: @player1.id, column: 0},
-      {suit: "♦", value: "6", player_id: @player1.id, column: 0},
+      # Flush in column 0
+      {suit: "♥", value: "2", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "5", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "7", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "9", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "K", player_id: @player1.id, column: 0},
 
-      # Flush in column 1
-      {suit: "♥", value: "2", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "5", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "7", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "9", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "K", player_id: @player1.id, column: 1},
+      # Full House in column 1
+      {suit: "♠", value: "4", player_id: @player1.id, column: 1},
+      {suit: "♦", value: "4", player_id: @player1.id, column: 1},
+      {suit: "♣", value: "4", player_id: @player1.id, column: 1},
+      {suit: "♠", value: "7", player_id: @player1.id, column: 1},
+      {suit: "♦", value: "7", player_id: @player1.id, column: 1},
 
-      # Full House in column 2
-      {suit: "♠", value: "4", player_id: @player1.id, column: 2},
-      {suit: "♦", value: "4", player_id: @player1.id, column: 2},
-      {suit: "♣", value: "4", player_id: @player1.id, column: 2},
-      {suit: "♠", value: "7", player_id: @player1.id, column: 2},
-      {suit: "♦", value: "7", player_id: @player1.id, column: 2},
+      # Quads in column 2
+      {suit: "♦", value: "10", player_id: @player1.id, column: 2},
+      {suit: "♣", value: "10", player_id: @player1.id, column: 2},
+      {suit: "♠", value: "10", player_id: @player1.id, column: 2},
+      {suit: "♥", value: "10", player_id: @player1.id, column: 2},
 
-      # Quads in column 3
-      {suit: "♣", value: "8", player_id: @player1.id, column: 3},
-      {suit: "♦", value: "8", player_id: @player1.id, column: 3},
+      # Straight Flush in column 3
+      {suit: "♠", value: "4", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "5", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "6", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "7", player_id: @player1.id, column: 3},
       {suit: "♠", value: "8", player_id: @player1.id, column: 3},
-      {suit: "♥", value: "8", player_id: @player1.id, column: 3},
-      {suit: "♠", value: "Q", player_id: @player1.id, column: 3},
 
       # Player 2's columns (4-7)
+      # Pair moves to column 4
+      {suit: "♥", value: "3", player_id: @player2.id, column: 4},
+      {suit: "♦", value: "3", player_id: @player2.id, column: 4},
+      {suit: "♣", value: "6", player_id: @player2.id, column: 4},
+      {suit: "♠", value: "J", player_id: @player2.id, column: 4},
+      {suit: "♣", value: "9", player_id: @player2.id, column: 4},
 
-      # High cards in column 4
-      {suit: "♦", value: "K", player_id: @player2.id, column: 4},
-      {suit: "♣", value: "J", player_id: @player2.id, column: 4},
-      {suit: "♠", value: "6", player_id: @player2.id, column: 4},
-      {suit: "♦", value: "9", player_id: @player2.id, column: 4},
-      {suit: "♣", value: "Q", player_id: @player2.id, column: 4},
+      # Two pair moves to column 5
+      {suit: "♣", value: "2", player_id: @player2.id, column: 5},
+      {suit: "♠", value: "2", player_id: @player2.id, column: 5},
+      {suit: "♠", value: "5", player_id: @player2.id, column: 5},
+      {suit: "♦", value: "5", player_id: @player2.id, column: 5},
+      {suit: "♥", value: "6", player_id: @player2.id, column: 5},
 
-      # Pair in column 5
-      {suit: "♥", value: "3", player_id: @player2.id, column: 5},
-      {suit: "♦", value: "3", player_id: @player2.id, column: 5},
-      {suit: "♣", value: "6", player_id: @player2.id, column: 5},
-      {suit: "♠", value: "J", player_id: @player2.id, column: 5},
-      {suit: "♣", value: "9", player_id: @player2.id, column: 5},
+      # Trips moves to column 6
+      {suit: "♦", value: "Q", player_id: @player2.id, column: 6},
+      {suit: "♣", value: "3", player_id: @player2.id, column: 6},
+      {suit: "♠", value: "10", player_id: @player2.id, column: 6},
+      {suit: "♥", value: "10", player_id: @player2.id, column: 6},
+      {suit: "♦", value: "10", player_id: @player2.id, column: 6},
 
-      # Two pair in column 6
-      {suit: "♣", value: "2", player_id: @player2.id, column: 6},
-      {suit: "♠", value: "2", player_id: @player2.id, column: 6},
-      {suit: "♠", value: "5", player_id: @player2.id, column: 6},
-      {suit: "♦", value: "5", player_id: @player2.id, column: 6},
-      {suit: "♥", value: "6", player_id: @player2.id, column: 6},
-
-      # Trips in column 7
-      {suit: "♦", value: "Q", player_id: @player2.id, column: 7},
-      {suit: "♣", value: "3", player_id: @player2.id, column: 7},
-      {suit: "♠", value: "10", player_id: @player2.id, column: 7},
-      {suit: "♥", value: "10", player_id: @player2.id, column: 7},
-      {suit: "♦", value: "10", player_id: @player2.id, column: 7}
+      # Straight in column 7
+      {suit: "♦", value: "2", player_id: @player2.id, column: 7},
+      {suit: "♠", value: "3", player_id: @player2.id, column: 7},
+      {suit: "♥", value: "4", player_id: @player2.id, column: 7},
+      {suit: "♣", value: "5", player_id: @player2.id, column: 7},
+      {suit: "♦", value: "6", player_id: @player2.id, column: 7}
     ]
   end
 
-  def apply_beginner_scenario(game)
-    # Player 1's hand - mix of low and medium cards
+  def apply_incompleted_powerful_scenario(game)
+    # Player 1's hand remains the same - cards that complete powerful hands
     game.player1_hand = [
-      {suit: "♠", value: "4"},
-      {suit: "♥", value: "6"},
-      {suit: "♦", value: "8"},
-      {suit: "♣", value: "9"},
-      {suit: "♠", value: "J"},
-      {suit: "♥", value: "Q"}
+      {suit: "♦", value: "7"},  # Completes straight in col 0
+      {suit: "♥", value: "3"},  # Completes flush in col 1
+      {suit: "♣", value: "7"},  # Completes full house in col 2
+      {suit: "♠", value: "3"},  # Completes straight flush in col 3
+      {suit: "♦", value: "10"}, # Completes quads in col 7
+      {suit: "♦", value: "Q"}
     ]
-    
-    # Player 2's hand - mix of medium cards
+
     game.player2_hand = [
-      {suit: "♦", value: "5"},
-      {suit: "♣", value: "7"},
-      {suit: "♥", value: "9"},
-      {suit: "♠", value: "J"},
-      {suit: "♦", value: "Q"},
-      {suit: "♣", value: "K"}
+      {suit: "♦", value: "K"},  # Completes pair in col 4
+      {suit: "♥", value: "3"},  # Completes trips in col 5
+      {suit: "♣", value: "5"},  # Completes three pair in col 6
+      {suit: "♠", value: "A"},
+      {suit: "♠", value: "K"},
+      {suit: "♣", value: "J"}
     ]
 
     game.board_cards = [
       # Player 1's columns (0-3)
-      # Pair in column 0
-      {suit: "♦", value: "2", player_id: @player1.id, column: 0},
-      {suit: "♠", value: "2", player_id: @player1.id, column: 0},
-      {suit: "♥", value: "4", player_id: @player1.id, column: 0},
-      {suit: "♣", value: "8", player_id: @player1.id, column: 0},
-      {suit: "♦", value: "K", player_id: @player1.id, column: 0},
+      # Nearly flush in column 0 (missing ♥K)
+      {suit: "♥", value: "2", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "5", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "7", player_id: @player1.id, column: 0},
+      {suit: "♥", value: "9", player_id: @player1.id, column: 0},
 
-      # High cards in column 1
-      {suit: "♥", value: "2", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "5", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "7", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "10", player_id: @player1.id, column: 1},
-      {suit: "♥", value: "K", player_id: @player1.id, column: 1},
+      # Nearly full house in column 1 (missing third 4)
+      {suit: "♠", value: "4", player_id: @player1.id, column: 1},
+      {suit: "♦", value: "4", player_id: @player1.id, column: 1},
+      {suit: "♠", value: "7", player_id: @player1.id, column: 1},
+      {suit: "♦", value: "7", player_id: @player1.id, column: 1},
 
-      # High cards in column 2
-      {suit: "♠", value: "3", player_id: @player1.id, column: 2},
-      {suit: "♦", value: "6", player_id: @player1.id, column: 2},
+      # Nearly quads in column 2 (missing fourth 10)
+      {suit: "♦", value: "10", player_id: @player1.id, column: 2},
       {suit: "♣", value: "10", player_id: @player1.id, column: 2},
-      {suit: "♠", value: "Q", player_id: @player1.id, column: 2},
-      {suit: "♦", value: "A", player_id: @player1.id, column: 2},
+      {suit: "♠", value: "10", player_id: @player1.id, column: 2},
+      {suit: "♦", value: "Q", player_id: @player1.id, column: 2},
 
-      # High cards in column 3
-      {suit: "♣", value: "2", player_id: @player1.id, column: 3},
-      {suit: "♦", value: "7", player_id: @player1.id, column: 3},
-      {suit: "♠", value: "8", player_id: @player1.id, column: 3},
-      {suit: "♣", value: "J", player_id: @player1.id, column: 3},
-      {suit: "♠", value: "K", player_id: @player1.id, column: 3},
+      # Nearly straight flush in column 3 (missing ♠3)
+      {suit: "♠", value: "4", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "5", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "6", player_id: @player1.id, column: 3},
+      {suit: "♠", value: "7", player_id: @player1.id, column: 3},
 
-      # Player 2's columns (4-7)
-      # High cards in column 4
-      {suit: "♣", value: "3", player_id: @player2.id, column: 4},
-      {suit: "♠", value: "5", player_id: @player2.id, column: 4},
+      # Player 2's columns (4-6)
+      # Nearly pair in column 4 (missing K)
+      {suit: "♣", value: "J", player_id: @player2.id, column: 4},
+      {suit: "♠", value: "6", player_id: @player2.id, column: 4},
       {suit: "♦", value: "9", player_id: @player2.id, column: 4},
-      {suit: "♣", value: "Q", player_id: @player2.id, column: 4},
-      {suit: "♥", value: "A", player_id: @player2.id, column: 4},
+      {suit: "♥", value: "K", player_id: @player2.id, column: 4},
 
-      # Pair in column 5
+      # Nearly trips in column 5 (missing third 3)
       {suit: "♦", value: "3", player_id: @player2.id, column: 5},
       {suit: "♣", value: "3", player_id: @player2.id, column: 5},
-      {suit: "♠", value: "6", player_id: @player2.id, column: 5},
-      {suit: "♥", value: "8", player_id: @player2.id, column: 5},
-      {suit: "♦", value: "J", player_id: @player2.id, column: 5},
+      {suit: "♣", value: "6", player_id: @player2.id, column: 5},
+      {suit: "♠", value: "J", player_id: @player2.id, column: 5},
 
-      # High cards in column 6
-      {suit: "♣", value: "4", player_id: @player2.id, column: 6},
-      {suit: "♠", value: "7", player_id: @player2.id, column: 6},
-      {suit: "♦", value: "10", player_id: @player2.id, column: 6},
-      {suit: "♣", value: "K", player_id: @player2.id, column: 6},
-      {suit: "♠", value: "A", player_id: @player2.id, column: 6},
+      # Nearly two pair in column 6
+      {suit: "♣", value: "2", player_id: @player2.id, column: 6},
+      {suit: "♠", value: "3", player_id: @player2.id, column: 6},
+      {suit: "♠", value: "5", player_id: @player2.id, column: 6},
+      {suit: "♦", value: "5", player_id: @player2.id, column: 6},
 
-      # High cards in column 7
-      {suit: "♦", value: "4", player_id: @player2.id, column: 7},
-      {suit: "♣", value: "6", player_id: @player2.id, column: 7},
-      {suit: "♠", value: "9", player_id: @player2.id, column: 7},
-      {suit: "♥", value: "J", player_id: @player2.id, column: 7},
-      {suit: "♦", value: "Q", player_id: @player2.id, column: 7}
+      # Nearly quads in column 7 (missing fourth 10)
+      {suit: "♣", value: "10", player_id: @player2.id, column: 7},
+      {suit: "♠", value: "10", player_id: @player2.id, column: 7},
+      {suit: "♥", value: "10", player_id: @player2.id, column: 7},
+      {suit: "♦", value: "Q", player_id: @player2.id, column: 7},
     ]
   end
 
+  # Populates the game's deck with all remaining cards that aren't already in use
+  # on the board or in players' hands. Each card is represented as a hash with
+  # suit and value. The resulting deck is shuffled before being assigned to the game.
   def populate_deck(game)
     used_cards = (game.board_cards + game.player1_hand + game.player2_hand)
       .map { |card| "#{card[:suit]}#{card[:value]}" }
