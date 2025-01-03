@@ -77,7 +77,6 @@ end
 
 # Create a specific game with Derek having powerful hands
 derek = User.find_by("LOWER(email) = ?", "derek")
-bot = User.where("email LIKE ?", "%easy%").first
 medium_bot = User.where("email LIKE ?", "%medium%").first
 
 # Create a game with completed powerful hands
