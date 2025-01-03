@@ -27,8 +27,11 @@ class User < ApplicationRecord
     update_without_password(params, *options)
   end
 
-  # TODO: this doesn't work
-  # def remember_me
-  #   (super == nil) ? true : super
-  # end
+  before_create :generate_remember_token
+
+  private
+  
+  def generate_remember_token
+    self.remember_token ||= SecureRandom.hex(10)
+  end
 end

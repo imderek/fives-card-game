@@ -25,6 +25,7 @@ class Users::SessionsController < Devise::SessionsController
       # If user doesn't exist, create a new user and sign them up
       user = User.new(email: email)
       user.organization = Organization.create(name: email)
+      user.remember_me = true
 
       if user.save
         sign_in(user)
