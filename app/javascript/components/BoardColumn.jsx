@@ -41,10 +41,14 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full z-0";
     
     let strengthClasses = "";
-    // Quads & Straight Flush (700-999) & Royal Flush (1000)
-    if (score === 1000 || (score >= 700 && score <= 999)) {
-      strengthClasses = "bg-gradient-to-br from-purple-500 via-[#2A0F40] via-40% to-purple-700 ring-1 ring-purple-400/80 bg-[length:200%_100%] shadow-[0_0_16px_3px_rgba(168,85,247,0.9)]";
+    // Straight Flush (800) & Royal Flush (1000)
+    if (score >= 800) {
+      strengthClasses = "bg-gradient-to-br from-slate-200 via-slate-900 via-40% to-slate-200 ring-1 ring-white bg-[length:200%_100%] shadow-[0_0_16px_3px_rgba(255,255,255,0.9)]";
     } 
+    // Quads (700-799)
+    else if (score >= 700 && score <= 799) {
+      strengthClasses = "bg-gradient-to-br from-purple-500 via-[#2A0F40] via-40% to-purple-700 ring-1 ring-purple-400/80 bg-[length:200%_100%] shadow-[0_0_16px_3px_rgba(168,85,247,0.9)]";
+    }
     // Full House (600-699)
     else if (score >= 600 && score <= 699) {
       strengthClasses = "bg-gradient-to-br from-red-600 via-red-900/60 via-35% to-red-700 ring-1 ring-red-500 bg-[length:200%_100%] shadow-[0_0_14px_5px_rgba(220,38,38,0.5)]";
@@ -73,8 +77,10 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     return `${baseClasses} ${strengthClasses} rounded-lg`;
   };
   const scoreColorClass = (score) => {
-    // Royal Flush (1000) & Straight Flush & Quads (700-999)
-    if (score === 1000 || (score >= 700 && score <= 999)) return 'font-normal text-purple-400';
+    // Royal Flush (1000) & Straight Flush (800-999)
+    if (score >= 800) return 'animate-pulse text-white';
+    // Quads (700-799)
+    if (score >= 700 && score <= 799) return 'text-purple-400';
     // Full House (600-699)
     if (score >= 600 && score <= 699) return 'text-red-400';
     // Flush (500-599)
@@ -94,9 +100,9 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   const renderParticles = () => {
     if (score < 700) return null;
     
-    const isHighTier = score >= 700;
-    const particleColor = isHighTier ? 'bg-purple-300' : 'bg-red-300';
-    const glowColor = isHighTier ? 'shadow-purple-400' : 'shadow-red-400';
+    const isHighTier = score >= 800;
+    const particleColor = isHighTier ? 'bg-white' : 'bg-purple-300';
+    const glowColor = isHighTier ? 'shadow-white' : 'shadow-purple-400';
     
     return (
       <>
