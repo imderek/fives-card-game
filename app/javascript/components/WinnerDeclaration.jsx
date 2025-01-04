@@ -22,9 +22,31 @@ const WinnerDeclaration = ({
         <div className="w-full flex flex-col animate-enter-scale">
             <div className="my-1 mb-2 mx-6 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
                 {/* Heading */}
-                <h1 className="mt-1 mb-4 text-xl font-bold text-slate-900 text-center">
-                    {game.winner_id === currentUser.id ? "You Won!" : "You Lost"}
-                </h1>
+                {game.winner_id === currentUser.id ? (
+                    <>
+                        <h1 className="mt-1 mb-0.5 text-xl font-bold text-slate-900 text-center">You Won!</h1>
+                        <p className="mb-5 text-sm text-slate-500 text-center">
+                            {[
+                                "Go ahead, you can celebrate.",
+                                "I'm not gonna lie, that was impressive.",
+                                "And you made it look sooo easy.",
+                                "And they never saw it comin'."
+                            ][Math.floor(Math.random() * 4)]}
+                        </p>
+                    </>
+                ) : (
+                    <>
+                        <h1 className="mt-1 mb-0.5 text-xl font-bold text-slate-900 text-center">You Lost</h1>
+                        <p className="mb-5 text-sm text-slate-500 text-center">
+                            {[
+                                "But at least you have your looks.",
+                                "Oof! That was hard to watch.",
+                                "Maybe next time! (but probably not)",
+                                "The game and my respect."
+                            ][Math.floor(Math.random() * 4)]}
+                        </p>
+                    </>
+                )}
                 {/* Scores */}
                 <div className="flex items-center justify-center gap-4 mb-3">
                     <div className="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
