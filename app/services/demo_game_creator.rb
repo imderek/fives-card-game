@@ -34,7 +34,8 @@ class DemoGameCreator
       current_turn: @player1.id,
       player1_hand: [],
       player2_hand: [],
-      board_cards: []
+      board_cards: [],
+      is_private: true
     }
   end
 
