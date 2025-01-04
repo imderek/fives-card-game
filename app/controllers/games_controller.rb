@@ -9,13 +9,17 @@ class GamesController < ApplicationController
                  .order(created_at: :desc)
                  .includes(:player1, :player2)
                  .limit(7)
-    @high_scores = Game.select('player1_id, is_private, MAX(player1_total_score) as high_score')
-                      .where('player1_total_score > 0')
-                      .where(is_private: false)
-                      .includes(:player1)
-                      .group('player1_id')
-                      .order('high_score DESC')
-                      .limit(5)
+    @high_scores = if ActiveRecord::Base.connection.adapter_name.downcase == 'postgresql'
+      Game.select('player1_id, BOOL_OR(is_private) as is_private, MAX(player1_total_score) as high_score')
+    else
+      Game.select('player1_id, MAX(is_private) as is_private, MAX(player1_total_score) as high_score')
+    end
+          .where('player1_total_score > 0')
+          .where(is_private: false)
+          .includes(:player1)
+          .group('player1_id')
+          .order('high_score DESC')
+          .limit(5)
   end
 
   def show

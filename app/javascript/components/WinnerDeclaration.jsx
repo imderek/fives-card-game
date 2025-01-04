@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const WinnerDeclaration = ({ 
     game, 
@@ -6,6 +6,18 @@ const WinnerDeclaration = ({
     formatPlayerName, 
     createNewGame 
 }) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(true);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (!isVisible) return null;
+
     return (
         <div className="w-full flex flex-col animate-enter-scale">
             <div className="my-1 mb-2 mx-6 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
