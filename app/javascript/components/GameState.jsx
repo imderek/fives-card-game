@@ -254,6 +254,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 opponentName={opponentName}
                 playerName={playerName}
                 winner={game.winner_id}
+                isPlayer1={isPlayer1}
             />
 
             {/* Opponent's hand */}
