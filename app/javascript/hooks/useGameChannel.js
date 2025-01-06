@@ -17,14 +17,13 @@ export const useGameChannel = (gameId, userId) => {
     });
 
     const channel = consumer.subscriptions.create(
-      { 
+      {
         channel: "GameChannel",
         game_id: gameId
       },
       {
         connected() {
           console.log(`Connected to game ${gameId} channel`);
-          // Request latest game state when reconnecting
           fetch(`/games/${gameId}`, {
             headers: {
               'Accept': 'application/json'
@@ -44,8 +43,27 @@ export const useGameChannel = (gameId, userId) => {
         },
 
         received(data) {
-          if (data.game) {
+          if (!data.recipient_id) {
+            // Bot game update - use entire state
+            console.log(`Received full game update (bot game)`);
             setGameState(data.game);
+          } else if (data.recipient_id === userId) {
+            // PvP update for this player - merge with existing state
+            console.log(`Received player-specific update for user ${userId}`);
+            setGameState(prevState => ({
+              ...prevState,
+              ...data.game
+            }));
+          } else {
+            // PvP update for other player - only update shared state
+            console.log(`Received shared state update for game`);
+            setGameState(prevState => ({
+              ...prevState,
+              ...data.game,
+              // Preserve our own hand
+              player1_hand: prevState?.player1_hand,
+              player2_hand: prevState?.player2_hand,
+            }));
           }
         }
       }

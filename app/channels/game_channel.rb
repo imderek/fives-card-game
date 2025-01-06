@@ -37,19 +37,23 @@ class GameChannel < ApplicationCable::Channel
         )
       })
     else
-      # For PvP games, broadcast different states to each player
+      # For PvP games, broadcast shared state to both players
+      shared_state = game.as_json(
+        methods: [
+          :board_cards,
+          :player1_discard_pile,
+          :player2_discard_pile,
+          :column_scores
+        ]
+      )
+
+      # Then broadcast player-specific hands
       [1, 2].each do |player_num|
         player_id = game.send("player#{player_num}_id")
         broadcast_to(game, {
           recipient_id: player_id,
-          game: game.as_json(
-            methods: [
-              :board_cards,
-              :player1_discard_pile,
-              :player2_discard_pile,
-              "player#{player_num}_hand",
-              :column_scores
-            ]
+          game: shared_state.merge(
+            "player#{player_num}_hand" => game.send("player#{player_num}_hand")
           )
         })
       end
