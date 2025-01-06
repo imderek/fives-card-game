@@ -87,6 +87,18 @@ class Game < ApplicationRecord
     current_column_cards < 5
   end
   
+  # Add helper methods for game types
+  def bot?
+    game_type == "bot"
+  end
+
+  def pvp?
+    game_type == "pvp"
+  end
+
+  # Add validation for players
+  validate :validate_players
+  
   private
   
   def setup_initial_game_state
@@ -110,5 +122,14 @@ class Game < ApplicationRecord
   
   def draw_initial_hand
     deck.pop(6)
+  end
+
+  def validate_players
+    if pvp?
+      errors.add(:player2_id, "must be present for PvP games") if player2_id.nil?
+      errors.add(:base, "Cannot play against yourself") if player1_id == player2_id
+    elsif bot?
+      errors.add(:player2, "must be a bot user") unless player2&.email&.include?("bot")
+    end
   end
 end 

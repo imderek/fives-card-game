@@ -42,47 +42,21 @@ class GamesController < ApplicationController
   def create
     @game = Game.new
     @game.player1 = current_user
-
-    # demo generator for admin (derek) only
-    if params[:type] == "demo"
-      medium_bot = User.where("email LIKE ?", "%medium%").first
-
-      DemoGameCreator.create_game(
-        player1: current_user,
-        player2: medium_bot,
-        scenario: :completed_powerful
-      )
-
-      DemoGameCreator.create_game(
-        player1: current_user,
-        player2: medium_bot,
-        scenario: :incompleted_powerful
-      )
-
-      redirect_to games_path, notice: "Demos created!"
-      return
-    end
+    @game.status = :waiting # Start in waiting state
     
-    # If no player2 is selected, use the selected bot difficulty
-    if params[:game][:player2_id].blank?
-      bot_difficulty = params[:game][:bot_difficulty] || 'easy'
-      bot_user = User.find_by(email: "#{bot_difficulty} bot")
-      @game.player2_id = bot_user.id
+    # Determine game type and set player2
+    if params[:game][:bot_difficulty].present?
+      # Bot game
+      setup_bot_game
     else
-      @game.player2_id = params[:game][:player2_id]
+      # PvP game
+      setup_pvp_game
     end
 
     if @game.save
-      Turbo::StreamsChannel.broadcast_append_to(
-        "games",
-        target: "games_list",
-        partial: "games/game_broadcast",
-        locals: { game: @game }
-      )
-      
       respond_to do |format|
-        format.html { redirect_to @game, notice: 'Game was successfully created.' }
-        format.json { render json: { id: @game.id } }
+        format.html { redirect_to @game }
+        format.json { render json: { id: @game.id }, status: :created }
       end
     else
       respond_to do |format|
@@ -222,7 +196,7 @@ class GamesController < ApplicationController
   end
 
   def game_params
-    params.require(:game).permit(:game_type, :player2_id)
+    params.require(:game).permit(:player2_id)
   end
 
   def valid_move?(card)
@@ -313,15 +287,24 @@ class GamesController < ApplicationController
   end
 
   def bot_turn?
-    Rails.logger.debug "Checking bot turn - current_turn: #{@game.current_turn}, player2: #{@game.player2.email}"
-    is_bot = @game.player2.email.include?("bot")
-    is_bot_turn = @game.current_turn == @game.player2_id
+    return false unless @game.bot? # Only check for bot turns in bot games
+    return false unless @game.current_turn == @game.player2_id
     
-    if is_bot && is_bot_turn
-      Rails.logger.debug "Bot's turn - making move"
-      return true
-    end
+    @game.player2.email.include?("bot")
+  end
+
+  def setup_bot_game
+    difficulty = params[:game][:bot_difficulty] || 'easy'
+    bot_user = User.find_by(email: "#{difficulty} bot")
     
-    false
+    @game.player2 = bot_user
+    @game.game_type = :bot
+    @game.status = :in_progress # Bot games start immediately
+  end
+
+  def setup_pvp_game
+    @game.player2_id = params[:game][:player2_id]
+    @game.game_type = :pvp
+    # PvP games stay in :waiting status until second player joins
   end
 end
