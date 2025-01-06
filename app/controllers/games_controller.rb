@@ -42,9 +42,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.new
     @game.player1 = current_user
-    @game.status = :waiting # Start in waiting state
     
-    # Determine game type and set player2
     if params[:game][:bot_difficulty].present?
       # Bot game
       setup_bot_game
@@ -299,12 +297,10 @@ class GamesController < ApplicationController
     
     @game.player2 = bot_user
     @game.game_type = :bot
-    @game.status = :in_progress # Bot games start immediately
   end
 
   def setup_pvp_game
     @game.player2_id = params[:game][:player2_id]
     @game.game_type = :pvp
-    # PvP games stay in :waiting status until second player joins
   end
 end

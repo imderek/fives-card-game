@@ -104,6 +104,7 @@ class Game < ApplicationRecord
   def setup_initial_game_state
     return if @skip_setup
     
+    # Initialize everything immediately for all games
     self.deck = generate_deck
     self.player1_hand = draw_initial_hand
     self.player2_hand = draw_initial_hand
@@ -112,6 +113,7 @@ class Game < ApplicationRecord
     self.player2_discard_pile = []
     self.current_turn = player1_id
     self.turn_phase = :play_card
+    self.status = :in_progress
   end
   
   def generate_deck
