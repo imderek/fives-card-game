@@ -9,12 +9,8 @@ export const useGameChannel = (gameId, userId) => {
   useEffect(() => {
     if (!gameId || !userId) return;
 
-    // Cleanup any existing subscriptions for this game
-    consumer.subscriptions.subscriptions.forEach(sub => {
-      if (sub.identifier.includes(gameId)) {
-        sub.unsubscribe();
-      }
-    });
+    // Extract the ID if we were passed a user object
+    const currentUserId = typeof userId === 'object' ? userId.id : userId;
 
     const channel = consumer.subscriptions.create(
       {
@@ -31,6 +27,7 @@ export const useGameChannel = (gameId, userId) => {
           })
           .then(response => response.json())
           .then(data => {
+            console.log('Initial game state:', data.game);
             if (data.game) {
               setGameState(data.game);
             }
@@ -43,28 +40,59 @@ export const useGameChannel = (gameId, userId) => {
         },
 
         received(data) {
-          if (!data.recipient_id) {
-            // Bot game update - use entire state
-            console.log(`Received full game update (bot game)`);
-            setGameState(data.game);
-          } else if (data.recipient_id === userId) {
-            // PvP update for this player - merge with existing state
-            console.log(`Received player-specific update for user ${userId}`);
-            setGameState(prevState => ({
+          console.log('Received update:', {
+            recipient_id: data.recipient_id,
+            currentUserId,
+            isMyUpdate: data.recipient_id === currentUserId,
+            player1_hand_length: data.game.player1_hand?.length,
+            player2_hand_length: data.game.player2_hand?.length,
+            current_turn: data.game.current_turn
+          });
+          
+          setGameState(prevState => {
+            if (!prevState) return data.game;
+
+            // Create new state with shared updates
+            const newState = {
               ...prevState,
-              ...data.game
-            }));
-          } else {
-            // PvP update for other player - only update shared state
-            console.log(`Received shared state update for game`);
-            setGameState(prevState => ({
-              ...prevState,
-              ...data.game,
-              // Preserve our own hand
-              player1_hand: prevState?.player1_hand,
-              player2_hand: prevState?.player2_hand,
-            }));
-          }
+              board_cards: data.game.board_cards,
+              current_turn: data.game.current_turn,
+              column_scores: data.game.column_scores,
+              player1_discard_pile: data.game.player1_discard_pile,
+              player2_discard_pile: data.game.player2_discard_pile,
+            };
+
+            // Only update our hand if this update is for us
+            if (data.recipient_id === currentUserId) {
+              console.log('Updating hand for user', currentUserId);
+              if (currentUserId === prevState.player1_id && Array.isArray(data.game.player1_hand)) {
+                console.log('Updating player 1 hand:', {
+                  oldLength: newState.player1_hand?.length,
+                  newLength: data.game.player1_hand.length
+                });
+                newState.player1_hand = [...data.game.player1_hand];
+              } else if (currentUserId === prevState.player2_id && Array.isArray(data.game.player2_hand)) {
+                console.log('Updating player 2 hand:', {
+                  oldLength: newState.player2_hand?.length,
+                  newLength: data.game.player2_hand.length
+                });
+                newState.player2_hand = [...data.game.player2_hand];
+              }
+            }
+
+            console.log('State update:', {
+              prevState: {
+                player1_hand: prevState.player1_hand?.length,
+                player2_hand: prevState.player2_hand?.length,
+              },
+              newState: {
+                player1_hand: newState.player1_hand?.length,
+                player2_hand: newState.player2_hand?.length,
+              }
+            });
+
+            return newState;
+          });
         }
       }
     );

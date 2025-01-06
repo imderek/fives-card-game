@@ -43,17 +43,23 @@ class GameChannel < ApplicationCable::Channel
           :board_cards,
           :player1_discard_pile,
           :player2_discard_pile,
-          :column_scores
+          :column_scores,
+          :current_turn  # Make sure turn info is included
         ]
       )
 
       # Then broadcast player-specific hands
       [1, 2].each do |player_num|
         player_id = game.send("player#{player_num}_id")
+        player_hand = game.send("player#{player_num}_hand")
+        
         broadcast_to(game, {
           recipient_id: player_id,
           game: shared_state.merge(
-            "player#{player_num}_hand" => game.send("player#{player_num}_hand")
+            # Only include this player's hand
+            "player#{player_num}_hand" => player_hand,
+            # Clear the other player's hand
+            "player#{3-player_num}_hand" => player_hand.length  # Just send the count
           )
         })
       end
