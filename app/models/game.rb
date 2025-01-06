@@ -99,7 +99,6 @@ class Game < ApplicationRecord
   # Add validation for players
   validate :validate_players
   
-  private
   
   def setup_initial_game_state
     return if @skip_setup
@@ -116,6 +115,8 @@ class Game < ApplicationRecord
     self.status = :in_progress
   end
   
+  private
+
   def generate_deck
     suits = ['♠', '♣', '♥', '♦']
     values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
