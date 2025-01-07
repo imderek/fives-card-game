@@ -233,7 +233,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 onPlayCard={handlePlayCard}
                 onDiscard={handleDiscard}
                 canDiscard={canDiscard}
-                handScore={game.column_scores["player1_hand"]}
+                handScore={game.column_scores[isPlayer1 ? "player1_hand" : "player2_hand"]}
             />
 
             {/* Winner Declaration */}
@@ -243,6 +243,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                     currentUser={currentUser}
                     formatPlayerName={formatPlayerName}
                     createNewGame={createNewGame}
+                    isPlayer1={isPlayer1}
                 />
             )}
 
@@ -269,7 +270,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 onDiscard={() => {}}
                 canDiscard={false}
                 facedown={!game.winner_id}
-                handScore={game.column_scores["player2_hand"]}
+                handScore={game.column_scores[isPlayer1 ? "player2_hand" : "player1_hand"]}
             />
 
             <div className="w-full px-6">

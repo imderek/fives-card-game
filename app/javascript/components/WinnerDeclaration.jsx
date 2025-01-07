@@ -4,7 +4,8 @@ const WinnerDeclaration = ({
     game, 
     currentUser, 
     formatPlayerName, 
-    createNewGame 
+    createNewGame,
+    isPlayer1 
 }) => {
     const [isVisible, setIsVisible] = useState(false);
 
@@ -18,61 +19,49 @@ const WinnerDeclaration = ({
 
     if (!isVisible) return null;
 
+    // Determine which scores and names go on which side
+    const leftScore = isPlayer1 ? game.player1_total_score : game.player2_total_score;
+    const rightScore = isPlayer1 ? game.player2_total_score : game.player1_total_score;
+    const leftName = isPlayer1 ? formatPlayerName(game.player1?.email) : formatPlayerName(game.player2?.email);
+    const rightName = isPlayer1 ? formatPlayerName(game.player2?.email) : formatPlayerName(game.player1?.email);
+    const isLeftWinner = isPlayer1 ? (game.winner_id === game.player1_id) : (game.winner_id === game.player2_id);
+
     return (
         <div className="w-full flex flex-col animate-enter-scale">
             <div className="my-1 mb-2 mx-6 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
                 {/* Heading */}
-                {game.winner_id === currentUser.id ? (
-                    <>
-                        <h1 className="mt-1 mb-0.5 text-xl font-bold text-slate-900 text-center">You Won!</h1>
-                        <p className="mb-5 text-sm text-slate-500 text-center">
-                            {[
-                                "Go ahead, you can celebrate.",
-                                "I'm not gonna lie, that was impressive.",
-                                "And you made it look sooo easy.",
-                                "And they never saw it comin'."
-                            ][Math.floor(Math.random() * 4)]}
-                        </p>
-                    </>
-                ) : (
-                    <>
-                        <h1 className="mt-1 mb-0.5 text-xl font-bold text-slate-900 text-center">You Lost</h1>
-                        <p className="mb-5 text-sm text-slate-500 text-center">
-                            {[
-                                "But at least you have your looks.",
-                                "Oof! That was hard to watch.",
-                                "Maybe next time! (but probably not)",
-                                "The game and my respect."
-                            ][Math.floor(Math.random() * 4)]}
-                        </p>
-                    </>
-                )}
+                <h1 className="mt-1 mb-4 text-xl font-bold text-slate-900 text-center">
+                    {game.winner_id === currentUser.id ? "You Won!" : "You Lost"}
+                </h1>
+
                 {/* Scores */}
                 <div className="flex items-center justify-center gap-4 mb-3">
-                    <div className="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
-                        {game.player1_total_score >= game.player2_total_score && (
+                    {/* Left Score */}
+                    <div className={`relative flex flex-1 flex-col items-center justify-center ${isLeftWinner ? 'border-amber-500 shadow-2xl' : 'border-slate-300'} border rounded-lg py-3 px-6 h-24`}>
+                        {isLeftWinner && (
                             <div className="absolute -top-4 bg-white z-1 p-1 px-2">
                                 <i className="fa fa-trophy text-amber-500 text-xl animate-bounce relative top-1"></i>
                             </div>
                         )}
-                        <div className={`text-2xl font-bold ${game.player1_total_score >= game.player2_total_score ? 'text-slate-900' : 'text-slate-400'}`}>
-                            {game.player1_total_score?.toLocaleString()}
+                        <div className={`text-2xl ${isLeftWinner ? 'font-bold text-slate-900' : 'text-slate-900'}`}>
+                            {leftScore?.toLocaleString()}
                         </div>
-                        <div className={`text-sm font-medium ${game.player1_total_score >= game.player2_total_score ? 'text-slate-900' : 'text-slate-400'}`}>
-                            {formatPlayerName(game.player1?.email)}
+                        <div className={`text-sm font-medium ${isLeftWinner ? 'text-slate-900' : 'text-slate-900'}`}>
+                            {leftName}
                         </div>
                     </div>
-                    <div className="relative flex flex-1 flex-col items-center justify-center border border-slate-500/50 rounded-lg py-3 px-6 h-24">
-                        {game.player2_total_score > game.player1_total_score && (
+                    {/* Right Score */}
+                    <div className={`relative flex flex-1 flex-col items-center justify-center ${!isLeftWinner ? 'border-amber-500 shadow-2xl' : 'border-slate-300'} border rounded-lg py-3 px-6 h-24`}>
+                        {!isLeftWinner && (
                             <div className="absolute -top-4 bg-white z-1 p-1 px-2">
                                 <i className="fa fa-trophy text-amber-500 text-xl"></i>
                             </div>
                         )}
-                        <div className={`text-2xl font-bold ${game.player2_total_score > game.player1_total_score ? 'text-slate-900' : 'text-slate-400'}`}>
-                            {game.player2_total_score?.toLocaleString()}
+                        <div className={`text-2xl ${!isLeftWinner ? 'font-bold text-slate-900' : 'text-slate-900'}`}>
+                            {rightScore?.toLocaleString()}
                         </div>
-                        <div className={`text-sm font-medium ${game.player2_total_score > game.player1_total_score ? 'text-slate-900' : 'text-slate-400'}`}>
-                            {formatPlayerName(game.player2?.email)}
+                        <div className={`text-sm font-medium ${!isLeftWinner ? 'text-slate-900' : 'text-slate-900'}`}>
+                            {rightName}
                         </div>
                     </div>
                 </div>
@@ -80,7 +69,7 @@ const WinnerDeclaration = ({
                 {/* Back to Lobby Button */}
                 <div className="mt-4 flex flex-col items-center justify-center">
                     <button 
-                        onClick={() => createNewGame(game.player2?.email)}
+                        onClick={() => createNewGame(isPlayer1 ? game.player2?.email : game.player1?.email)}
                         className="py-4 mb-2 font-medium w-full block text-center bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm"
                     >
                         Rematch
