@@ -59,16 +59,16 @@ class GamesController < ApplicationController
         "games",
         target: "games_list",
         partial: "games/game",
-        locals: { game: @game, current_user: current_user }
+        locals: { game: @game, current_user: User.find(@game.player1_id) }
       )
 
-      # Broadcast to each player's specific stream
+      # Broadcast to each player's specific stream with their respective current_user
       [@game.player1_id, @game.player2_id].each do |player_id|
         Turbo::StreamsChannel.broadcast_prepend_to(
           "user_#{player_id}_games",
           target: "games_list",
           partial: "games/game",
-          locals: { game: @game, current_user: current_user }
+          locals: { game: @game, current_user: User.find(player_id) }
         )
       end
 
