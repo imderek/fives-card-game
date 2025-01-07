@@ -37,6 +37,10 @@ class GamesController < ApplicationController
 
   def new
     @game = Game.new
+
+    @available_players = User.where.not(id: current_user.id)
+                             .where.not("email LIKE ?", "%bot%")
+                             .order('email ASC')
   end
 
   def create
