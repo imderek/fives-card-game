@@ -59,7 +59,7 @@ class GamesController < ApplicationController
         "games",
         target: "games_list",
         partial: "games/game",
-        locals: { game: @game, current_user: User.find(@game.player1_id) }
+        locals: { game: @game, current_user: User.find(@game.player1_id), new_game: true }
       )
 
       # Broadcast to each player's specific stream with their respective current_user
@@ -68,7 +68,7 @@ class GamesController < ApplicationController
           "user_#{player_id}_games",
           target: "games_list",
           partial: "games/game",
-          locals: { game: @game, current_user: User.find(player_id) }
+          locals: { game: @game, current_user: User.find(player_id), new_game: true }
         )
       end
 
