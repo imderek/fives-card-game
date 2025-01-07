@@ -48,14 +48,20 @@ class GamesController < ApplicationController
     @game.player1 = current_user
     
     if params[:game][:bot_difficulty].present?
-      # Bot game
       setup_bot_game
     else
-      # PvP game
       setup_pvp_game
     end
 
     if @game.save
+      # Broadcast the new game to the games list
+      Turbo::StreamsChannel.broadcast_prepend_to(
+        "games",
+        target: "games_list",
+        partial: "games/game",
+        locals: { game: @game, current_user: current_user }
+      )
+
       respond_to do |format|
         format.html { redirect_to @game }
         format.json { render json: { id: @game.id }, status: :created }
