@@ -47,7 +47,8 @@ const GameState = ({ game: initialGame, currentUser }) => {
     const game = {
         ...(optimisticState || liveGameState || initialGame),
         player1: initialGame?.player1,
-        player2: initialGame?.player2
+        player2: initialGame?.player2,
+        winner_id: (liveGameState?.winner_id || initialGame?.winner_id)
     };
     
     const isPlayer1 = currentUser?.id === game?.player1_id;
@@ -222,7 +223,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
 
     return (
         <div id="react-game-state" className="w-full py-3 flex flex-col items-center gap-4">
-            {/* Player's hand and discard action */}
             <PlayerHand 
                 cards={playerHand.map(card => ({
                     ...card,
@@ -237,7 +237,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
             />
 
             {/* Winner Declaration */}
-            {game.winner_id && (
+            {(game.winner_id || liveGameState?.winner_id) && (
                 <WinnerDeclaration
                     game={game}
                     currentUser={currentUser}
@@ -246,7 +246,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 />
             )}
 
-            {/* GameBoard with formatted names */}
+            {/* GameBoard */}
             <GameBoard
                 cards={game.board_cards || []}
                 selectedCard={selectedCard}
@@ -271,6 +271,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 facedown={!game.winner_id}
                 handScore={game.column_scores["player2_hand"]}
             />
+
             <div className="w-full px-6">
                 <a href="/" className="block text-center border border-slate-500/50 rounded-lg mb-10 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70">
                     Back to Lobby

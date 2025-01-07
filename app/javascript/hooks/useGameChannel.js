@@ -44,9 +44,8 @@ export const useGameChannel = (gameId, userId) => {
             recipient_id: data.recipient_id,
             currentUserId,
             isMyUpdate: data.recipient_id === currentUserId,
-            player1_hand_length: data.game.player1_hand?.length,
-            player2_hand_length: data.game.player2_hand?.length,
-            current_turn: data.game.current_turn
+            status: data.game.status,
+            winner_id: data.game.winner_id
           });
           
           setGameState(prevState => {
@@ -60,6 +59,10 @@ export const useGameChannel = (gameId, userId) => {
               column_scores: data.game.column_scores,
               player1_discard_pile: data.game.player1_discard_pile,
               player2_discard_pile: data.game.player2_discard_pile,
+              status: data.game.status,
+              winner_id: data.game.winner_id,
+              player1_total_score: data.game.player1_total_score,
+              player2_total_score: data.game.player2_total_score
             };
 
             // Only update our hand if this update is for us

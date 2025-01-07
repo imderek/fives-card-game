@@ -32,7 +32,8 @@ class GameChannel < ApplicationCable::Channel
             :player1_discard_pile,
             :player2_discard_pile,
             :deck,
-            :column_scores
+            :column_scores,
+            :winner_id
           ]
         )
       })
