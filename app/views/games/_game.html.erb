@@ -1,5 +1,9 @@
 <%= link_to game_path(game), id: dom_id(game), class: "block bg-slate-700 text-white py-4 px-4 rounded-lg shadow-lg" do %>
-  <% opponent = game.player2.email.titleize %>
+  <% opponent = if current_user == game.player1
+                  game.player2.email.titleize
+                else
+                  game.player1.email.titleize
+                end %>
   <div class="flex justify-between items-center text-sm">
     <div>
       <div class="flex flex-row items-center mb-1">

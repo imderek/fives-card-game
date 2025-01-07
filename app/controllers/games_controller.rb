@@ -54,13 +54,23 @@ class GamesController < ApplicationController
     end
 
     if @game.save
-      # Broadcast the new game to the games list
+      # Broadcast to both the general stream and player-specific streams
       Turbo::StreamsChannel.broadcast_prepend_to(
         "games",
         target: "games_list",
         partial: "games/game",
         locals: { game: @game, current_user: current_user }
       )
+
+      # Broadcast to each player's specific stream
+      [@game.player1_id, @game.player2_id].each do |player_id|
+        Turbo::StreamsChannel.broadcast_prepend_to(
+          "user_#{player_id}_games",
+          target: "games_list",
+          partial: "games/game",
+          locals: { game: @game, current_user: current_user }
+        )
+      end
 
       respond_to do |format|
         format.html { redirect_to @game }
@@ -188,10 +198,13 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     
     if @game.destroy
-      Turbo::StreamsChannel.broadcast_remove_to(
-        "games",
-        target: dom_id(@game)
-      )
+      # Broadcast removal to both players
+      [@game.player1_id, @game.player2_id].each do |player_id|
+        Turbo::StreamsChannel.broadcast_remove_to(
+          "games_for_user_#{player_id}",
+          target: dom_id(@game)
+        )
+      end
       
       redirect_to games_path
     end

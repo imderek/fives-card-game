@@ -1,4 +1,5 @@
 <%= turbo_stream_from "games" %>
+<%= turbo_stream_from "user_#{current_user.id}_games" %>
 
 <div class="max-w-7xl mx-auto px-4 py-6 pb-20">
   <!-- Header -->
