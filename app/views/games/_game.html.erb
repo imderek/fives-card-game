@@ -10,7 +10,14 @@
         <span class="inline-block mr-2 px-2 py-1 font-semibold <%= game.bot? ? 'bg-slate-500/50 text-slate-300' : 'hidden bg-slate-100 text-slate-600' %> rounded">
             <%= game.game_type.upcase %>
         </span>
-        <span class="inline-block font-medium">VS <%= opponent %></span>
+        <% if game.game_type == "pvp" %>
+          <div class="flex flex-row gap-2 items-center">
+            <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][opponent.hash % 7] %> text-white flex items-center justify-center"><%= opponent.first %></div>
+            <span class="inline-block font-medium">VS <%= opponent %></span>
+          </div>
+        <% else %>
+          <span class="inline-block font-medium">VS <%= opponent %></span>
+        <% end %>
       </div>
       <div class="text-gray-500 dark:text-slate-400 text-xs"><%= time_ago_in_words(game.created_at).capitalize %> ago</div>
     </div>
