@@ -6,6 +6,7 @@ import PlayerInfo from './PlayerInfo';
 import { useGameChannel } from '../hooks/useGameChannel';
 import WinnerDeclaration from './WinnerDeclaration';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
+import Scoreboard from './Scoreboard';
 
 const calculateTotalScore = (columns) => {
     return columns.reduce((total, column) => {
@@ -250,35 +251,18 @@ const GameState = ({ game: initialGame, currentUser }) => {
 
     return (
         <div id="react-game-state" className="w-full py-3 flex flex-col items-center gap-3">
-            {/* Add Scoreboard here */}
+            {/* Scoreboard */}
             {!game.winner_id && (
-                <div className="mb-1 px-6 w-full">
-                    <div className="px-7 pt-1 pb-2 bg-slate-700/80 text-white rounded-lg relative z-40 w-full max-w-md">
-                        <div className="relative flex items-center justify-center gap-4 rounded-lg">
-                            <div className={`absolute ${game.current_turn === currentUser.id ? 'left-2' : 'right-2'} top-1/2 -translate-y-1/2 flex flex-1 flex-col items-center justify-center`}>
-                                <div className="absolute w-3 h-3">
-                                    <div className="w-full h-full rounded-full bg-amber-500 animate-ping"></div>
-                                </div>
-                                <div className="absolute w-2 h-2">
-                                    <div className="w-full h-full rounded-full bg-amber-500 animate-pulse"></div>
-                                </div>
-                            </div>
-                            <div className="relative flex flex-1 flex-col items-center justify-center">
-                                <div className="text-xl font-bold">
-                                    {playerScore.toLocaleString()}
-                                </div>
-                                <div className="text-xs font-medium text-slate-200">{playerName}</div>
-                            </div>
-                            <div className="w-px h-10 bg-slate-500/50"></div>
-                            <div className="relative flex flex-1 flex-col items-center justify-center">
-                                <div className="text-xl font-bold text-slate-400">{opponentScore.toLocaleString()}</div>
-                                <div className="text-xs font-medium text-slate-400">{opponentName}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Scoreboard
+                    playerScore={playerScore}
+                    opponentScore={opponentScore}
+                    playerName={playerName}
+                    opponentName={opponentName}
+                    isCurrentPlayerTurn={game.current_turn === currentUser.id}
+                />
             )}
 
+            {/* Current player's hand */}
             <PlayerHand 
                 cards={playerHand.map(card => ({
                     ...card,
