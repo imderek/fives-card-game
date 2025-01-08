@@ -3,13 +3,25 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["menu", "buttonText", "buttonAvatar"]
 
+  initialize() {
+    this.boundHandleClick = (event) => this.handleDocumentClick(event)
+  }
+
   connect() {
-    console.log("Dropdown controller connected!")
-    document.addEventListener('click', this.handleClickOutside.bind(this))
+    document.addEventListener('click', this.boundHandleClick, true)
+  }
+
+  disconnect() {
+    document.removeEventListener('click', this.boundHandleClick, true)
+  }
+
+  handleDocumentClick(event) {
+    if (!this.element.contains(event.target) && !this.menuTarget.classList.contains('hidden')) {
+      this.close()
+    }
   }
 
   toggle(event) {
-    console.log("Toggle called!")
     event.stopPropagation()
     this.menuTarget.classList.toggle('hidden')
   }
@@ -26,15 +38,5 @@ export default class extends Controller {
       this.buttonAvatarTarget.classList.remove('hidden')
     }
     this.menuTarget.classList.add('hidden')
-  }
-
-  handleClickOutside = (event) => {
-    if (!this.element.contains(event.target)) {
-      this.close()
-    }
-  }
-
-  disconnect() {
-    document.removeEventListener('click', this.handleClickOutside.bind(this))
   }
 } 
