@@ -33,7 +33,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
 
   return (
     <div className="flex flex-col items-center gap-2 relative">
-      <div className={`${canDiscard ? 'mb-3' : 'mb-4'} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
+      <div className={`mb-3 relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
         {cards.map((card, index) => {
           // Only calculate angles and offsets if not stacked
           const style = facedown ? {
@@ -71,21 +71,22 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
       </div>
 
       {/* Discard button */}
-      {canDiscard && !facedown && (
-        <div className="discard-area w-full px-5">
+      {!facedown && (
+        <div className="discard-area w-full px-5 relative -top-1">
           <div className="flex flex-row items-center justify-center gap-2">
-            <div className="block text-xs font-normal text-slate-400">You can opt to</div>
             <button
               onClick={onDiscard}
-              className={`w-28 px-2 py-2 mb-0.5 text-xs font-medium border rounded-lg transition-colors ${
-                cards.some(card => card.isSelected)
+              className={`inline-flex gap-2 items-center justify-center relative px-3 py-2 mb-0.5 text-xs font-medium border rounded-lg transition-colors ${
+                (cards.some(card => card.isSelected) && canDiscard)
                   ? 'bg-red-500 hover:bg-red-400 !border-red-500 text-white'
                   : 'border-slate-600 text-slate-400'
               }`}
             >
-              Discard & Draw
+              <div className="">Discard & Draw</div>
+              <div className={`p-1 px-2 flex items-center justify-center rounded-md ${canDiscard ? 'bg-amber-500 text-white' : 'bg-slate-600/60 text-slate-500'}`}>
+                {canDiscard ? '1' : '0'}
+              </div>
             </button>
-            <div className="block text-xs font-normal text-slate-400 mr-[0.3rem]">but only once</div>
           </div>
         </div>
       )}

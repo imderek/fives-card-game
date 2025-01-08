@@ -19,17 +19,6 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
   const playerCards = columnArray.slice(0, 4);
   const opponentCards = columnArray.slice(4, 8);
 
-  // Calculate total scores
-  const calculateTotalScore = (columns) => {
-    return columns.reduce((total, column) => {
-      const { score } = evaluatePokerHand(column);
-      return total + score;
-    }, 0);
-  };
-
-  const playerScore = calculateTotalScore(playerCards);
-  const opponentScore = calculateTotalScore(opponentCards);
-
   // Determine which columns belong to which player based on the player's perspective
   const isPlayer2 = window.location.pathname.includes(playerName.toLowerCase());
   
@@ -46,34 +35,15 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
           <BoardColumn
             key={index}
             cards={column}
-            index={isPlayer1 ? index : index + 4}  // Player 1: 0-3, Player 2: 4-7
+            index={isPlayer1 ? index : index + 4}
             selectedCard={selectedCard}
             onPlayCardToColumn={onPlayCardToColumn}
-            isPlayerColumn={true}  // Top columns are always player's columns
+            isPlayerColumn={true}
           />
         ))}
       </div>
 
-      {/* Scoreboard */}
-      {winner ? (
-        <div className="mt-1 mb-5 h-px bg-slate-600/60"></div>
-      ) : (
-        <div className="mb-4 mx-6 px-7 pt-2 pb-3 bg-white rounded-lg relative z-40">
-            <div className="flex items-center justify-center gap-4 rounded-lg">
-            <div className="relative flex flex-1 flex-col items-center justify-center">
-                <div className="text-xl font-bold text-slate-900">
-                {playerScore.toLocaleString()}
-                </div>
-                <div className="text-xs font-medium text-slate-900">{playerName}</div>
-            </div>
-            <div className="w-px h-10 bg-slate-300"></div>
-            <div className="relative flex flex-1 flex-col items-center justify-center">
-                <div className="text-xl font-bold text-slate-500">{opponentScore.toLocaleString()}</div>
-                <div className="text-xs font-medium text-slate-500">{opponentName}</div>
-            </div>
-            </div>
-        </div>
-      )}
+      <div className="mt-0 mb-4 h-px bg-slate-600/60"></div>
 
       {/* Bottom board area */}
       <div className="mb-2 px-6 opponent-board grid grid-cols-4 gap-3">
@@ -81,10 +51,10 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
           <BoardColumn
             key={index}
             cards={column}
-            index={isPlayer1 ? index + 4 : index}  // Player 1: 4-7, Player 2: 0-3
+            index={isPlayer1 ? index + 4 : index}
             selectedCard={selectedCard}
             onPlayCardToColumn={onPlayCardToColumn}
-            isPlayerColumn={false}  // Bottom columns are always opponent's columns
+            isPlayerColumn={false}
           />
         ))}
       </div>
