@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  # allow_browser versions: :modern
+  before_action :update_last_active_at, if: :user_signed_in?
 
   protected
 
@@ -10,5 +9,11 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(scope)
     new_user_session_path
+  end
+
+  private
+
+  def update_last_active_at
+    current_user.touch(:last_active_at)
   end
 end

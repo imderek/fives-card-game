@@ -41,6 +41,7 @@ class GamesController < ApplicationController
     @available_players = User.where.not(id: current_user.id)
                              .where.not("email LIKE ?", "%bot%")
                              .order('email ASC')
+                             .where('last_active_at > ?', 5.minutes.ago)
   end
 
   def create
@@ -54,14 +55,6 @@ class GamesController < ApplicationController
     end
 
     if @game.save
-      # Broadcast to both the general stream and player-specific streams
-      Turbo::StreamsChannel.broadcast_prepend_to(
-        "games",
-        target: "games_list",
-        partial: "games/game",
-        locals: { game: @game, current_user: User.find(@game.player1_id), new_game: true }
-      )
-
       # Broadcast to each player's specific stream with their respective current_user
       [@game.player1_id, @game.player2_id].each do |player_id|
         Turbo::StreamsChannel.broadcast_prepend_to(
