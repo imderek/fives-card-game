@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0, winner }) => {
+const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0, winner, discardPile = [] }) => {
   const handlePlayCard = (card, cardElement) => {
     if (!cardElement) return;
     
@@ -72,19 +72,31 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
 
       {/* Discard button */}
       {!facedown && !winner && (
-        <div className="discard-area w-full px-5 relative -top-1">
+        <div className="mt-2 discard-area w-full px-5 relative -top-1">
           <div className="flex flex-row items-center justify-center gap-2">
             <button
               onClick={onDiscard}
               className={`inline-flex gap-2 items-center justify-center relative px-3 py-2 mb-0.5 text-xs font-medium border rounded-lg transition-colors ${
                 (cards.some(card => card.isSelected) && canDiscard)
                   ? 'bg-red-500 hover:bg-red-400 !border-red-500 text-white'
-                  : 'border-slate-600 text-slate-400'
+                  : discardPile.length > 0
+                    ? 'border-slate-700 text-slate-500' // no more discards left
+                    : 'border-slate-600 text-slate-400' // no card selected
               }`}
             >
               <div className="">Discard & Draw</div>
-              <div className={`p-1 px-2 flex items-center justify-center rounded-md ${canDiscard ? 'bg-amber-500 text-white' : 'bg-slate-600/60 text-slate-500'}`}>
-                {canDiscard ? '1' : '0'}
+              <div className={`
+                p-1 px-2 
+                flex items-center justify-center 
+                rounded-md
+                ${cards.some(card => card.isSelected) && canDiscard
+                  ? 'text-red-500 bg-white'
+                  : canDiscard
+                    ? 'bg-slate-500 text-white'
+                    : 'bg-slate-600/60 text-slate-500'
+                }`}
+              >
+                {discardPile.length === 0 ? '1' : '0'}
               </div>
             </button>
           </div>
@@ -102,4 +114,4 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
   );
 };
 
-export default PlayerHand; 
+export default PlayerHand;

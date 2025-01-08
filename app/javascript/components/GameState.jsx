@@ -291,6 +291,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 canDiscard={canDiscard}
                 handScore={game.column_scores[isPlayer1 ? "player1_hand" : "player2_hand"]}
                 winner={game.winner_id}
+                discardPile={isPlayer1 ? game.player1_discard_pile : game.player2_discard_pile}
             />
 
             {/* Winner Declaration */}
