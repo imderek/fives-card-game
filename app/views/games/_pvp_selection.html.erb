@@ -7,7 +7,10 @@
           data-action="dropdown#toggle"
           data-dropdown-target="button"
           class="w-full text-white bg-slate-700 hover:bg-slate-600 focus:ring-4 focus:outline-none focus:ring-amber-500 font-medium rounded-lg text-base px-5 py-2.5 text-center inline-flex items-center justify-between border border-slate-500/60">
-          <span data-dropdown-target="buttonText">Select an opponent</span>
+          <div class="flex items-center gap-2">
+            <div data-dropdown-target="buttonAvatar" class="hidden w-6 h-6 rounded-full bg-gradient-to-b shadow-lg text-white flex items-center justify-center"></div>
+            <span data-dropdown-target="buttonText">Select an opponent</span>
+          </div>
           <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
           </svg>
@@ -24,11 +27,13 @@
                         class: "hidden peer",
                         data: { 
                           action: "click->dropdown#close",
-                          dropdown_text_value: player.email.titleize
+                          dropdown_text_value: player.email.titleize,
+                          dropdown_avatar_class: ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][player.id % 7],
+                          dropdown_avatar_text: player.email.first.upcase
                         } 
                     %>
-                    <%= f.label :player2_id, value: player.id, class: "flex items-center px-5 py-2 hover:bg-slate-600 dark:hover:text-white cursor-pointer" do %>
-                      <img class="w-6 h-6 me-2 rounded-full" src="https://ui-avatars.com/api/?name=<%= player.email %>&background=random" alt="<%= player.email %> avatar">
+                    <%= f.label :player2_id, value: player.id, class: "flex gap-2 items-center px-5 py-2 hover:bg-slate-600 dark:hover:text-white cursor-pointer" do %>
+                      <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][player.id % 7] %> text-white flex items-center justify-center"><%= player.email.first.upcase %></div>
                       <%= player.email.titleize %>
                     <% end %>
                   </li>
