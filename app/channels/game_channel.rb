@@ -21,49 +21,32 @@ class GameChannel < ApplicationCable::Channel
   def self.broadcast_update(game)
     Rails.logger.info "Broadcasting update for game #{game.id}"
 
-    if game.bot?
-      # For bot games, broadcast full game state
+    # For both bot and PvP games, broadcast shared state to both players
+    shared_state = game.as_json(
+      methods: [
+        :board_cards,
+        :player1_discard_pile,
+        :player2_discard_pile,
+        :column_scores,
+        :current_turn,
+        :winner_id  # Make sure winner is included
+      ]
+    )
+
+    # Then broadcast player-specific hands
+    [1, 2].each do |player_num|
+      player_id = game.send("player#{player_num}_id")
+      player_hand = game.send("player#{player_num}_hand")
+      
       broadcast_to(game, {
-        game: game.as_json(
-          methods: [
-            :player1_hand, 
-            :player2_hand, 
-            :board_cards,
-            :player1_discard_pile,
-            :player2_discard_pile,
-            :deck,
-            :column_scores,
-            :winner_id
-          ]
+        recipient_id: player_id,
+        game: shared_state.merge(
+          # Only include this player's hand
+          "player#{player_num}_hand" => player_hand,
+          # For the other player's hand, just send the count
+          "player#{3-player_num}_hand" => player_hand&.length || 0
         )
       })
-    else
-      # For PvP games, broadcast shared state to both players
-      shared_state = game.as_json(
-        methods: [
-          :board_cards,
-          :player1_discard_pile,
-          :player2_discard_pile,
-          :column_scores,
-          :current_turn  # Make sure turn info is included
-        ]
-      )
-
-      # Then broadcast player-specific hands
-      [1, 2].each do |player_num|
-        player_id = game.send("player#{player_num}_id")
-        player_hand = game.send("player#{player_num}_hand")
-        
-        broadcast_to(game, {
-          recipient_id: player_id,
-          game: shared_state.merge(
-            # Only include this player's hand
-            "player#{player_num}_hand" => player_hand,
-            # Clear the other player's hand
-            "player#{3-player_num}_hand" => player_hand.length  # Just send the count
-          )
-        })
-      end
     end
 
     Rails.logger.info "Finished broadcasting update for game #{game.id}"

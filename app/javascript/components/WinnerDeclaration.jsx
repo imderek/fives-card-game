@@ -68,12 +68,14 @@ const WinnerDeclaration = ({
                 
                 {/* Back to Lobby Button */}
                 <div className="mt-4 flex flex-col items-center justify-center">
-                    <button 
-                        onClick={() => createNewGame(isPlayer1 ? game.player2?.email : game.player1?.email)}
-                        className="py-4 mb-2 font-medium w-full block text-center bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm"
-                    >
-                        Rematch
-                    </button>
+                    {game.game_type === 'bot' && (
+                        <button 
+                            onClick={() => createNewGame(isPlayer1 ? game.player2?.email : game.player1?.email)}
+                            className="py-4 mb-2 font-medium w-full block text-center bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm"
+                        >
+                            Rematch
+                        </button>
+                    )}
                     <a href="/" className="py-4 w-full block text-center bg-slate-500 hover:bg-slate-400 text-white rounded-lg text-sm">
                         Back to Lobby
                     </a>
