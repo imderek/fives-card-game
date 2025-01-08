@@ -1,20 +1,20 @@
 import React from 'react';
 import Card from './Card';
 
-const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0 }) => {
+const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0, winner }) => {
   const handlePlayCard = (card, cardElement) => {
     if (!cardElement) return;
     
     // Get the card's current position in the hand
     const cardRect = cardElement.getBoundingClientRect();
     
-    // Debug logs
-    console.log('Card Element Debug:', {
-      element: cardElement,
-      tagName: cardElement.tagName,
-      classList: cardElement.className,
-      rect: cardRect
-    });
+    // // Debug logs
+    // console.log('Card Element Debug:', {
+    //   element: cardElement,
+    //   tagName: cardElement.tagName,
+    //   classList: cardElement.className,
+    //   rect: cardRect
+    // });
     
     // Convert to fixed position coordinates
     const initialPosition = {
@@ -33,7 +33,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
 
   return (
     <div className="flex flex-col items-center gap-2 relative">
-      <div className={`mb-3 relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
+      <div className={`${winner ? 'mb-4' : 'mb-1'} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
         {cards.map((card, index) => {
           // Only calculate angles and offsets if not stacked
           const style = facedown ? {
@@ -71,7 +71,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
       </div>
 
       {/* Discard button */}
-      {!facedown && (
+      {!facedown && !winner && (
         <div className="discard-area w-full px-5 relative -top-1">
           <div className="flex flex-row items-center justify-center gap-2">
             <button

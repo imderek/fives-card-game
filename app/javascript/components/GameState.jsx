@@ -278,14 +278,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
                     </div>
                 </div>
             )}
-            {/* Turn indicator */}
-            <div className="hidden text-center text-lg font-medium text-slate-300">
-              {game.current_turn === currentUser.id ? (
-                <span className="text-amber-500">Your turn</span>
-              ) : (
-                <span className="text-slate-500">{formatPlayerName(isPlayer1 ? game.player2.email : game.player1.email)}'s turn</span>
-              )}
-            </div>
 
             <PlayerHand 
                 cards={playerHand.map(card => ({
@@ -298,6 +290,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 onDiscard={handleDiscard}
                 canDiscard={canDiscard}
                 handScore={game.column_scores[isPlayer1 ? "player1_hand" : "player2_hand"]}
+                winner={game.winner_id}
             />
 
             {/* Winner Declaration */}
@@ -335,6 +328,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 canDiscard={false}
                 facedown={!game.winner_id}
                 handScore={game.column_scores[isPlayer1 ? "player2_hand" : "player1_hand"]}
+                winner={game.winner_id}
             />
 
             <div className="w-full px-6">

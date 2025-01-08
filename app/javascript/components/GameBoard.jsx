@@ -1,6 +1,5 @@
 import React from 'react';
 import BoardColumn from './BoardColumn';
-import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
 const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName, playerName, winner, isPlayer1 }) => {
   // Group cards by column
