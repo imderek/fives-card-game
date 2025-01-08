@@ -63,6 +63,11 @@ class GamesController < ApplicationController
           partial: "games/game",
           locals: { game: @game, current_user: User.find(player_id), new_game: true }
         )
+        # Remove no_games_message element if it exists
+        Turbo::StreamsChannel.broadcast_remove_to(
+          "user_#{player_id}_games",
+          target: "no_games_message"
+        )
       end
 
       respond_to do |format|

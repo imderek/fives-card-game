@@ -144,13 +144,13 @@
         class: "px-4 py-2 text-sm text-white rounded-lg border border-slate-500/50", 
         data: { turbo_confirm: "Are you sure you want to generate demos?" } if current_user.email == "derek" %>
   </div>
-  <% if @games.any? %>
-    <div id="games_list" class="space-y-2">
+  <div id="games_list" class="space-y-2">
+    <% if @games.any? %>
       <% @games.each do |game| %>
         <%= render "games/game", game: game %>
       <% end %>
-    </div>
-  <% else %>
-    <div class="text-slate-500">You haven't played yet.</div>
-  <% end %>
+    <% else %>
+      <div id="no_games_message" class="text-slate-500">You haven't played yet.</div>
+    <% end %>
+  </div>
 </div>
