@@ -16,11 +16,12 @@
     <div class="flex flex-col justify-center gap-4 text-[.925rem]">
       <!-- Play buttons -->
       <div class="flex flex-row items-stretch justify-center gap-2.5">
-        <a href="<%= new_game_path(type: :bot) %>" class="flex flex-col justify-center w-full px-2 py-4 shadow-xl rounded-lg font-semibold text-white bg-gradient-to-l from-amber-600 to-amber-300 hover:bg-gradient-to-l hover:from-amber-500 hover:to-amber-200">
-          <i class="fa-solid fa-play mb-1"></i> Play Now
-        </a>
-        <a href="<%= new_game_path(type: :pvp) %>" class="overflow-hidden relative flex flex-col justify-center w-full px-2 py-4 shadow-xl rounded-lg font-semibold text-white bg-slate-700">
+        <a href="<%= new_game_path(type: :pvp) %>" class="overflow-hidden relative flex flex-col justify-center w-full px-2 py-4 shadow-xl rounded-lg font-semibold text-white bg-gradient-to-l from-amber-600 to-amber-300 hover:bg-gradient-to-l hover:from-amber-500 hover:to-amber-200">
+          <div class="absolute -left-7 top-3 bg-gradient-to-r from-amber-500 to-amber-600 text-[0.7rem] text-white px-8 py-0.5 -rotate-45">NEW</div>
           <i class="fa-solid fa-user mb-1"></i> Play a Friend
+        </a>
+        <a href="<%= new_game_path(type: :bot) %>" class="overflow-hidden relative flex flex-col justify-center w-full px-2 py-4 shadow-xl rounded-lg font-semibold text-white bg-slate-700">
+          <i class="fa-solid fa-desktop mb-1"></i> Play the AI
         </a>
       </div>
       <!-- How to play -->
