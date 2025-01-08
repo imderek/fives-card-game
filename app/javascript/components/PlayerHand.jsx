@@ -33,7 +33,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
 
   return (
     <div className="flex flex-col items-center gap-2 relative">
-      <div className={`${winner ? 'mb-4' : 'mb-1'} ${(!isCurrentPlayer && !winner) ? 'opacity-80' : ''} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
+      <div className={`${winner ? 'mb-4' : 'mb-1'} ${(!isCurrentPlayer && !winner) ? 'opacity-90' : ''} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
         {cards.map((card, index) => {
           // Only calculate angles and offsets if not stacked
           const style = facedown ? {
@@ -112,7 +112,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
       )}
 
       {!facedown && !winner && !isCurrentPlayer && (
-        <div className="absolute -top-[3rem] inset-0 flex items-center justify-center z-30">
+        <div className="absolute -top-[2.6rem] inset-0 flex items-center justify-center z-30">
           <div className="p-2 py-1 bg-white rounded-md text-sm font-medium shadow-lg text-slate-900 animate-enter-scale">
             {opponentName}'s Turn
           </div>

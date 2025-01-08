@@ -1,4 +1,4 @@
-<%= link_to game_path(game), id: dom_id(game), class: "block bg-slate-700 text-white py-4 px-4 rounded-lg shadow-lg" do %>
+<%= link_to game_path(game), id: dom_id(game), class: "block bg-slate-700 hover:bg-slate-600 text-white py-4 px-4 rounded-lg shadow-lg" do %>
   <% opponent = if current_user == game.player1
                   game.player2.email.titleize
                 else
@@ -7,13 +7,10 @@
   <div class="flex justify-between items-center text-sm">
     <div>
       <div class="flex flex-row items-center mb-1">
-        <span class="inline-block mr-2 px-2 py-1 font-semibold <%= game.bot? ? 'bg-slate-500/50 text-slate-300' : 'hidden bg-slate-100 text-slate-600' %> rounded">
-            <%= game.game_type.upcase %>
-        </span>
         <% if game.game_type == "pvp" %>
           <div class="flex flex-row gap-2 items-center">
             <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][opponent.hash % 7] %> text-white flex items-center justify-center"><%= opponent.first %></div>
-            <span class="inline-block font-medium">VS <%= opponent %></span>
+            <span class="inline-block font-medium"><%= opponent %></span>
           </div>
         <% else %>
           <span class="inline-block font-medium">VS <%= opponent %></span>
