@@ -41,7 +41,7 @@ class GamesController < ApplicationController
     @available_players = User.where.not(id: current_user.id)
                              .where.not("email LIKE ?", "%bot%")
                              .order('email ASC')
-                             .where('last_active_at > ?', 5.minutes.ago)
+                             .where('last_active_at > ?', 30.minutes.ago)
   end
 
   def create

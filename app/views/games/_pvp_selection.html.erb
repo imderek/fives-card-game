@@ -1,18 +1,48 @@
-<div class="dark justify-center mx-auto mb-5 py-6 pt-[4.55rem] px-3">
+<div class="dark justify-center mx-auto mb-5 py-6 pt-[4.55rem] px-3" data-controller="dropdown" data-debug="true">
   <h1 class="mb-4 text-xl font-semibold text-center dark:text-white">Choose Your Opponent</h1>
   <%= form_with(model: @game, local: true, class: "") do |f| %>
     <div class="mb-6 w-full md:w-96 mx-auto">
-      <%# <label for="player2" class="block mb-2 font-medium text-white">Select Player</label> %>
-      <div class="relative">
-        <%= f.select :player2_id,
-            @available_players.map { |p| [p.email.titleize, p.id] },
-            { prompt: "Select an opponent" },
-            { class: "bg-slate-700 border border-slate-500/60 text-white rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5" }
-        %>
+      <div>
+        <button type="button"
+          data-action="dropdown#toggle"
+          data-dropdown-target="button"
+          class="w-full text-white bg-slate-700 hover:bg-slate-600 focus:ring-4 focus:outline-none focus:ring-amber-500 font-medium rounded-lg text-base px-5 py-2.5 text-center inline-flex items-center justify-between border border-slate-500/60">
+          <span data-dropdown-target="buttonText">Select an opponent</span>
+          <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </button>
+
+        <div data-dropdown-target="menu" class="mt-2 z-10 hidden w-full">
+          <div class="w-full rounded-lg shadow dark:bg-slate-700">
+            <% if @available_players.present? %>
+              <p class="p-5 py-2.5 pb-0 pb-0 text-sm text-gray-400">Active Players</p>
+              <ul class="py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
+                <% @available_players.each do |player| %>
+                  <li>
+                    <%= f.radio_button :player2_id, player.id, 
+                        class: "hidden peer",
+                        data: { 
+                          action: "click->dropdown#close",
+                          dropdown_text_value: player.email.titleize
+                        } 
+                    %>
+                    <%= f.label :player2_id, value: player.id, class: "flex items-center px-5 py-2 hover:bg-slate-600 dark:hover:text-white cursor-pointer" do %>
+                      <img class="w-6 h-6 me-2 rounded-full" src="https://ui-avatars.com/api/?name=<%= player.email %>&background=random" alt="<%= player.email %> avatar">
+                      <%= player.email.titleize %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="p-5 py-4 text-sm text-gray-400">No active players</p>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="flex flex-col px-1 md:flex-row justify-center gap-2 font-medium">
+    <div class="flex flex-col md:flex-row justify-center gap-2 font-medium">
       <%= f.submit "Start Game", class: "cursor-pointer px-6 py-3 text-white bg-amber-500 hover:bg-amber-400 rounded-lg" %>
       <%= link_to "Cancel", games_path, class: "px-6 py-3 text-center bg-white dark:text-white rounded-md dark:border dark:border-slate-500/60 dark:bg-transparent dark:hover:bg-slate-800" %>
     </div>
