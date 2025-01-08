@@ -250,7 +250,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
     }
 
     return (
-        <div id="react-game-state" className="w-full py-3 flex flex-col items-center gap-3">
+        <div id="react-game-state" className="w-full py-2 flex flex-col items-center gap-3">
             {/* Scoreboard */}
             {!game.winner_id && (
                 <Scoreboard
@@ -276,6 +276,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 handScore={game.column_scores[isPlayer1 ? "player1_hand" : "player2_hand"]}
                 winner={game.winner_id}
                 discardPile={isPlayer1 ? game.player1_discard_pile : game.player2_discard_pile}
+                opponentName={opponentName}
             />
 
             {/* Winner Declaration */}

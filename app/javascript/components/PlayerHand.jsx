@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0, winner, discardPile = [] }) => {
+const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0, winner, discardPile = [], opponentName = 'Opponent' }) => {
   const handlePlayCard = (card, cardElement) => {
     if (!cardElement) return;
     
@@ -33,7 +33,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
 
   return (
     <div className="flex flex-col items-center gap-2 relative">
-      <div className={`${winner ? 'mb-4' : 'mb-1'} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
+      <div className={`${winner ? 'mb-4' : 'mb-1'} ${(!isCurrentPlayer && !winner) ? 'opacity-80' : ''} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
         {cards.map((card, index) => {
           // Only calculate angles and offsets if not stacked
           const style = facedown ? {
@@ -76,7 +76,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
           <div className="flex flex-row items-center justify-center gap-2">
             <button
               onClick={onDiscard}
-              className={`inline-flex gap-2 items-center justify-center relative px-3 py-2 mb-0.5 text-xs font-medium border rounded-lg transition-colors ${
+              className={`inline-flex gap-2 items-center justify-center relative px-3 py-1.5 text-sm font-medium border rounded-lg transition-colors ${
                 (cards.some(card => card.isSelected) && canDiscard)
                   ? 'bg-red-500 hover:bg-red-400 !border-red-500 text-white'
                   : discardPile.length > 0
@@ -86,7 +86,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
             >
               <div className="">Discard & Draw</div>
               <div className={`
-                p-1 px-2 
+                p-0.5 px-2 
                 flex items-center justify-center 
                 rounded-md
                 ${cards.some(card => card.isSelected) && canDiscard
@@ -105,8 +105,16 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
 
       {handScore > 0 && (
         <div className="absolute -top-[.4rem] inset-0 flex items-center justify-center z-30">
-          <div className="p-2 py-1 bg-slate-500 rounded-md text-xs sm:text-lg font-normal shadow-lg text-white animate-enter-scale">
+          <div className="p-2 py-1 bg-slate-500 rounded-md text-xs sm:text-lg font-medium shadow-lg text-white animate-enter-scale">
             +{handScore}
+          </div>
+        </div>
+      )}
+
+      {!facedown && !winner && !isCurrentPlayer && (
+        <div className="absolute -top-[3rem] inset-0 flex items-center justify-center z-30">
+          <div className="p-2 py-1 bg-white rounded-md text-sm font-medium shadow-lg text-slate-900 animate-enter-scale">
+            {opponentName}'s Turn
           </div>
         </div>
       )}
