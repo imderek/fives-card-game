@@ -48,7 +48,7 @@ class GamesController < ApplicationController
     @game = Game.new
     @game.player1 = current_user
     
-    if params[:game][:bot_difficulty].present?
+    if params.dig(:game, :bot_difficulty).present?
       setup_bot_game
     else
       setup_pvp_game
@@ -342,7 +342,8 @@ class GamesController < ApplicationController
   end
 
   def setup_bot_game
-    difficulty = params[:game][:bot_difficulty] || 'easy'
+    # Use dig to safely navigate nested params, fallback to 'easy' if any part is nil
+    difficulty = params.dig(:game, :bot_difficulty) || 'easy'
     bot_user = User.find_by(email: "#{difficulty} bot")
     
     @game.player2 = bot_user
