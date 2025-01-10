@@ -3,7 +3,7 @@ import PlayerHand from "../PlayerHand";
 import GameBoard from "../GameBoard";
 import { useGameChannel } from "../../hooks/useGameChannel";
 import WinnerDeclaration from "../WinnerDeclaration";
-import Scoreboard from "../Scoreboard";
+import { Scoreboard } from "../Scoreboard";
 import { calculateTotalScore } from "./GameState_calculateTotalScore";
 import { formatPlayerName } from "./GameState_formatPlayerName";
 import { createNewGame } from "./GameState_createNewGame";
