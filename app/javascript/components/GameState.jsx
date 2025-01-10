@@ -62,7 +62,24 @@ const GameState = ({ game: initialGame, currentUser }) => {
     
     const isPlayer1 = currentUser?.id === game?.player1_id;
     const playerHand = isPlayer1 ? game?.player1_hand || [] : game?.player2_hand || [];
-    const opponentHand = isPlayer1 ? game?.player2_hand || [] : game?.player1_hand || [];
+    
+    // Create face-down cards for opponent's hand
+    const opponentHand = (() => {
+        const rawHand = isPlayer1 ? game?.player2_hand : game?.player1_hand;
+        
+        // If game is over, use actual cards
+        if (game.winner_id && Array.isArray(rawHand)) {
+            return rawHand;
+        }
+        
+        // During gameplay, create face-down cards based on count
+        const count = typeof rawHand === 'number' ? rawHand : (rawHand?.length || 0);
+        return Array(count).fill().map(() => ({
+            isPlaceholder: false,  // Changed to false so cards are visible
+            suit: '★',  // Using a placeholder suit
+            value: '?'  // Using a placeholder value
+        }));
+    })();
     
     // Format the opponent's email (titleize and remove domain if it's an email)
     const formatPlayerName = (email) => {
