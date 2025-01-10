@@ -1,13 +1,25 @@
-import React from 'react';
-import Card from './Card';
+import React from "react";
+import Card from "./Card";
 
-const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, canDiscard, facedown = false, handScore = 0, winner, discardPile = [], opponentName = 'Opponent' }) => {
+const PlayerHand = ({
+  cards,
+  isCurrentPlayer,
+  canPlay,
+  onPlayCard,
+  onDiscard,
+  canDiscard,
+  facedown = false,
+  handScore = 0,
+  winner,
+  discardPile = [],
+  opponentName = "Opponent",
+}) => {
   const handlePlayCard = (card, cardElement) => {
     if (!cardElement) return;
-    
+
     // Get the card's current position in the hand
     const cardRect = cardElement.getBoundingClientRect();
-    
+
     // // Debug logs
     // console.log('Card Element Debug:', {
     //   element: cardElement,
@@ -15,52 +27,80 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
     //   classList: cardElement.className,
     //   rect: cardRect
     // });
-    
+
     // Convert to fixed position coordinates
     const initialPosition = {
       x: cardRect.left + window.scrollX,
-      y: cardRect.top + window.scrollY
+      y: cardRect.top + window.scrollY,
     };
 
     // Debug log
-    console.log('Initial Position:', initialPosition);
-    
+    console.log("Initial Position:", initialPosition);
+
     onPlayCard({
       ...card,
-      initialPosition
+      initialPosition,
     });
   };
 
   return (
     <div className="flex flex-col items-center gap-2 relative">
-      <div className={`${winner ? 'mb-4' : 'mb-1'} ${(!isCurrentPlayer && !winner) ? 'opacity-90' : ''} relative flex items-end justify-center ${facedown ? '-space-x-4' : 'top-[1.8rem] space-x-[-1.5rem]'}`}>
+      <div
+        className={`${winner ? "mb-4" : "mb-1"} ${
+          !isCurrentPlayer && !winner ? "opacity-90" : ""
+        } relative flex items-end justify-center ${
+          facedown ? "-space-x-4" : "top-[1.8rem] space-x-[-1.5rem]"
+        }`}
+      >
         {cards.map((card, index) => {
           // Only calculate angles and offsets if not stacked
-          const style = facedown ? {
-            zIndex: index,
-            opacity: card.isPlaceholder ? '0.0' : '1',
-            pointerEvents: card.isPlaceholder ? 'none' : 'auto'
-          } : {
-            transformOrigin: 'bottom center',
-            transform: `rotate(${-15 + (30.0 / Math.max(1, cards.length - 1)) * index}deg) translate(${-(-15 + (30.0 / Math.max(1, cards.length - 1)) * index) * 0.15}px, ${-30 * (1 - ((-15 + (30.0 / Math.max(1, cards.length - 1)) * index) / 25.0) ** 2)}px)`,
-            zIndex: index,
-            opacity: card.isPlaceholder ? '0.0' : '1',
-            pointerEvents: card.isPlaceholder ? 'none' : 'auto'
-          };
+          const style = facedown
+            ? {
+                zIndex: index,
+                opacity: card.isPlaceholder ? "0.0" : "1",
+                pointerEvents: card.isPlaceholder ? "none" : "auto",
+              }
+            : {
+                transformOrigin: "bottom center",
+                transform: `rotate(${
+                  -15 + (30.0 / Math.max(1, cards.length - 1)) * index
+                }deg) translate(${
+                  -(-15 + (30.0 / Math.max(1, cards.length - 1)) * index) * 0.15
+                }px, ${
+                  -30 *
+                  (1 -
+                    ((-15 + (30.0 / Math.max(1, cards.length - 1)) * index) /
+                      25.0) **
+                      2)
+                }px)`,
+                zIndex: index,
+                opacity: card.isPlaceholder ? "0.0" : "1",
+                pointerEvents: card.isPlaceholder ? "none" : "auto",
+              };
 
           const isLastCard = index === cards.length - 1;
 
           return (
-            <div
-              key={`${card.suit}-${card.value}-${index}`}
-              style={style}
-            >
-              <div className={isLastCard && !facedown ? 'duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter' : ''}>
+            <div key={`${card.suit}-${card.value}-${index}`} style={style}>
+              <div
+                className={
+                  isLastCard && !facedown
+                    ? "duration-500 ease-out opacity-0 translate-y-[-20px] animate-card-enter"
+                    : ""
+                }
+              >
                 <Card
                   card={card}
                   playable={isCurrentPlayer && canPlay && !card.isPlaceholder}
                   playersHand={true}
-                  onPlay={(card) => handlePlayCard(card, document.querySelector(`[data-card-id="${card.suit}-${card.value}"]`))}
+                  onPlay={(card) =>
+                    handlePlayCard(
+                      card,
+                      document.querySelector(
+                        `[data-card-id="${card.suit}-${card.value}"]`
+                      )
+                    )
+                  }
                   isSelected={card.isSelected}
                   facedown={facedown}
                 />
@@ -77,26 +117,28 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
             <button
               onClick={onDiscard}
               className={`inline-flex gap-2 items-center justify-center relative px-3 py-1.5 text-sm font-medium border rounded-lg transition-colors ${
-                (cards.some(card => card.isSelected) && canDiscard)
-                  ? 'bg-red-500 hover:bg-red-400 !border-red-500 text-white'
+                cards.some((card) => card.isSelected) && canDiscard
+                  ? "bg-red-500 hover:bg-red-400 !border-red-500 text-white"
                   : discardPile.length > 0
-                    ? 'border-slate-700 text-slate-500' // no more discards left
-                    : 'border-slate-600 text-slate-400' // no card selected
+                  ? "border-slate-700 text-slate-500" // no more discards left
+                  : "border-slate-600 text-slate-400" // no card selected
               }`}
             >
               <div className="">Discard & Draw</div>
-              <div className={`
+              <div
+                className={`
                 p-0.5 px-2 
                 flex items-center justify-center 
                 rounded-md
-                ${cards.some(card => card.isSelected) && canDiscard
-                  ? 'text-red-500 bg-white'
-                  : canDiscard
-                    ? 'bg-slate-500 text-white'
-                    : 'bg-slate-600/60 text-slate-500'
+                ${
+                  cards.some((card) => card.isSelected) && canDiscard
+                    ? "text-red-500 bg-white"
+                    : canDiscard
+                    ? "bg-slate-500 text-white"
+                    : "bg-slate-600/60 text-slate-500"
                 }`}
               >
-                {discardPile.length === 0 ? '1' : '0'}
+                {discardPile.length === 0 ? "1" : "0"}
               </div>
             </button>
           </div>
