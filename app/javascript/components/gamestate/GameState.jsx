@@ -194,7 +194,11 @@ const GameState = ({ game: initialGame, currentUser }) => {
   const opponentScore = calculateTotalScore(Object.values(opponentColumns));
 
   if (!game || !currentUser) {
-    return <div>Loading game...</div>;
+    return (
+      <TableTop>
+        <div>Loading game...</div>
+      </TableTop>
+    );
   }
 
   return (
