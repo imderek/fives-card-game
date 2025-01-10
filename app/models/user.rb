@@ -7,7 +7,6 @@ class User < ApplicationRecord
   # Remove the email validation
   validates :email, presence: true
 
-  has_many :games
   belongs_to :organization
 
   has_many :games_as_player1, class_name: 'Game', foreign_key: 'player1_id'
@@ -28,6 +27,10 @@ class User < ApplicationRecord
   end
 
   before_create :generate_remember_token
+
+  def games
+    Game.where('player1_id = ? OR player2_id = ?', id, id)
+  end
 
   private
   
