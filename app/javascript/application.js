@@ -23,7 +23,7 @@ document.addEventListener("turbo:render", initFlowbite);
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import GameState from "./components/GameState";
+import GameState from "./components/gamestate/GameState";
 
 document.addEventListener("turbo:load", () => {
   const gameContainer = document.getElementById("react-game-root");
@@ -45,10 +45,10 @@ document.addEventListener("turbo:load", () => {
 
   if (!gameData || !currentUser) return;
 
-  console.group("App State Top Level");
-  console.log("Game Data:", gameData);
-  console.log("Current User:", currentUser);
-  console.groupEnd();
+  // console.group("App State Top Level");
+  // console.log("Game Data:", gameData);
+  // console.log("Current User:", currentUser);
+  // console.groupEnd();
 
   // Initialize React component if not already initialized
   if (!gameContainer.dataset.reactInitialized) {
