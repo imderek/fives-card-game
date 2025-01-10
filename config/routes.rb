@@ -38,4 +38,6 @@ Rails.application.routes.draw do
       post :discard_card
     end
   end
+
+  resources :players, only: [:index]
 end

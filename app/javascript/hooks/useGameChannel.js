@@ -65,20 +65,30 @@ export const useGameChannel = (gameId, userId) => {
               player2_total_score: data.game.player2_total_score
             };
 
-            // Only update our hand if this update is for us
+            // Update hands based on recipient
             if (data.recipient_id === currentUserId) {
-              console.log('Updating hand for user', currentUserId);
+              // Update our hand with full card details
               if (currentUserId === prevState.player1_id && Array.isArray(data.game.player1_hand)) {
-                console.log('Updating player 1 hand:', {
-                  oldLength: newState.player1_hand?.length,
-                  newLength: data.game.player1_hand.length
-                });
                 newState.player1_hand = [...data.game.player1_hand];
+                // Update opponent's hand count only
+                if (typeof data.game.player2_hand === 'number') {
+                  newState.player2_hand = Array(data.game.player2_hand).fill({ isPlaceholder: true });
+                }
               } else if (currentUserId === prevState.player2_id && Array.isArray(data.game.player2_hand)) {
-                console.log('Updating player 2 hand:', {
-                  oldLength: newState.player2_hand?.length,
-                  newLength: data.game.player2_hand.length
-                });
+                newState.player2_hand = [...data.game.player2_hand];
+                // Update opponent's hand count only
+                if (typeof data.game.player1_hand === 'number') {
+                  newState.player1_hand = Array(data.game.player1_hand).fill({ isPlaceholder: true });
+                }
+              }
+            }
+
+            // If game is over, show all cards
+            if (data.game.winner_id) {
+              if (Array.isArray(data.game.player1_hand)) {
+                newState.player1_hand = [...data.game.player1_hand];
+              }
+              if (Array.isArray(data.game.player2_hand)) {
                 newState.player2_hand = [...data.game.player2_hand];
               }
             }
