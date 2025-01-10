@@ -47,6 +47,26 @@ class GamesController < ApplicationController
   def create
     @game = Game.new
     @game.player1 = current_user
+
+    # Create demo games for admin user
+    if params[:type] == "demo"
+      medium_bot = User.where("email LIKE ?", "%medium%").first
+
+      DemoGameCreator.create_game(
+        player1: current_user,
+        player2: medium_bot,
+        scenario: :completed_powerful
+      )
+
+      DemoGameCreator.create_game(
+        player1: current_user,
+        player2: medium_bot,
+        scenario: :incompleted_powerful
+      )
+
+      redirect_to games_path, notice: "Demos created!"
+      return
+    end
     
     if params.dig(:game, :bot_difficulty).present?
       setup_bot_game

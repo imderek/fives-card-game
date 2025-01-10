@@ -29,13 +29,15 @@ class DemoGameCreator
       player1: @player1,
       player2: @player2,
       status: "waiting",
-      game_type: "pvp",
+      game_type: "bot",
       turn_phase: "play_card",
       current_turn: @player1.id,
       player1_hand: [],
       player2_hand: [],
       board_cards: [],
-      is_private: true
+      is_private: true,
+      player1_discard_pile: [],
+      player2_discard_pile: []
     }
   end
 
