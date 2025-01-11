@@ -14,7 +14,6 @@
       <thead class="bg-slate-600 text-slate-300">
         <tr>
           <th class="px-3 py-3 align-top">Player</th>
-          <th class="px-3 py-3 align-top">PVP/Bot</th>
           <th class="px-3 py-3 align-top">Last Active</th>
         </tr>
       </thead>
@@ -22,10 +21,19 @@
         <% @players.each do |player| %>
           <tr class="hover:bg-slate-600/50">
             <td class="px-3 py-3 align-top">
-              <%= player.email.titleize %>
+              <div class="mb-1"><%= player.email.titleize %></div>
+              <div class="text-sm text-slate-400 flex items-center gap-2">
+                <div class="flex items-center gap-1">
+                  <i class="fa fa-user text-slate-500"></i>
+                  <%= player.pvp_games_count %>
+                </div>
+                <div class="flex items-center gap-1">
+                  <i class="fa fa-robot text-slate-500"></i>
+                  <%= player.bot_games_count %>
+                </div>
+              </div>
             </td>
-            <td class="px-3 py-3 align-top"><%= player.pvp_games_count %>/<%= player.bot_games_count %></td>
-            <td class="px-3 py-3 align-top"><%= player.last_active_at&.strftime('%m/%d/%y') || 'Never' %></td>
+            <td class="px-3 py-3 align-top"><%= player.last_active_at ? time_ago_in_words(player.last_active_at) + ' ago' : 'Never' %></td>
           </tr>
         <% end %>
       </tbody>
