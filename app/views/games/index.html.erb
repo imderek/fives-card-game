@@ -17,13 +17,20 @@
       <!-- Play buttons -->
       <div class="flex flex-row items-stretch justify-center gap-2.5">
         <!-- Play a friend -->
-        <a href="<%= new_game_path(type: :pvp) %>" class="overflow-hidden relative flex flex-col justify-center w-full px-2 py-[1.125rem] shadow-xl rounded-lg font-semibold text-white bg-gradient-to-l from-amber-600 to-amber-300 hover:bg-gradient-to-l hover:from-amber-500 hover:to-amber-200">
+        <a href="<%= new_game_path(type: :pvp) %>" class="overflow-hidden relative flex flex-col justify-center w-full px-2 py-[0.8rem] pt-[1rem] shadow-xl rounded-lg font-semibold text-white bg-gradient-to-l from-amber-600 to-amber-300 hover:bg-gradient-to-l hover:from-amber-500 hover:to-amber-200 border-b-4 border-amber-600">
           <div class="absolute -left-7 top-3 bg-gradient-to-r from-amber-500 to-amber-600 text-[0.7rem] text-white px-8 py-0.5 -rotate-45">NEW</div>
-          <i class="fa-solid fa-user mb-1.5"></i> Play a Friend
+          <div class="flex justify-center text-lg -space-x-1">
+            <i class="mb-1.5 fa-regular fa-user"></i>
+            <i class="mb-1.5 fa-solid fa-user"></i>
+          </div>
+          Play a Friend
         </a>
-        <!-- Play the AI -->
-        <a href="<%= new_game_path(type: :bot) %>" class="overflow-hidden relative flex flex-col justify-center w-full px-2 py-[1.125rem] shadow-xl rounded-lg font-semibold text-white bg-slate-700 hover:bg-slate-600">
-          <i class="fa-solid fa-desktop mb-1.5"></i> Play the AI
+        <!-- Play solo -->
+        <a href="<%= new_game_path(type: :bot) %>" class="overflow-hidden relative flex flex-col justify-center w-full px-2 py-[0.8rem] pt-[1rem] shadow-xl rounded-lg font-semibold text-white hover:bg-slate-600 bg-gradient-to-br from-slate-700 from-30% to-slate-700/30 border-b-4 border-slate-700/80">
+          <div class="flex justify-center text-lg -space-x-1">
+            <i class="mb-1.5 fa-solid fa-play"></i>
+          </div>
+          Play Solo
         </a>
       </div>
       <!-- How to play -->
