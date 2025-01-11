@@ -14,6 +14,6 @@ class PlayersController < ApplicationController
                    )
                    .left_joins(:games_as_player1, :games_as_player2)
                    .group(:id)
-                   .order(last_active_at: :desc)
+                   .order(Arel.sql("COALESCE(last_active_at, DATE('1970-01-01')) DESC"))
   end
 end 
