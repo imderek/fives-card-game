@@ -15,6 +15,11 @@ const calculateTotalScore = (columns) => {
     }, 0);
 };
 
+const getBotDifficulty = (email) => {
+    if (!email?.includes('bot')) return null;
+    return email.split(' ')[0]; // Gets 'easy', 'medium', or 'hard'
+};
+
 const GameState = ({ game: initialGame, currentUser }) => {
     const [selectedCard, setSelectedCard] = React.useState(null);
     const [optimisticState, setOptimisticState] = React.useState(null);
@@ -98,6 +103,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
 
     const opponentName = formatPlayerName(isPlayer1 ? game?.player2?.email : game?.player1?.email);
     const playerName = formatPlayerName(currentUser?.email);
+    const isBot = getBotDifficulty(isPlayer1 ? game?.player2?.email : game?.player1?.email) !== null;
     
     console.log('Game State Debug:', {
         currentUser,
@@ -210,11 +216,6 @@ const GameState = ({ game: initialGame, currentUser }) => {
         }
     };
 
-    const getBotDifficulty = (email) => {
-        if (!email?.includes('bot')) return null;
-        return email.split(' ')[0]; // Gets 'easy', 'medium', or 'hard'
-    };
-
     const createNewGame = async (botEmail) => {
         try {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
@@ -276,6 +277,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                     playerName={playerName}
                     opponentName={opponentName}
                     isCurrentPlayerTurn={game.current_turn === currentUser.id}
+                    isBot={isBot}
                 />
             )}
 
