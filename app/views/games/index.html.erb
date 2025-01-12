@@ -48,7 +48,7 @@
               <div class="mb-1 p-4 md:p-5 flex items-start justify-between rounded-t">
                 <div class="flex flex-col">
                   <h3 class="mb-0.5 text-xl font-semibold text-slate-900">
-                      How to Play Fives
+                      How to Play Fiives
                   </h3>
                   <p class="text-sm font-medium text-slate-500">Build poker hands to score points.</p>
                 </div>
@@ -150,9 +150,6 @@
   <!-- Recent Games -->
   <div class="<%= @games.any? ? 'mb-4' : 'mb-2' %> flex flex-row justify-between items-center">
     <h1 class="text-xl font-medium dark:text-white">My Recent Games</h1>
-    <%= button_to "Demos", games_path(type: :demo), 
-        class: "px-4 py-2 text-sm text-white rounded-lg border border-slate-500/50", 
-        data: { turbo_confirm: "Are you sure you want to generate demos?" } if current_user.email == "derek" %>
   </div>
   <div id="games_list" class="space-y-3">
     <% if @games.any? %>
@@ -163,4 +160,17 @@
       <div id="no_games_message" class="text-slate-500">You haven't played yet.</div>
     <% end %>
   </div>
+
+  <!-- Admin -->
+  <% if current_user.email == "derek" %>
+    <h1 class="my-4 text-xl font-medium dark:text-white">Admin Tools</h1>
+    <div class="flex flex-row gap-2">
+      <%= button_to "Generate Demos", games_path(type: :demo),
+          class: "btn btn-outline text-sm",
+          data: { turbo_confirm: "Are you sure you want to generate demos?" } %>
+      <%= button_to "View Player Stats", players_path,
+          method: :get,
+          class: "btn btn-outline text-sm" %>
+    </div>
+  <% end %>
 </div>

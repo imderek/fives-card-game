@@ -71,12 +71,12 @@ const WinnerDeclaration = ({
                     {game.game_type === 'bot' && (
                         <button 
                             onClick={() => createNewGame(isPlayer1 ? game.player2?.email : game.player1?.email)}
-                            className="py-4 mb-2 font-medium w-full block text-center bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm"
+                            className="mb-2 btn btn-primary"
                         >
                             Rematch
                         </button>
                     )}
-                    <a href="/" className="py-4 w-full block text-center bg-slate-500 hover:bg-slate-400 text-white rounded-lg text-sm">
+                    <a href="/" className="btn btn-secondary">
                         Back to Lobby
                     </a>
                 </div>
