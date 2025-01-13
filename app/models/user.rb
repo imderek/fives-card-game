@@ -9,9 +9,9 @@ class User < ApplicationRecord
 
   belongs_to :organization
 
-  has_many :games_as_player1, class_name: 'Game', foreign_key: 'player1_id'
-  has_many :games_as_player2, class_name: 'Game', foreign_key: 'player2_id'
-  has_many :won_games, class_name: 'Game', foreign_key: 'winner_id'
+  has_many :games_as_player1, class_name: 'Game', foreign_key: 'player1_id', dependent: :destroy
+  has_many :games_as_player2, class_name: 'Game', foreign_key: 'player2_id', dependent: :destroy
+  has_many :won_games, class_name: 'Game', foreign_key: 'winner_id', dependent: :destroy
 
   # Skip password validation
   def password_required?
