@@ -268,78 +268,87 @@ const GameState = ({ game: initialGame, currentUser }) => {
     }
 
     return (
-        <div id="react-game-state" className="w-full py-2 flex flex-col items-center gap-3">
-            {/* Scoreboard */}
-            {!game.winner_id && (
-                <Scoreboard
-                    playerScore={playerScore}
-                    opponentScore={opponentScore}
-                    playerName={playerName}
+        <div id="react-game-state" className="w-full py-2 flex flex-col md:p-2 md:px-6 md:flex-row md:items-start md:justify-between items-center gap-2 md:gap-12">
+            {/* Left Column - Scores and Hands */}
+            <div className="w-full md:w-2/5 flex flex-col items-center gap-3">
+                {/* Scoreboard */}
+                {!game.winner_id && (
+                    <Scoreboard
+                        playerScore={playerScore}
+                        opponentScore={opponentScore}
+                        playerName={playerName}
+                        opponentName={opponentName}
+                        isCurrentPlayerTurn={game.current_turn === currentUser.id}
+                        isBot={isBot}
+                    />
+                )}
+
+                {/* Current player's hand */}
+                <PlayerHand 
+                    cards={playerHand.map(card => ({
+                        ...card,
+                        isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
+                    }))}
+                    isCurrentPlayer={game.current_turn === currentUser.id}
+                    canPlay={game.turn_phase === "play_card"}
+                    onPlayCard={handlePlayCard}
+                    onDiscard={handleDiscard}
+                    canDiscard={canDiscard}
+                    handScore={game.column_scores[isPlayer1 ? "player1_hand" : "player2_hand"]}
+                    winner={game.winner_id}
+                    discardPile={isPlayer1 ? game.player1_discard_pile : game.player2_discard_pile}
                     opponentName={opponentName}
-                    isCurrentPlayerTurn={game.current_turn === currentUser.id}
-                    isBot={isBot}
                 />
-            )}
+            </div>
 
-            {/* Current player's hand */}
-            <PlayerHand 
-                cards={playerHand.map(card => ({
-                    ...card,
-                    isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
-                }))}
-                isCurrentPlayer={game.current_turn === currentUser.id}
-                canPlay={game.turn_phase === "play_card"}
-                onPlayCard={handlePlayCard}
-                onDiscard={handleDiscard}
-                canDiscard={canDiscard}
-                handScore={game.column_scores[isPlayer1 ? "player1_hand" : "player2_hand"]}
-                winner={game.winner_id}
-                discardPile={isPlayer1 ? game.player1_discard_pile : game.player2_discard_pile}
-                opponentName={opponentName}
-            />
+            {/* Right Column - Game Board and Winner Declaration */}
+            <div className="w-full md:w-2/3 flex flex-col items-center gap-3">
+                {/* Winner Declaration */}
+                {(game.winner_id || liveGameState?.winner_id) && (
+                    <WinnerDeclaration
+                        game={game}
+                        currentUser={currentUser}
+                        formatPlayerName={formatPlayerName}
+                        createNewGame={createNewGame}
+                        isPlayer1={isPlayer1}
+                    />
+                )}
 
-            {/* Winner Declaration */}
-            {(game.winner_id || liveGameState?.winner_id) && (
-                <WinnerDeclaration
-                    game={game}
-                    currentUser={currentUser}
-                    formatPlayerName={formatPlayerName}
-                    createNewGame={createNewGame}
+                {/* GameBoard */}
+                <GameBoard
+                    cards={game.board_cards || []}
+                    selectedCard={selectedCard}
+                    onPlayCardToColumn={handlePlayCardToColumn}
+                    opponentName={opponentName}
+                    playerName={playerName}
+                    winner={game.winner_id}
                     isPlayer1={isPlayer1}
                 />
-            )}
+                <div className="w-full">
+                    {/* Opponent's hand */}
+                    <div className="md:hidden mb-4">
+                        <PlayerHand 
+                            cards={opponentHand.map(card => ({
+                                ...card,
+                                isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
+                            }))}
+                            isCurrentPlayer={false}
+                            canPlay={false}
+                            onPlayCard={() => {}}
+                            onDiscard={() => {}}
+                            canDiscard={false}
+                            facedown={!game.winner_id}
+                            handScore={game.column_scores[isPlayer1 ? "player2_hand" : "player1_hand"]}
+                            winner={game.winner_id}
+                        />
+                    </div>
 
-            {/* GameBoard */}
-            <GameBoard
-                cards={game.board_cards || []}
-                selectedCard={selectedCard}
-                onPlayCardToColumn={handlePlayCardToColumn}
-                opponentName={opponentName}
-                playerName={playerName}
-                winner={game.winner_id}
-                isPlayer1={isPlayer1}
-            />
-
-            {/* Opponent's hand */}
-            <PlayerHand 
-                cards={opponentHand.map(card => ({
-                    ...card,
-                    isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
-                }))}
-                isCurrentPlayer={false}
-                canPlay={false}
-                onPlayCard={() => {}}
-                onDiscard={() => {}}
-                canDiscard={false}
-                facedown={!game.winner_id}
-                handScore={game.column_scores[isPlayer1 ? "player2_hand" : "player1_hand"]}
-                winner={game.winner_id}
-            />
-
-            <div className="w-full px-6">
-                <a href="/" className="block text-center border border-slate-500/50 rounded-lg mb-10 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70">
-                    Back to Lobby
-                </a>
+                    <div className="w-full px-6 md:p-0">
+                        <a href="/" className="block text-center border border-slate-500/50 rounded-lg mb-6 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70">
+                            Back to Lobby
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     );

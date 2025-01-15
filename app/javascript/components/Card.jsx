@@ -3,8 +3,8 @@ import React from 'react';
 const Card = React.forwardRef(({ card, playable = false, playersHand = false, onPlay, isSelected = false, facedown = false, isAnimating = false, style }, ref) => {
   const cardStyles = `
     relative 
-    ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' :
-      playable || playersHand ? 'w-[3.7rem] h-[4.7rem] md:w-20 md:h-28' : 'w-12 h-[4rem] md:w-20 md:h-28'}
+    ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem]' :
+      playable || playersHand ? 'w-[3.7rem] h-[4.7rem]' : 'w-12 h-[4rem] md:h-[3rem] md:text-sm'}
     ${isSelected ? 'selected-card ring ring-yellow-500 top-[-5px] shadow-xl' : ''}
     rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
     ${facedown ? 'bg-gradient-to-br from-slate-600 to-slate-800' : 'border border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'}
@@ -42,8 +42,8 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
           </svg>
         </div>
       ) : (
-        <div className="w-full h-full flex flex-col items-start p-0.5 px-1.5 md:p-2">
-          <div className={`${card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : 'text-black'} text-md md:text-xl`}>
+        <div className="w-full h-full flex flex-col items-start p-0.5 px-1.5">
+          <div className={`${card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : 'text-black'} text-md`}>
             {card.value}{card.suit}
           </div>
         </div>

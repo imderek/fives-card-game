@@ -38,7 +38,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   const isColumnFull = cards.length >= 5;
 
   const getColumnStrengthClasses = (score, isPlayerColumn) => {
-    const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] p-2 relative column transition-colors duration-150 flex flex-col gap-1 w-full z-0";
+    const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] md:min-h-[11.5rem] p-2 md:p-1 relative column transition-colors duration-150 flex flex-col gap-1 w-full z-0";
     
     let strengthClasses = "";
     // Straight Flush (800) & Royal Flush (1000)
@@ -192,7 +192,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
       >
         {/* Hand name and score */}
         {delayedHandName && (
-          <div className="text-xs text-center text-white relative top-[-0.1rem]">
+          <div className="text-xs text-center text-white relative top-[-0.1rem] md:top-0 md:leading-[.85rem]">
             <div className="line-clamp-1">{delayedHandName}</div>
             {delayedScore > 0 && (
               <div className={scoreColorClass(delayedScore)}>+{delayedScore}</div>
@@ -202,7 +202,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
         
         {/* Cards vertically stacked */}
         <div 
-          className="flex flex-col -space-y-[2.3rem] md:-space-y-16 items-center"
+          className="flex flex-col -space-y-[2.3rem] md:-space-y-[1.5rem] items-center"
           style={{ pointerEvents: 'none' }}
         >
           {cards.map((card, cardIndex) => (

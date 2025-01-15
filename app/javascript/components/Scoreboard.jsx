@@ -9,8 +9,8 @@ const Scoreboard = ({
     isBot
 }) => {
     return (
-        <div className="mb-1 px-6 w-full">
-            <div className="px-7 bg-slate-700/80 text-white rounded-lg relative z-40 w-full max-w-md">
+        <div className="mb-1 px-6 md:p-0 w-full">
+            <div className="px-7 md:px-3 bg-slate-700/80 text-white rounded-lg relative z-40 w-full">
                 <div className="h-full relative flex items-center justify-center gap-4 rounded-lg">
                     {/* Turn indicator */}
                     <div className={`${isBot ? 'hidden' : 'absolute'} ${isCurrentPlayerTurn ? 'left-1' : 'right-1'} top-1/2 -translate-y-1/2 flex flex-1 flex-col items-center justify-center`}>
