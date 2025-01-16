@@ -15,10 +15,9 @@ export default class extends Controller {
   
   // Method for initial selection (without event)
   selectBot(difficulty) {
-    if (difficulty === 'hard') return // Don't allow hard difficulty yet
-    
     // Update hidden field
     this.difficultyTarget.value = difficulty
+    console.log(difficulty)
 
     // Update card styles
     this.botCardTargets.forEach(card => {
@@ -26,6 +25,14 @@ export default class extends Controller {
       card.classList.add('bg-transparent', 'border', 'border-slate-500/60')
       card.querySelector('h2').classList.remove('text-slate-700')
       card.querySelector('h2').classList.add('text-white')
+
+      // banner default styles
+      const banner = card.querySelector('.banner')
+      if (banner) {
+        banner.classList.remove('bg-slate-300')
+        banner.classList.remove('text-slate-500')
+        banner.classList.add('bg-slate-700/70')
+      }
     })
     
     // Style selected card
@@ -36,6 +43,14 @@ export default class extends Controller {
     selectedCard.classList.remove('bg-transparent', 'border', 'border-slate-500/60')
     selectedCard.querySelector('h2').classList.add('text-slate-700')
     selectedCard.querySelector('h2').classList.remove('text-white')
+
+    // banner
+    const banner = selectedCard.querySelector('.banner')
+    if (banner) {
+      banner.classList.remove('bg-slate-700/70')
+      banner.classList.add('bg-slate-300')
+      banner.classList.add('text-slate-500')
+    }
   }
   
   // Method for click events

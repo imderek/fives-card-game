@@ -3,6 +3,7 @@ class BotService
   STRATEGY_MAPPING = {
     'easy bot' => BotStrategies::EasyBot,
     'medium bot' => BotStrategies::MediumBot,
+    'hard bot' => BotStrategies::HardBot,
     # Add more strategies as they're implemented:
     # 'bot_hard@example.com' => BotStrategies::HardBot
   }
