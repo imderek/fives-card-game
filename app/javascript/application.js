@@ -11,12 +11,10 @@ application.debug = false
 window.Stimulus = application
 
 // Import controllers manually
-import CardController from "./controllers/card_controller"
 import BotSelectionController from "./controllers/bot_selection_controller"
 import DropdownController from "./controllers/dropdown_controller"
 
 // Register controllers
-application.register("card", CardController)
 application.register("bot-selection", BotSelectionController)
 application.register("dropdown", DropdownController)
 
