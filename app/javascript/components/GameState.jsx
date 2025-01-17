@@ -2,7 +2,6 @@ import React from 'react';
 import Card from './Card';
 import PlayerHand from './PlayerHand';
 import GameBoard from './GameBoard';
-import PlayerInfo from './PlayerInfo';
 import { useGameChannel } from '../hooks/useGameChannel';
 import WinnerDeclaration from './WinnerDeclaration';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
