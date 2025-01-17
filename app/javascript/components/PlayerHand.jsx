@@ -75,7 +75,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
         <div className="mt-2 md:mt-4 discard-area w-full px-5 relative -top-1">
           <button
             onClick={onDiscard}
-            className={`inline-flex gap-2 items-center justify-center relative px-3 py-1.5 text-xs font-medium border rounded-lg transition-colors ${
+            className={`inline-flex gap-2 items-center justify-center relative px-2 py-1.5 text-xs font-medium border rounded-lg transition-colors ${
               (cards.some(card => card.isSelected) && canDiscard)
                 ? 'bg-red-500 hover:bg-red-400 !border-red-500 text-white'
                 : discardPile.length > 0

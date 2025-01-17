@@ -2,11 +2,10 @@ import React from 'react';
 
 const Card = React.forwardRef(({ card, playable = false, playersHand = false, onPlay, isSelected = false, facedown = false, isAnimating = false, style }, ref) => {
   const cardStyles = `
-    relative 
+    relative transition-all duration-150 ease-out rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
     ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem]' :
       playable || playersHand ? 'w-[3.7rem] h-[4.7rem]' : 'w-12 h-[4rem] md:h-[3rem] md:text-sm'}
-    ${isSelected ? 'selected-card ring ring-yellow-500 top-[-5px] shadow-xl' : ''}
-    rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
+    ${isSelected ? 'selected-card ring ring-amber-500 border border-amber-600/80 translate-y-[-7px] !shadow-[-8px_3px_10px_rgba(0,0,0,0.2)]' : ''}
     ${facedown ? 'bg-gradient-to-br from-slate-600 to-slate-800' : 'border border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'}
     ${isAnimating ? 'fixed transition-all duration-300 ease-out z-[100]' : ''}
   `.trim();
