@@ -23,16 +23,16 @@
 
   <body class="bg-gradient-to-b from-slate-800 to-slate-950 bg-slate-950 h-full min-h-screen">
 
-    <main class="md:mx-auto md:w-[27.5rem] min-h-24">
+    <main class="sm:mx-auto sm:w-[27.5rem] min-h-24">
       <%= render 'shared/flash' %>
       <section class="">
         <h1 class="
-          hidden md:block
-          w-full md:mx-auto uppercase leading-9 tracking-tighter text-5xl font-bold
+          hidden sm:block
+          w-full sm:mx-auto uppercase leading-9 tracking-tighter text-5xl font-bold
           pt-12 pl-6 pr-6 text-slate-800/50 bg-clip-text bg-gradient-to-br from-slate-600/30 to-slate-300
         ">A poker-based game called <span class="inline-block text-transparent bg-clip-text bg-gradient-to-br from-slate-700/30 to-70% to-white">Fiives</span></h1>
         <h1 class="
-          md:hidden
+          sm:hidden
           w-full mb-2 uppercase leading-9 tracking-tighter text-5xl font-bold
           pt-24 pl-6 pr-6 text-slate-800/50 bg-clip-text bg-gradient-to-br from-slate-600/30 to-slate-300
         ">A poker-based game called <br/><span class="inline-block text-transparent bg-clip-text bg-gradient-to-br from-slate-700/30 to-70% to-white">Fiives</span></h1>
@@ -42,10 +42,10 @@
       </section>
       <footer class="px-6">
         <div class="mb-6 mt-4 pt-6 border-t border-slate-700 text-center text-slate-500 text-sm">
-          <p class="mt-1 mb-4 mx-6 md:mb-0 text-white text-lg leading-5">
+          <p class="mt-1 mb-4 mx-6 text-white text-lg leading-5">
             <a href="https://playfiives.com" class="text-white hover:text-slate-400">playfiives.com</a>
           </p>
-          <%= ENV['CREDITS_ACKNOWLEDGEMENTS'] %>
+          <%= ENV['CREDITS_ACKNOWLEDGEMENTS'] || 'Created by Derek Johnson, Gabe Meacham, William Lee, and Jay Akins.' %>
         </div>
       </footer>
     </main>

@@ -72,7 +72,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
 
       {/* Discard button */}
       {!facedown && !winner && (
-        <div className="mt-2 md:mt-4 discard-area w-full px-5 relative -top-1">
+        <div className="mt-2 sm:mt-4 discard-area w-full px-5 relative -top-1">
           <button
             onClick={onDiscard}
             className={`inline-flex gap-2 items-center justify-center relative px-2 py-1.5 text-xs font-medium border rounded-lg transition-colors ${

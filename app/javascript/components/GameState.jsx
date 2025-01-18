@@ -267,9 +267,9 @@ const GameState = ({ game: initialGame, currentUser }) => {
     }
 
     return (
-        <div id="react-game-state" className="w-full py-2 flex flex-col md:p-2 md:px-6 md:flex-row md:items-start md:justify-between items-center gap-2 md:gap-12">
+        <div id="react-game-state" className="w-full py-2 flex flex-col sm:p-2 sm:px-6 sm:flex-row sm:items-start sm:justify-between items-center gap-2 sm:gap-12">
             {/* Left Column - Scores and Hands */}
-            <div className="w-full md:w-2/5 flex flex-col items-center gap-3">
+            <div className="w-full sm:w-2/5 flex flex-col items-center gap-3">
                 {/* Scoreboard */}
                 {!game.winner_id && (
                     <Scoreboard
@@ -301,7 +301,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
             </div>
 
             {/* Right Column - Game Board and Winner Declaration */}
-            <div className="w-full md:w-2/3 flex flex-col items-center gap-3">
+            <div className="w-full sm:w-2/3 flex flex-col items-center gap-3">
                 {/* Winner Declaration */}
                 {(game.winner_id || liveGameState?.winner_id) && (
                     <WinnerDeclaration
@@ -325,7 +325,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 />
                 <div className="w-full">
                     {/* Opponent's hand */}
-                    <div className="md:hidden mb-4">
+                    <div className="sm:hidden mb-4">
                         <PlayerHand 
                             cards={opponentHand.map(card => ({
                                 ...card,
@@ -342,7 +342,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                         />
                     </div>
 
-                    <div className="w-full px-6 md:p-0">
+                    <div className="w-full px-6 sm:p-0">
                         <a href="/" className="block text-center border border-slate-500/50 rounded-lg mb-6 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70">
                             Back to Lobby
                         </a>
