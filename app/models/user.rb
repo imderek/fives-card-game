@@ -33,14 +33,9 @@ class User < ApplicationRecord
   end
 
   def average_completed_game_score
-    games.completed
-      .where.not(player1_total_score: nil, player2_total_score: nil)
-      .select("AVG(CASE 
-        WHEN player1_id = #{id} THEN player1_total_score 
-        ELSE player2_total_score 
-      END) as avg_score")
-      .group("")
-      .reorder(nil)
+    Game.where(player2_id: id, status: :completed)
+      .where.not(player2_total_score: nil)
+      .select("AVG(player2_total_score) as avg_score")
       .first
       &.avg_score
   end
