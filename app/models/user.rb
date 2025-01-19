@@ -33,7 +33,13 @@ class User < ApplicationRecord
   end
 
   def average_completed_game_score
-    avg = Game.where(player2_id: id, status: :completed).pluck("AVG(player2_total_score)").first
+    avg = Game.where("(player1_id = :id OR player2_id = :id)", id: id)
+      .where(status: :completed)
+      .pluck(Arel.sql("AVG(CASE 
+        WHEN player1_id = #{id} THEN player1_total_score 
+        ELSE player2_total_score 
+      END)"))
+      .first
     avg&.to_f&.round(2)
   end
 
