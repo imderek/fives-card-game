@@ -32,6 +32,30 @@ class User < ApplicationRecord
     Game.where('player1_id = ? OR player2_id = ?', id, id)
   end
 
+  def average_completed_game_score
+    games.completed
+      .where.not(player1_total_score: nil, player2_total_score: nil)
+      .select("AVG(CASE 
+        WHEN player1_id = #{id} THEN player1_total_score 
+        ELSE player2_total_score 
+      END) as avg_score")
+      .first
+      &.avg_score
+  end
+
+  # Class methods for finding bots
+  def self.easy_bot
+    find_by(email: 'easy bot')
+  end
+
+  def self.medium_bot
+    find_by(email: 'medium bot')
+  end
+
+  def self.hard_bot
+    find_by(email: 'hard bot')
+  end
+
   private
   
   def generate_remember_token

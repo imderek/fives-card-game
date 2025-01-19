@@ -14,6 +14,8 @@ class Game < ApplicationRecord
   enum :game_type, [:pvp, :bot]
   enum :turn_phase, [:play_card, :draw_card], default: :play_card
   
+  scope :completed, -> { where(status: :completed) }
+  
   before_create :setup_initial_game_state
   
   def broadcast_game_state
