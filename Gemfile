@@ -68,3 +68,5 @@ end
 gem "devise", "~> 4.9"
 
 gem "jsbundling-rails", "~> 1.3"
+
+gem 'terminal-table'
