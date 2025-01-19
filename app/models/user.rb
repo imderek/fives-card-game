@@ -33,11 +33,8 @@ class User < ApplicationRecord
   end
 
   def average_completed_game_score
-    Game.where(player2_id: id, status: :completed)
-      .where.not(player2_total_score: nil)
-      .select("AVG(player2_total_score) as avg_score")
-      .first
-      &.avg_score
+    avg = Game.where(player2_id: id, status: :completed).pluck("AVG(player2_total_score)").first
+    avg&.to_f&.round(2)
   end
 
   # Class methods for finding bots
