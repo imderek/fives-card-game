@@ -39,7 +39,8 @@ class User < ApplicationRecord
         WHEN player1_id = #{id} THEN player1_total_score 
         ELSE player2_total_score 
       END) as avg_score")
-      .reorder(nil)  # Remove any default ordering
+      .group("")
+      .reorder(nil)
       .first
       &.avg_score
   end
