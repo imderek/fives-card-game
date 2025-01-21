@@ -31,7 +31,7 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
     >
       {facedown ? (
         <div className="w-full h-full flex items-center justify-center">
-          <svg width="30" height="30" viewBox="0 0 30 30" className="text-slate-500">
+          <svg width="30" height="30" viewBox="0 0 30 30" className="text-slate-500/70">
             <circle cx="5" cy="9" r="3" fill="currentColor"/>
             <circle cx="15" cy="9" r="3" fill="currentColor"/>
             <circle cx="25" cy="9" r="3" fill="currentColor"/>

@@ -28,7 +28,7 @@ const WinnerDeclaration = ({
 
     return (
         <div className="w-full flex flex-col animate-enter-scale">
-            <div className="my-1 mb-2 mx-6 md:mx-0 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
+            <div className="my-1 mx-6 md:mx-0 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
                 {/* Heading */}
                 <h1 className="mt-1 mb-4 text-xl font-bold text-slate-900 text-center">
                     {game.winner_id === currentUser.id ? "You Won!" : "You Lost"}

@@ -269,7 +269,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
     return (
         <div id="react-game-state" className="w-full py-2 flex flex-col sm:p-2 sm:px-6 sm:flex-row sm:items-start sm:justify-between items-center gap-2 sm:gap-12">
             {/* Left Column - Scores and Hands */}
-            <div className="w-full sm:w-2/5 flex flex-col items-center gap-3">
+            <div className={`${game.winner_id ? 'mb-3' : ''} w-full sm:w-2/5 flex flex-col items-center gap-3`}>
                 {/* Scoreboard */}
                 {!game.winner_id && (
                     <Scoreboard
@@ -280,6 +280,17 @@ const GameState = ({ game: initialGame, currentUser }) => {
                         isCurrentPlayerTurn={game.current_turn === currentUser.id}
                         isBot={isBot}
                         winner={game.winner_id}
+                    />
+                )}
+
+                {/* Winner Declaration */}
+                {(game.winner_id || liveGameState?.winner_id) && (
+                    <WinnerDeclaration
+                        game={game}
+                        currentUser={currentUser}
+                        formatPlayerName={formatPlayerName}
+                        createNewGame={createNewGame}
+                        isPlayer1={isPlayer1}
                     />
                 )}
 
@@ -301,19 +312,8 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 />
             </div>
 
-            {/* Right Column - Game Board and Winner Declaration */}
+            {/* Right Column - Game Board */}
             <div className="w-full sm:w-2/3 flex flex-col items-center gap-3">
-                {/* Winner Declaration */}
-                {(game.winner_id || liveGameState?.winner_id) && (
-                    <WinnerDeclaration
-                        game={game}
-                        currentUser={currentUser}
-                        formatPlayerName={formatPlayerName}
-                        createNewGame={createNewGame}
-                        isPlayer1={isPlayer1}
-                    />
-                )}
-
                 {/* GameBoard */}
                 <GameBoard
                     cards={game.board_cards || []}
@@ -326,7 +326,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 />
                 <div className="w-full">
                     {/* Opponent's hand */}
-                    <div className="sm:hidden mb-4">
+                    <div className={`${game.winner_id ? 'mb-4' : ''} sm:hidden`}>
                         {game.winner_id && (
                             <PlayerHand 
                                 cards={opponentHand.map(card => ({
