@@ -20,7 +20,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
       const timer = setTimeout(() => {
         setDelayedScore(score);
         setDelayedHandName(handName);
-        if (score >= 200) {
+        if ((isPlayerColumn && score >= 200) || (!isPlayerColumn && !winner)) {
           setShouldAnimate(true);
           setTimeout(() => setShouldAnimate(false), 500);
         }
