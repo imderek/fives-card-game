@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Card from './Card';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
 
-const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn }) => {
+const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn, winner }) => {
   const [prevScore, setPrevScore] = React.useState(0);
   const [delayedScore, setDelayedScore] = React.useState(0);
   const [delayedHandName, setDelayedHandName] = React.useState('');
@@ -40,6 +40,11 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   const getColumnStrengthClasses = (score, isPlayerColumn) => {
     const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] sm:min-h-[11.5rem] p-2 sm:p-1 relative column transition-colors duration-150 flex flex-col gap-1 w-full z-0";
     
+    // Only show special styles for player columns or when there's a winner
+    if (!isPlayerColumn && !winner) {
+      return `${baseClasses} bg-slate-800/80 rounded-lg`;
+    }
+
     let strengthClasses = "";
     // Straight Flush (800) & Royal Flush (1000)
     if (score >= 800) {
@@ -77,6 +82,9 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     return `${baseClasses} ${strengthClasses} rounded-lg`;
   };
   const scoreColorClass = (score) => {
+    // Only show special colors for player columns or when there's a winner
+    if (!isPlayerColumn && !winner) return 'text-slate-400';
+
     // Royal Flush (1000) & Straight Flush (800-999)
     if (score >= 800) return 'animate-pulse text-white';
     // Quads (700-799)
@@ -98,7 +106,8 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   };
 
   const renderParticles = () => {
-    if (score < 700) return null;
+    // Only show particles for player columns or when there's a winner
+    if (score < 700 || (!isPlayerColumn && !winner)) return null;
     
     const isHighTier = score >= 800;
     const particleColor = isHighTier ? 'bg-white' : 'bg-purple-300';
@@ -193,9 +202,13 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
         {/* Hand name and score */}
         {delayedHandName && (
           <div className="text-xs text-center text-white relative top-[-0.1rem] sm:top-0 sm:leading-[.85rem]">
-            <div className="line-clamp-1">{delayedHandName}</div>
+            <div className="line-clamp-1">
+              {isPlayerColumn || winner ? delayedHandName : 'TBD'}
+            </div>
             {delayedScore > 0 && (
-              <div className={scoreColorClass(delayedScore)}>+{delayedScore}</div>
+              <div className={scoreColorClass(delayedScore)}>
+                {isPlayerColumn || winner ? `+${delayedScore}` : '???'}
+              </div>
             )}
           </div>
         )}
@@ -211,7 +224,10 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
               className="opacity-0 animate-fade-in [animation-delay:300ms]"
               style={{ pointerEvents: 'none' }}
             >
-              <Card card={card} />
+              <Card 
+                card={card} 
+                facedown={!isPlayerColumn && !winner && cardIndex === 4}
+              />
             </div>
           ))}
         </div>

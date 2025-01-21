@@ -6,7 +6,8 @@ const Scoreboard = ({
     playerName,
     opponentName,
     isCurrentPlayerTurn,
-    isBot
+    isBot,
+    winner
 }) => {
     return (
         <div className="mb-1 px-6 md:p-0 w-full">
@@ -35,7 +36,9 @@ const Scoreboard = ({
 
                     {/* Opponent's score */}
                     <div className={`py-2 ${!isCurrentPlayerTurn ? 'border-b-4 border-amber-500' : 'border-b-4 border-transparent'} relative flex flex-1 flex-col items-center justify-center`}>
-                        <div className="text-xl font-bold text-slate-400">{opponentScore.toLocaleString()}</div>
+                        <div className="text-xl font-bold text-slate-400">
+                            {(!winner && opponentScore > 0) ? '???' : opponentScore.toLocaleString()}
+                        </div>
                         <div className="text-xs font-medium text-slate-400">{opponentName}</div>
                     </div>
                 </div>

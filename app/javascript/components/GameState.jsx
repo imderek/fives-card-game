@@ -279,6 +279,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                         opponentName={opponentName}
                         isCurrentPlayerTurn={game.current_turn === currentUser.id}
                         isBot={isBot}
+                        winner={game.winner_id}
                     />
                 )}
 
@@ -326,20 +327,22 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 <div className="w-full">
                     {/* Opponent's hand */}
                     <div className="sm:hidden mb-4">
-                        <PlayerHand 
-                            cards={opponentHand.map(card => ({
-                                ...card,
-                                isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
-                            }))}
-                            isCurrentPlayer={false}
-                            canPlay={false}
-                            onPlayCard={() => {}}
-                            onDiscard={() => {}}
-                            canDiscard={false}
-                            facedown={!game.winner_id}
-                            handScore={game.column_scores[isPlayer1 ? "player2_hand" : "player1_hand"]}
-                            winner={game.winner_id}
-                        />
+                        {game.winner_id && (
+                            <PlayerHand 
+                                cards={opponentHand.map(card => ({
+                                    ...card,
+                                    isSelected: selectedCard?.suit === card.suit && selectedCard?.value === card.value
+                                }))}
+                                isCurrentPlayer={false}
+                                canPlay={false}
+                                onPlayCard={() => {}}
+                                onDiscard={() => {}}
+                                canDiscard={false}
+                                facedown={!game.winner_id}
+                                handScore={game.column_scores[isPlayer1 ? "player2_hand" : "player1_hand"]}
+                                winner={game.winner_id}
+                            />
+                        )}
                     </div>
 
                     <div className="w-full px-6 sm:p-0">

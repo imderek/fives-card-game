@@ -38,6 +38,7 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
             selectedCard={selectedCard}
             onPlayCardToColumn={onPlayCardToColumn}
             isPlayerColumn={true}
+            winner={winner}
           />
         ))}
       </div>
@@ -55,6 +56,7 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
             selectedCard={selectedCard}
             onPlayCardToColumn={onPlayCardToColumn}
             isPlayerColumn={false}
+            winner={winner}
           />
         ))}
       </div>
