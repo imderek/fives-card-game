@@ -1,5 +1,9 @@
-<% if params[:type] == 'pvp' %>
-  <%= render 'pvp_selection' %>
-<% else %>
-  <%= render 'bot_selection' %>
-<% end %>
+<div class="max-w-7xl mx-auto px-4 py-6 pb-20">
+  <%= render "shared/header" %>
+
+  <% if params[:type] == 'pvp' %>
+    <%= render 'pvp_selection' %>
+  <% else %>
+    <%= render 'bot_selection' %>
+  <% end %>
+</div>
