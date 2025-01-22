@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       post :play_card
       post :draw_card
       post :discard_card
+      post :submit_bet
     end
   end
 

@@ -228,6 +228,28 @@ class GamesController < ApplicationController
     end
   end
 
+  def submit_bet
+    @game = Game.find(params[:id])
+    
+    if @game.betting_enabled?
+      bet_amount = params[:bet_amount].to_f
+      
+      # Update the player's bet and pot size
+      if @game.player1_id == current_user.id
+        @game.player1_bet = bet_amount
+      else
+        @game.player2_bet = bet_amount
+      end
+      @game.pot_size = @game.player1_bet + @game.player2_bet
+
+      @game.update!(status: :completed)
+      @game.broadcast_game_state
+      head :ok
+    else
+      render_error("Betting is not enabled for this game")
+    end
+  end
+
   private
 
   def set_game
@@ -263,6 +285,13 @@ class GamesController < ApplicationController
       Rails.logger.debug "Initial hand state: #{@game.player2_hand.inspect}" if played_card[:player_id] == @game.player2_id
       
       update_board_state(played_card)
+      
+      # Check for winner BEFORE changing turns
+      completion_service = GameCompletionService.new(@game)
+      if completion_service.board_full?
+        completion_service.check_for_winner
+        return true # Exit early if game is complete
+      end
       
       # Remove card from player's hand and update current turn
       if played_card[:player_id] == @game.player1_id
@@ -304,9 +333,6 @@ class GamesController < ApplicationController
       success = @game.save
       Rails.logger.debug "Save successful: #{success}"
       Rails.logger.debug "Final game state after save: #{@game.attributes.inspect}"
-
-      # Check for winner using the GameCompletionService
-      GameCompletionService.new(@game).check_for_winner
 
       success
     rescue => e

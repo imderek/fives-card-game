@@ -11,6 +11,8 @@ class GameCompletionService
   def check_for_winner
     return unless board_full?
     
+    Rails.logger.debug "Board is full, calculating scores..."
+    
     # Calculate board scores
     player1_board_score = calculate_player_score(@game.player1_id)
     player2_board_score = calculate_player_score(@game.player2_id)
@@ -23,19 +25,38 @@ class GameCompletionService
     player1_total = player1_board_score + player1_hand_score
     player2_total = player2_board_score + player2_hand_score
     
+    Rails.logger.debug "Scores calculated:"
+    Rails.logger.debug "Player 1 - Board: #{player1_board_score}, Hand: #{player1_hand_score}, Total: #{player1_total}"
+    Rails.logger.debug "Player 2 - Board: #{player2_board_score}, Hand: #{player2_hand_score}, Total: #{player2_total}"
+    
     # Add hand scores to column_scores
     column_scores = @game.column_scores || {}
     column_scores["player1_hand"] = player1_hand_score
     column_scores["player2_hand"] = player2_hand_score
     
-    # Update game with final scores and winner
-    @game.update(
-      status: :completed,
-      winner_id: player1_total > player2_total ? @game.player1_id : @game.player2_id,
-      player1_total_score: player1_total,
-      player2_total_score: player2_total,
-      column_scores: column_scores
-    )
+    # Determine winner
+    winner_id = determine_winner(player1_total, player2_total)
+    
+    # If it's a bot game, set to betting status first (but still store the winner)
+    if @game.bot? && @game.status != "completed"
+      Rails.logger.debug "Bot game detected, setting to betting status"
+      @game.update(
+        status: :betting,
+        winner_id: winner_id,
+        player1_total_score: player1_total,
+        player2_total_score: player2_total,
+        column_scores: column_scores
+      )
+    else
+      Rails.logger.debug "Setting winner and completing game"
+      @game.update(
+        status: :completed,
+        winner_id: winner_id,
+        player1_total_score: player1_total,
+        player2_total_score: player2_total,
+        column_scores: column_scores
+      )
+    end
   end
 
   def board_full?

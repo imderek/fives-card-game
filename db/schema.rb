@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_21_223545) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_22_171200) do
   create_table "contact_deals", force: :cascade do |t|
     t.integer "contact_id", null: false
     t.integer "deal_id", null: false
@@ -67,6 +67,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_21_223545) do
     t.integer "player1_total_score"
     t.integer "player2_total_score"
     t.boolean "is_private", default: false
+    t.integer "player1_bet", default: 0
+    t.integer "player2_bet", default: 0
+    t.integer "pot_size", default: 0
     t.index ["player1_id"], name: "index_games_on_player1_id"
     t.index ["player2_id"], name: "index_games_on_player2_id"
   end

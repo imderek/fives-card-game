@@ -10,7 +10,7 @@ class Game < ApplicationRecord
   serialize :player1_discard_pile, coder: YAML
   serialize :player2_discard_pile, coder: YAML
   
-  enum :status, [:waiting, :in_progress, :completed]
+  enum :status, [:waiting, :in_progress, :betting, :completed]
   enum :game_type, [:pvp, :bot]
   enum :turn_phase, [:play_card, :draw_card], default: :play_card
   
@@ -115,6 +115,11 @@ class Game < ApplicationRecord
     self.current_turn = player1_id
     self.turn_phase = :play_card
     self.status = :in_progress
+  end
+  
+  def betting_enabled?
+    # For now, always return true for bot games in betting status
+    bot? && status == "betting"
   end
   
   private

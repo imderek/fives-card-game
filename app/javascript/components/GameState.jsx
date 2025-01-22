@@ -56,12 +56,13 @@ const GameState = ({ game: initialGame, currentUser }) => {
         }
     }, [liveGameState, initialGame?.id]);
     
-    // Merge initial game state with live updates and optimistic updates, preserving player info
+    // Merge initial game state with live updates and optimistic updates
     const game = {
         ...(optimisticState || liveGameState || initialGame),
         player1: initialGame?.player1,
         player2: initialGame?.player2,
-        winner_id: (liveGameState?.winner_id || initialGame?.winner_id)
+        winner_id: (liveGameState?.winner_id || initialGame?.winner_id),
+        betting_enabled: (liveGameState?.status === 'betting' && initialGame?.game_type === 'bot')
     };
     
     const isPlayer1 = currentUser?.id === game?.player1_id;
@@ -271,7 +272,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
             {/* Left Column - Scores and Hands */}
             <div className={`${game.winner_id ? 'mb-3' : ''} w-full sm:w-2/5 flex flex-col items-center gap-3`}>
                 {/* Scoreboard */}
-                {!game.winner_id && (
+                {!game.winner_id && game.status !== 'betting' && (
                     <Scoreboard
                         playerScore={playerScore}
                         opponentScore={opponentScore}
@@ -283,8 +284,8 @@ const GameState = ({ game: initialGame, currentUser }) => {
                     />
                 )}
 
-                {/* Winner Declaration */}
-                {(game.winner_id || liveGameState?.winner_id) && (
+                {/* Winner Declaration or Betting UI */}
+                {(game.winner_id || game.status === 'betting') && (
                     <WinnerDeclaration
                         game={game}
                         currentUser={currentUser}
