@@ -27,6 +27,7 @@ class User < ApplicationRecord
     update_without_password(params, *options)
   end
 
+  before_create :set_initial_cash
   before_create :generate_remember_token
 
   def games
@@ -59,6 +60,10 @@ class User < ApplicationRecord
 
   private
   
+  def set_initial_cash
+    self.cash ||= 1000
+  end
+
   def generate_remember_token
     self.remember_token ||= SecureRandom.hex(10)
   end

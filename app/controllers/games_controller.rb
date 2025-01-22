@@ -232,17 +232,28 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     
     if @game.betting_enabled?
-      bet_amount = params[:bet_amount].to_f
+      bet_amount = params[:bet_amount].to_i
       
-      # Update the player's bet and pot size
+      # Update the player's bet and have the bot match it
       if @game.player1_id == current_user.id
         @game.player1_bet = bet_amount
+        @game.player2_bet = bet_amount  # Bot matches the bet
       else
         @game.player2_bet = bet_amount
+        @game.player1_bet = bet_amount  # Bot matches the bet
       end
       @game.pot_size = @game.player1_bet + @game.player2_bet
 
+      # Deduct the bet from the player's cash
+      current_user.update!(cash: current_user.cash - bet_amount)
+
       @game.update!(status: :completed)
+
+      # Add winnings if the player won
+      if @game.winner_id == current_user.id
+        current_user.update!(cash: current_user.cash + @game.pot_size)
+      end
+
       @game.broadcast_game_state
       head :ok
     else
