@@ -19,7 +19,7 @@ class GamesController < ApplicationController
           .includes(:player1)
           .group('player1_id')
           .order('high_score DESC')
-          .limit(5)
+          .limit(10)
   end
 
   def show
