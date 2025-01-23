@@ -7,18 +7,18 @@ const WinnerDeclaration = ({
     createNewGame,
     isPlayer1 
 }) => {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
     const [isBetting, setIsBetting] = useState(false);
-    const [betAmount, setBetAmount] = useState("");
+    const [betAmount, setBetAmount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsVisible(true);
-        }, 1000);
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         setIsVisible(true);
+    //     }, 1000);
 
-        return () => clearTimeout(timer);
-    }, []);
+    //     return () => clearTimeout(timer);
+    // }, []);
 
     useEffect(() => {
         console.log("Game status changed:", game.status);
@@ -64,30 +64,61 @@ const WinnerDeclaration = ({
         console.log("Showing betting UI");
         return (
             <div className="w-full flex flex-col animate-enter-scale">
-                <div className="my-1 mx-6 md:mx-0 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
-                    <h1 className="mt-1 mb-4 text-xl font-bold text-slate-900 text-center">
-                        Place Your Bet
+                <div className="my-1 mx-6 md:mx-0 p-3 pt-6 bg-white rounded-lg relative z-40">
+                    <h1 className="mb-1 text-lg font-normal text-black text-center">
+                        Time to bet!
                     </h1>
                     
-                    <div className="flex flex-col items-center gap-4 mb-3">
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="number"
-                                value={betAmount}
-                                onChange={(e) => setBetAmount(Number(e.target.value))}
-                                className="form-input bg-slate-200 text-slate-900 border-0 rounded-lg focus:ring-slate-400 block w-full p-2.5 placeholder-slate-400 focus:ring-slate-500 focus:ring-2"
-                                placeholder="Bet amount"
-                                disabled={isSubmitting}
-                            />
-                            <span className="text-sm text-gray-500">coins</span>
+                    <div className="flex flex-col items-center">
+                        <div className="px-4 mb-1 flex items-center justify-center gap-2 text-xl">
+                            <button 
+                                onClick={() => setBetAmount(prev => Math.max(0, prev - 100))}
+                                className="w-12 h-12 text-slate-500 hover:text-slate-600 bg-slate-200 rounded-lg"
+                            >
+                                <i className="fa fa-minus"></i>
+                            </button>
+                            <div className="flex items-center w-1/2">
+                                {/* <span className="text-green-500"><i className="fa fa-money-bill-wave"></i></span> */}
+                                <input
+                                    type="text"
+                                    value={betAmount}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/[^0-9]/g, '');
+                                        setBetAmount(Number(value) || 0);
+                                    }}
+                                    className="form-input p-0 w-full text-black font-bold text-4xl text-center border-0 rounded-lg focus:ring-slate-200 placeholder-slate-200 focus:ring-slate-500 focus:ring-2"
+                                    placeholder="0"
+                                    disabled={isSubmitting}
+                                />
+                            </div>
+                            <button 
+                                onClick={() => setBetAmount(prev => prev + 100)}
+                                className="w-12 h-12 text-slate-500 hover:text-slate-600 bg-slate-200 rounded-lg"
+                            >
+                                <i className="fa fa-plus"></i>
+                            </button>
                         </div>
                         
+                        <div className="text-slate-500">
+                            Pot size: ${(betAmount * 2).toLocaleString()}
+                        </div>
+
                         <button 
                             onClick={handleBetSubmit}
-                            className="btn btn-primary"
+                            className="mt-6 btn btn-primary px-8"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? 'Submitting...' : 'Submit Bet'}
+                            Place Bet
+                        </button>
+                        <button 
+                            onClick={() => {
+                                setBetAmount(0);
+                                handleBetSubmit();
+                            }}
+                            className="mt-2 btn btn-outline text-slate-400 border-slate-400"
+                            disabled={isSubmitting}
+                        >
+                            Skip Betting
                         </button>
                     </div>
                 </div>

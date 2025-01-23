@@ -324,11 +324,12 @@ const GameState = ({ game: initialGame, currentUser }) => {
                     playerName={playerName}
                     winner={game.winner_id}
                     isPlayer1={isPlayer1}
+                    status={game.status}
                 />
                 <div className="w-full">
                     {/* Opponent's hand */}
                     <div className={`${game.winner_id ? 'mb-4' : ''} sm:hidden`}>
-                        {game.winner_id && (
+                        {game.status == 'completed' && (
                             <PlayerHand 
                                 cards={opponentHand.map(card => ({
                                     ...card,
