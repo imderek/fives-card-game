@@ -11,20 +11,23 @@ const WinnerDeclaration = ({
     const [isBetting, setIsBetting] = useState(false);
     const [betAmount, setBetAmount] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setIsVisible(true);
-    //     }, 1000);
-
-    //     return () => clearTimeout(timer);
-    // }, []);
+    const [hasBetCompleted, setHasBetCompleted] = useState(false);
 
     useEffect(() => {
         console.log("Game status changed:", game.status);
         console.log("Game betting enabled:", game.betting_enabled);
         setIsBetting(game.betting_enabled);
     }, [game.status]);
+
+    useEffect(() => {
+        if (game.status === 'completed' && hasBetCompleted) {
+            setIsVisible(false);
+            const timer = setTimeout(() => {
+                setIsVisible(true);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [game.status, hasBetCompleted]);
 
     const handleBetSubmit = async () => {
         try {
@@ -41,6 +44,8 @@ const WinnerDeclaration = ({
             if (!response.ok) {
                 throw new Error('Failed to submit bet');
             }
+            setHasBetCompleted(true);
+            setIsVisible(false);
         } catch (error) {
             console.error('Error submitting bet:', error);
         } finally {
@@ -49,7 +54,6 @@ const WinnerDeclaration = ({
     };
 
     if (!isVisible) {
-        console.log("WinnerDeclaration not visible yet");
         return null;
     }
 
