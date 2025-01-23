@@ -19,7 +19,7 @@ class GamesController < ApplicationController
           .includes(:player1)
           .group('player1_id')
           .order('high_score DESC')
-          .limit(10)
+          .limit(7)
   end
 
   def show
@@ -306,7 +306,7 @@ class GamesController < ApplicationController
       Rails.logger.debug "Final game state after save: #{@game.attributes.inspect}"
 
       # Check for winner using the GameCompletionService
-      GameCompletionService.new(@game).check_for_winner
+      check_for_winner
 
       success
     rescue => e
@@ -373,5 +373,21 @@ class GamesController < ApplicationController
   def setup_pvp_game
     @game.player2_id = params[:game][:player2_id]
     @game.game_type = :pvp
+  end
+
+  def check_for_winner
+    completion_service = GameCompletionService.new(@game)
+    completion_service.check_for_winner
+    
+    # If game is completed, broadcast header update to both players
+    if @game.completed? && @game.winner_id
+      # Broadcast to winner
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "user_#{@game.winner_id}",
+        target: "header",
+        partial: "shared/header",
+        locals: { current_user: User.find(@game.winner_id) }
+      )
+    end
   end
 end

@@ -1,9 +1,7 @@
 <%= turbo_stream_from "games" %>
 <%= turbo_stream_from "user_#{current_user.id}_games" %>
 
-<div class="max-w-7xl mx-auto p-4">
-  <%= render "shared/header" %>
-
+<div class="max-w-7xl mx-auto p-4 pt-0">
   <!-- Welcome -->
   <div class="mb-2 text-center text-white py-1">
     <h2 class="text-xl font-medium mb-3.5">Welcome, <%= current_user.email.titleize %>.</h2>
