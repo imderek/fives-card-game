@@ -23,7 +23,7 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
     };
 
     // Debug log
-    console.log('Initial Position:', initialPosition);
+    // console.log('Initial Position:', initialPosition);
     
     onPlayCard({
       ...card,
