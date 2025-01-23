@@ -1,5 +1,9 @@
 <%= turbo_stream_from "game_#{@game.id}_player_#{current_user.id}" %>
 
+<div class="max-w-7xl mx-auto p-4 pb-0">
+  <%= render "shared/header" %>
+</div>
+
 <div
   id="react-game-root"
   data-turbo="false"
