@@ -20,6 +20,16 @@ class GamesController < ApplicationController
           .group('player1_id')
           .order('high_score DESC')
           .limit(7)
+
+    @win_counts = Game.select('max(winner_id) as winner_id, COUNT(*) as wins_count')
+                      .where(is_private: false)
+                      .where.not(winner_id: nil)
+                      .includes(:winner)
+                      .where.not("users.email LIKE ?", "%bot%")
+                      .references(:users)
+                      .group('winner_id')
+                      .order('wins_count DESC')
+                      .limit(7)
   end
 
   def show

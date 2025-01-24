@@ -31,8 +31,8 @@
   <!-- Top scores -->
   <h1 class="text-xl font-medium mb-3 dark:text-white">Leaderboard</h1>
   <div class="grid gap-4 mb-5">
-    <div class="text-sm flex flex-col gap-3 justify-between text-white p-4 bg-slate-700 rounded-lg shadow-xl">
-      <div class="hidden mb-2 font-medium text-center text-slate-500 border-b border-slate-600">
+    <div class="text-sm flex flex-col gap-3 justify-between text-white p-4 pt-2 bg-slate-700 rounded-lg shadow-xl">
+      <div class="mb-2 font-medium text-center text-slate-500 border-b border-slate-600">
           <ul class="flex flex-wrap -mb-px">
               <li class="me-2">
                   <a href="#" class="inline-block p-2 text-white border-b-2 border-amber-500 active" aria-current="page">Most Wins</a>
@@ -48,7 +48,7 @@
 
       <% @high_scores.each_with_index do |game, index| %>
         <!-- User row -->
-        <div class="flex flex-row justify-between items-center">
+        <div class="hidden flex flex-row justify-between items-center">
           <!-- Left column -->
           <div class="flex flex-row gap-2 items-center">
             <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
@@ -57,6 +57,20 @@
           </div>
           <!-- Right column -->
           <div class=""><%= game.high_score %></div>
+        </div>
+      <% end %>
+
+      <% @win_counts.each_with_index do |game, index| %>
+        <!-- User row -->
+        <div class="flex flex-row justify-between items-center">
+          <!-- Left column -->
+          <div class="flex flex-row gap-2 items-center">
+            <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
+            <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.winner.email.first.upcase %></div>
+            <div class="font-medium"><%= game.winner.email.titleize %></div>
+          </div>
+          <!-- Right column -->
+          <div class=""><%= game.wins_count %></div>
         </div>
       <% end %>
     </div>
