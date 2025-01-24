@@ -11,15 +11,21 @@ class GamesController < ApplicationController
                  .limit(7)
     @high_scores = if ActiveRecord::Base.connection.adapter_name.downcase == 'postgresql'
       Game.select('player1_id, BOOL_OR(is_private) as is_private, MAX(player1_total_score) as high_score')
+          .where('player1_total_score > 0')
+          .where(is_private: false)
+          .includes(:player1)
+          .group('player1_id, games.is_private')
+          .order('high_score DESC')
+          .limit(7)
     else
       Game.select('player1_id, MAX(is_private) as is_private, MAX(player1_total_score) as high_score')
-    end
           .where('player1_total_score > 0')
           .where(is_private: false)
           .includes(:player1)
           .group('player1_id')
           .order('high_score DESC')
           .limit(7)
+    end
 
     @total_points = Game.select('CASE 
                                   WHEN player1_id = users.id THEN player1_total_score 
@@ -36,16 +42,17 @@ class GamesController < ApplicationController
                        .where('(player1_id = users.id AND player1_total_score > 0) OR 
                               (player2_id = users.id AND player2_total_score > 0)')
                        .where.not("users.email LIKE ?", "%bot%")
-                       .group('users.id, users.email')
+                       .group('users.id, users.email, player1_id, player2_id, games.is_private, 
+                              games.player1_total_score, games.player2_total_score')
                        .order('total_points DESC')
                        .limit(7)
 
-    @win_counts = Game.select('winner_id, COUNT(*) as wins_count')
+    @win_counts = Game.select('winner_id, users.email as email, COUNT(*) as wins_count')
                       .where(is_private: false)
                       .where.not(winner_id: nil)
                       .joins(:winner)
                       .where.not("users.email LIKE ?", "%bot%")
-                      .group('winner_id')
+                      .group('winner_id, users.email, games.is_private')
                       .order('wins_count DESC')
                       .limit(7)
   end
