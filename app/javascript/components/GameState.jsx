@@ -219,7 +219,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
     const createNewGame = async (botEmail) => {
         try {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            const difficulty = botEmail?.split(' ')[0]; // Gets 'easy', 'medium', or 'hard'
+            const difficulty = botEmail?.split(' ')[0];
             
             const response = await fetch('/games', {
                 method: 'POST',
@@ -268,7 +268,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
     }
 
     return (
-        <div id="react-game-state" className="w-full py-2 flex flex-col sm:p-2 sm:px-6 sm:flex-row sm:items-start sm:justify-between items-center gap-2 sm:gap-12">
+        <div id="react-game-state" className="w-full py-2 pt-0 flex flex-col sm:p-2 sm:px-6 sm:flex-row sm:items-start sm:justify-between items-center gap-2 sm:gap-12">
             {/* Left Column - Scores and Hands */}
             <div className={`${game.winner_id ? 'mb-3' : ''} w-full sm:w-2/5 flex flex-col items-center gap-3`}>
                 {/* Scoreboard */}
@@ -348,7 +348,11 @@ const GameState = ({ game: initialGame, currentUser }) => {
                     </div>
 
                     <div className="w-full px-6 sm:p-0">
-                        <a href="/" className="block text-center border border-slate-500/50 rounded-lg mb-6 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70">
+                        <a 
+                            href="/" 
+                            data-turbo="true"
+                            className="block text-center border border-slate-500/50 rounded-lg mb-6 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70"
+                        >
                             Back to Lobby
                         </a>
                     </div>

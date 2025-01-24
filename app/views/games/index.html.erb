@@ -1,11 +1,9 @@
 <%= turbo_stream_from "games" %>
 <%= turbo_stream_from "user_#{current_user.id}_games" %>
 
-<div class="max-w-7xl mx-auto px-4 py-6 pb-20">
-  <%= render "shared/header" %>
-
+<div class="max-w-7xl mx-auto p-4 pt-0">
   <!-- Welcome -->
-  <div class="mb-2 text-center text-white py-1">
+  <div class="mb-4 text-center text-white py-1">
     <h2 class="text-xl font-medium mb-3.5">Welcome, <%= current_user.email.titleize %>.</h2>
     <div class="flex flex-col justify-center gap-4">
       <!-- Play buttons -->
@@ -27,117 +25,70 @@
           Play Solo
         </a>
       </div>
-      <!-- How to play -->
-      <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="text-slate-400 hover:text-slate-300 rounded-lg">
-        <i class="fa-solid fa-circle-question mr-0.5 opacity-70"></i> Learn How to Play
-      </button>
-    </div>
-
-    <!-- Instructions modal -->
-    <div id="instructions-modal" tabindex="-1" aria-hidden="true" data-modal-placement="center" class="hidden fixed top-0 left-0 right-0 text-left z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-2xl max-h-full">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow animate-enter-scale">
-              <!-- Modal header -->
-              <div class="mb-1 p-4 md:p-5 flex items-start justify-between rounded-t">
-                <div class="flex flex-col">
-                  <h3 class="mb-0.5 text-xl font-semibold text-slate-900">
-                      How to Play Fiives
-                  </h3>
-                  <p class="text-sm font-medium text-slate-500">Build poker hands to score points.</p>
-                </div>
-                <button type="button" class="text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm w-8 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-slate-600 dark:hover:text-white" data-modal-hide="instructions-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-              </div>
-              <!-- Modal body -->
-              <div class="p-4 pt-0 space-y-6">
-                  <div class="text-sm text-slate-900">
-                    <ol class="list-disc relative ml-1">
-                        <li class="ms-4">
-                            <p class="mb-2">Each player is dealt <strong>6 cards</strong>.</p>
-                        </li>
-                        <li class="ms-4">
-                            <p class="mb-2">You'll take turns placing <strong>one card</strong> on your side of the <strong>board</strong> in any column.</p>
-                        </li>
-                        <li class="ms-4">
-                            <p class="mb-2">Each column <strong> represents a poker hand</strong>. The stronger the hand, the more points you earn.</p>
-                        </li>
-                        <li class="ms-4">
-                            <p class="mb-2">At the end of every turn, <strong>you will be given a new card</strong> from the deck automatically.</p>
-                        </li>
-                        <li class="ms-4">
-                            <p class="mb-2">Score more points than your opponent to win.</p>
-                        </li>
-                    </ol>
-                    <div class="mt-4 mb-2 border-t border-slate-300 pt-4 px-1">
-                      <p class="text-lg font-semibold text-slate-900 mb-3">Poker Hands</p>
-                      <div class="grid grid-cols-1 gap-x-8 gap-y-1 text-sm text-slate-600">
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Royal Flush</span>
-                          <span>1000</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Straight Flush</span>
-                          <span>800</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Quads</span>
-                          <span>700</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Full House</span>
-                          <span>600</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Flush</span>
-                          <span>500</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Straight</span>
-                          <span>400</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Trips</span>
-                          <span>300</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">Two Pair</span>
-                          <span>200</span>
-                        </div>
-                        <div class="flex justify-between">
-                          <span class="text-slate-900">One Pair</span>
-                          <span>100</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-          </div>
-      </div>
     </div>
   </div>
 
-  <!-- Top scores -->
-  <h1 class="text-xl font-medium mb-3 dark:text-white">Top Scores</h1>
+  <!-- Leaderboard -->
+  <h1 class="text-xl font-medium mb-3 dark:text-white">Leaderboard</h1>
   <div class="grid gap-4 mb-5">
-    <div class="text-sm flex flex-col gap-3 justify-between text-white p-4 bg-slate-700 rounded-lg shadow-xl">
-      <% @high_scores.each_with_index do |game, index| %>
-        <!-- User row -->
-        <div class="flex flex-row justify-between items-center">
-          <!-- Left column -->
-          <div class="flex flex-row gap-2 items-center">
-            <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
-            <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.player1.email.first.upcase %></div>
-            <div class="font-medium"><%= game.player1.email.titleize %></div>
-          </div>
-          <!-- Right column -->
-          <div class=""><%= game.high_score %></div>
+    <div class="text-sm flex flex-col gap-3 justify-between text-white p-4 pt-2 bg-slate-700 rounded-lg shadow-xl">
+      <div class="mb-2 font-medium text-center text-slate-500 border-b border-slate-600">
+        <ul class="flex flex-wrap -mb-px" id="leaderboardTabs" data-tabs-toggle="#leaderboardContent" data-tabs-active-classes="border-amber-500 text-white" data-tabs-inactive-classes="border-transparent text-slate-400 hover:text-white" role="tablist">
+          <li class="me-2" role="presentation">
+            <button class="inline-block p-2 border-b-2 border-amber-500 text-white" id="wins-tab" data-tabs-target="#wins" type="button" role="tab" aria-controls="wins" aria-selected="true">Most Wins</button>
+          </li>
+          <li class="me-2" role="presentation">
+            <button class="inline-block p-2 border-b-2 border-transparent text-slate-400 hover:text-white" id="scores-tab" data-tabs-target="#scores" type="button" role="tab" aria-controls="scores" aria-selected="false">Top Scores</button>
+          </li>
+          <li class="me-2" role="presentation">
+            <button class="inline-block p-2 border-b-2 border-transparent text-slate-400 hover:text-white" id="points-tab" data-tabs-target="#points" type="button" role="tab" aria-controls="points" aria-selected="false">Total Points</button>
+          </li>
+        </ul>
+      </div>
+
+      <div id="leaderboardContent">
+        <!-- Most Wins Tab -->
+        <div class="space-y-3" id="wins" role="tabpanel" aria-labelledby="wins-tab">
+          <% @win_counts.each_with_index do |game, index| %>
+            <div class="flex flex-row justify-between items-center">
+              <div class="flex flex-row gap-2 items-center">
+                <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
+                <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.winner.email.first.upcase %></div>
+                <div class="font-medium"><%= game.winner.email.titleize %></div>
+              </div>
+              <div class=""><%= game.wins_count %></div>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+
+        <!-- Top Scores Tab -->
+        <div class="hidden space-y-3" id="scores" role="tabpanel" aria-labelledby="scores-tab">
+          <% @high_scores.each_with_index do |game, index| %>
+            <div class="flex flex-row justify-between items-center">
+              <div class="flex flex-row gap-2 items-center">
+                <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
+                <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.player1.email.first.upcase %></div>
+                <div class="font-medium"><%= game.player1.email.titleize %></div>
+              </div>
+              <div class=""><%= game.high_score %></div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Total Points Tab -->
+        <div class="hidden space-y-3" id="points" role="tabpanel" aria-labelledby="points-tab">
+          <% @total_points.each_with_index do |game, index| %>
+            <div class="flex flex-row justify-between items-center">
+              <div class="flex flex-row gap-2 items-center">
+                <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
+                <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.email.first.upcase %></div>
+                <div class="font-medium"><%= game.email.titleize %></div>
+              </div>
+              <div class=""><%= game.total_points %></div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -145,7 +96,7 @@
   <div class="<%= @games.any? ? 'mb-4' : 'mb-2' %> flex flex-row justify-between items-center">
     <h1 class="text-xl font-medium dark:text-white">My Recent Games</h1>
   </div>
-  <div id="games_list" class="space-y-3">
+  <div id="games_list" class="mb-4 space-y-3">
     <% if @games.any? %>
       <% @games.each do |game| %>
         <%= render "games/game", game: game %>
@@ -157,14 +108,23 @@
 
   <!-- Admin -->
   <% if current_user.email == "derek" %>
-    <h1 class="my-4 text-xl font-medium dark:text-white">Admin Tools</h1>
-    <div class="flex flex-row gap-2">
+    <h1 class="mb-2 text-xl font-medium dark:text-white">Admin Tools</h1>
+    <div class="grid grid-cols-2 gap-2 w-full">
       <%= button_to "Generate Demos", games_path(type: :demo),
-          class: "btn btn-outline text-sm",
+          class: "w-full btn btn-outline text-sm",
           data: { turbo_confirm: "Are you sure you want to generate demos?" } %>
       <%= button_to "View Player Stats", players_path,
           method: :get,
-          class: "btn btn-outline text-sm" %>
+          class: "w-full btn btn-outline text-sm" %>
     </div>
+  <% end %>
+
+  <!-- Logout -->
+  <%= button_to destroy_user_session_path, 
+      method: :delete,
+      form_class: "flex items-center gap-1.5",
+      class: "w-full mt-4 mb-7 p-0 text-center text-slate-500 hover:text-white text-[.925rem] leading-none" do %>
+    <i class="fa-solid fa-right-from-bracket"></i>
+    <span class="text-slate-400 hover:text-white">Log Out</span>
   <% end %>
 </div>

@@ -45,6 +45,10 @@ class User < ApplicationRecord
     avg&.to_f&.round(2)
   end
 
+  def total_wins
+    Game.where(winner_id: id, is_private: false).count
+  end
+
   # Class methods for finding bots
   def self.easy_bot
     find_by(email: 'easy bot')

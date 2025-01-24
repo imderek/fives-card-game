@@ -10,7 +10,7 @@ const Scoreboard = ({
     winner
 }) => {
     return (
-        <div className="mb-1 px-6 sm:p-0 w-full">
+        <div className="mb-1 px-4 sm:p-0 w-full">
             <div className="px-7 md:px-3 bg-slate-700/80 text-white rounded-lg relative z-40 w-full">
                 <div className="h-full relative flex items-center justify-center gap-4 rounded-lg">
                     {/* Turn indicator */}

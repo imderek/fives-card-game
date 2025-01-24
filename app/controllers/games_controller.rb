@@ -11,15 +11,50 @@ class GamesController < ApplicationController
                  .limit(7)
     @high_scores = if ActiveRecord::Base.connection.adapter_name.downcase == 'postgresql'
       Game.select('player1_id, BOOL_OR(is_private) as is_private, MAX(player1_total_score) as high_score')
+          .where('player1_total_score > 0')
+          .where(is_private: false)
+          .includes(:player1)
+          .group('player1_id, games.is_private')
+          .order('high_score DESC')
+          .limit(7)
     else
       Game.select('player1_id, MAX(is_private) as is_private, MAX(player1_total_score) as high_score')
-    end
           .where('player1_total_score > 0')
           .where(is_private: false)
           .includes(:player1)
           .group('player1_id')
           .order('high_score DESC')
-          .limit(10)
+          .limit(7)
+    end
+
+    @total_points = Game.select('CASE 
+                                  WHEN player1_id = users.id THEN player1_total_score 
+                                  WHEN player2_id = users.id THEN player2_total_score 
+                                END as game_score, 
+                                users.id as player_id,
+                                users.email as email,
+                                SUM(CASE 
+                                  WHEN player1_id = users.id THEN player1_total_score 
+                                  WHEN player2_id = users.id THEN player2_total_score 
+                                END) as total_points')
+                       .joins('JOIN users ON users.id = player1_id OR users.id = player2_id')
+                       .where(is_private: false)
+                       .where('(player1_id = users.id AND player1_total_score > 0) OR 
+                              (player2_id = users.id AND player2_total_score > 0)')
+                       .where.not("users.email LIKE ?", "%bot%")
+                       .group('users.id, users.email, player1_id, player2_id, games.is_private, 
+                              games.player1_total_score, games.player2_total_score')
+                       .order('total_points DESC')
+                       .limit(7)
+
+    @win_counts = Game.select('winner_id, users.email as email, COUNT(*) as wins_count')
+                      .where(is_private: false)
+                      .where.not(winner_id: nil)
+                      .joins(:winner)
+                      .where.not("users.email LIKE ?", "%bot%")
+                      .group('winner_id, users.email, games.is_private')
+                      .order('wins_count DESC')
+                      .limit(7)
   end
 
   def show
@@ -410,5 +445,21 @@ class GamesController < ApplicationController
   def setup_pvp_game
     @game.player2_id = params[:game][:player2_id]
     @game.game_type = :pvp
+  end
+
+  def check_for_winner
+    completion_service = GameCompletionService.new(@game)
+    completion_service.check_for_winner
+    
+    # If game is completed, broadcast header update to both players
+    if @game.completed? && @game.winner_id
+      # Broadcast to winner
+      Turbo::StreamsChannel.broadcast_replace_to(
+        "user_#{@game.winner_id}",
+        target: "header",
+        partial: "shared/header",
+        locals: { current_user: User.find(@game.winner_id) }
+      )
+    end
   end
 end
