@@ -21,6 +21,25 @@ class GamesController < ApplicationController
           .order('high_score DESC')
           .limit(7)
 
+    @total_points = Game.select('CASE 
+                                  WHEN player1_id = users.id THEN player1_total_score 
+                                  WHEN player2_id = users.id THEN player2_total_score 
+                                END as game_score, 
+                                users.id as player_id,
+                                users.email as email,
+                                SUM(CASE 
+                                  WHEN player1_id = users.id THEN player1_total_score 
+                                  WHEN player2_id = users.id THEN player2_total_score 
+                                END) as total_points')
+                       .joins('JOIN users ON users.id = player1_id OR users.id = player2_id')
+                       .where(is_private: false)
+                       .where('(player1_id = users.id AND player1_total_score > 0) OR 
+                              (player2_id = users.id AND player2_total_score > 0)')
+                       .where.not("users.email LIKE ?", "%bot%")
+                       .group('users.id, users.email')
+                       .order('total_points DESC')
+                       .limit(7)
+
     @win_counts = Game.select('max(winner_id) as winner_id, COUNT(*) as wins_count')
                       .where(is_private: false)
                       .where.not(winner_id: nil)
