@@ -9,52 +9,37 @@ class GamesController < ApplicationController
                  .order(created_at: :desc)
                  .includes(:player1, :player2)
                  .limit(7)
-    @high_scores = if ActiveRecord::Base.connection.adapter_name.downcase == 'postgresql'
-      Game.select('player1_id, BOOL_OR(is_private) as is_private, MAX(player1_total_score) as high_score')
-          .where('player1_total_score > 0')
-          .where(is_private: false)
-          .includes(:player1)
-          .group('player1_id, games.is_private')
-          .order('high_score DESC')
-          .limit(7)
-    else
-      Game.select('player1_id, MAX(is_private) as is_private, MAX(player1_total_score) as high_score')
-          .where('player1_total_score > 0')
-          .where(is_private: false)
-          .includes(:player1)
-          .group('player1_id')
-          .order('high_score DESC')
-          .limit(7)
-    end
+    @high_scores = Game.select('player1_id, MAX(player1_total_score) as high_score')
+                      .joins(:player1)
+                      .where('player1_total_score > 0')
+                      .where(is_private: false)
+                      .group('player1_id')
+                      .order('high_score DESC')
+                      .limit(7)
 
-    @total_points = Game.select('CASE 
-                                  WHEN player1_id = users.id THEN player1_total_score 
-                                  WHEN player2_id = users.id THEN player2_total_score 
-                                END as game_score, 
-                                users.id as player_id,
-                                users.email as email,
-                                SUM(CASE 
-                                  WHEN player1_id = users.id THEN player1_total_score 
-                                  WHEN player2_id = users.id THEN player2_total_score 
-                                END) as total_points')
-                       .joins('JOIN users ON users.id = player1_id OR users.id = player2_id')
-                       .where(is_private: false)
-                       .where('(player1_id = users.id AND player1_total_score > 0) OR 
-                              (player2_id = users.id AND player2_total_score > 0)')
+    player1_points = Game.select('player1_id as user_id, player1_total_score as score')
+                        .where('player1_total_score > 0')
+                        .where(is_private: false)
+
+    player2_points = Game.select('player2_id as user_id, player2_total_score as score')
+                        .where('player2_total_score > 0')
+                        .where(is_private: false)
+
+    @total_points = User.select('users.id, users.email, SUM(all_scores.score) as total_points')
+                       .joins("INNER JOIN (#{player1_points.to_sql} UNION ALL #{player2_points.to_sql}) as all_scores ON users.id = all_scores.user_id")
                        .where.not("users.email LIKE ?", "%bot%")
-                       .group('users.id, users.email, player1_id, player2_id, games.is_private, 
-                              games.player1_total_score, games.player2_total_score')
+                       .group('users.id, users.email')
                        .order('total_points DESC')
                        .limit(7)
 
-    @win_counts = Game.select('winner_id, users.email as email, COUNT(*) as wins_count')
-                      .where(is_private: false)
-                      .where.not(winner_id: nil)
-                      .joins(:winner)
-                      .where.not("users.email LIKE ?", "%bot%")
-                      .group('winner_id, users.email, games.is_private')
-                      .order('wins_count DESC')
-                      .limit(7)
+    @win_counts = Game.select('winner_id, users.email, COUNT(*) as wins_count')
+                     .joins(:winner)
+                     .where(is_private: false)
+                     .where.not(winner_id: nil)
+                     .where.not("users.email LIKE ?", "%bot%")
+                     .group('winner_id, users.email')
+                     .order('wins_count DESC')
+                     .limit(7)
   end
 
   def show
