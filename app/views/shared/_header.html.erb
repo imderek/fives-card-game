@@ -1,142 +1,139 @@
 <%= turbo_stream_from "user_#{current_user.id}" %>
 
 <!-- Header -->
-<div id="header" class="flex flex-row items-center justify-between mb-2 p-4 pb-0" data-controller="header">
+<div id="header" class="flex flex-row items-center justify-between mb-2 p-4 pb-0">
   <h1 class="block w-1/3 text-2xl font-bold text-white">
     <%= link_to "Fiives", "/", class: "text-white hover:text-slate-300", data: { turbo: false } %>
   </h1>
   <div class="w-2/3 flex flex-row items-center justify-end gap-3.5 text-[.925rem] leading-none">
     <button class="inline p-0 text-slate-500 hover:text-white leading-none">
       <i class="fa-solid fa-trophy text-amber-500"></i>
-      <span class="text-white" data-header-target="wins"><%= current_user.total_wins %></span>
+      <span class="wins-value text-white"><%= current_user.total_wins %></span>
     </button>
     <button data-modal-target="cash-modal" data-modal-toggle="cash-modal" class="inline p-0 text-slate-500 hover:text-white leading-none">
       <i class="fa-solid fa-money-bill-wave text-green-500"></i>
-      <span class="text-white">$1,000</span>
+      <span class="cash-value text-white">$<%= number_with_delimiter(current_user.cash, delimiter: ',') %></span>
     </button>
     <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="text-slate-400 hover:text-slate-300 rounded-lg">
       <i class="fa-solid fa-info-circle text-slate-500"></i>
       <span class="text-slate-400">Help</span>
     </button>
   </div>
-</div>
 
-<!-- Instructions modal -->
-<div id="instructions-modal" tabindex="-1" aria-hidden="true" data-modal-placement="center" class="hidden fixed top-0 left-0 right-0 text-left z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-full max-w-2xl max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow animate-enter-scale">
-          <!-- Modal header -->
-          <div class="mb-1 p-4 md:p-5 flex items-start justify-between rounded-t">
-            <div class="flex flex-col">
-              <h3 class="mb-0.5 text-xl font-semibold text-slate-900">
-                  How to Play Fiives
-              </h3>
-              <p class="text-sm font-medium text-slate-500">Build poker hands to score points.</p>
+  <!-- Instructions modal -->
+  <div id="instructions-modal" tabindex="-1" aria-hidden="true" data-modal-placement="center" class="hidden fixed top-0 left-0 right-0 text-left z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      <div class="relative w-full max-w-2xl max-h-full">
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow animate-enter-scale">
+            <!-- Modal header -->
+            <div class="mb-1 p-4 md:p-5 flex items-start justify-between rounded-t">
+              <div class="flex flex-col">
+                <h3 class="mb-0.5 text-xl font-semibold text-slate-900">
+                    How to Play Fiives
+                </h3>
+                <p class="text-sm font-medium text-slate-500">Build poker hands to score points.</p>
+              </div>
+              <button type="button" class="text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm w-8 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-slate-600 dark:hover:text-white" data-modal-hide="instructions-modal">
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+              </button>
             </div>
-            <button type="button" class="text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm w-8 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-slate-600 dark:hover:text-white" data-modal-hide="instructions-modal">
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                </svg>
-                <span class="sr-only">Close modal</span>
-            </button>
-          </div>
-          <!-- Modal body -->
-          <div class="p-4 pt-0 space-y-6">
-              <div class="text-sm text-slate-900">
-                <ol class="list-disc relative ml-1">
-                    <li class="ms-4">
-                        <p class="mb-2">Each player is dealt <strong>6 cards</strong>.</p>
-                    </li>
-                    <li class="ms-4">
-                        <p class="mb-2">You'll take turns placing <strong>one card</strong> on your side of the <strong>board</strong> in any column.</p>
-                    </li>
-                    <li class="ms-4">
-                        <p class="mb-2">Each column <strong> represents a poker hand</strong>. The stronger the hand, the more points you earn.</p>
-                    </li>
-                    <li class="ms-4">
-                        <p class="mb-2">At the end of every turn, <strong>you will be given a new card</strong> from the deck automatically.</p>
-                    </li>
-                    <li class="ms-4">
-                        <p class="mb-2">Score more points than your opponent to win.</p>
-                    </li>
-                </ol>
-                <div class="mt-4 mb-2 border-t border-slate-300 pt-4 px-1">
-                  <p class="text-lg font-semibold text-slate-900 mb-3">Poker Hands</p>
-                  <div class="grid grid-cols-1 gap-x-8 gap-y-1 text-sm text-slate-600">
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Royal Flush</span>
-                      <span>1000</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Straight Flush</span>
-                      <span>800</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Quads</span>
-                      <span>700</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Full House</span>
-                      <span>600</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Flush</span>
-                      <span>500</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Straight</span>
-                      <span>400</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Trips</span>
-                      <span>300</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">Two Pair</span>
-                      <span>200</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-900">One Pair</span>
-                      <span>100</span>
+            <!-- Modal body -->
+            <div class="p-4 pt-0 space-y-6">
+                <div class="text-sm text-slate-900">
+                  <ol class="list-disc relative ml-1">
+                      <li class="ms-4">
+                          <p class="mb-2">Each player is dealt <strong>6 cards</strong>.</p>
+                      </li>
+                      <li class="ms-4">
+                          <p class="mb-2">You'll take turns placing <strong>one card</strong> on your side of the <strong>board</strong> in any column.</p>
+                      </li>
+                      <li class="ms-4">
+                          <p class="mb-2">Each column <strong> represents a poker hand</strong>. The stronger the hand, the more points you earn.</p>
+                      </li>
+                      <li class="ms-4">
+                          <p class="mb-2">At the end of every turn, <strong>you will be given a new card</strong> from the deck automatically.</p>
+                      </li>
+                      <li class="ms-4">
+                          <p class="mb-2">Score more points than your opponent to win.</p>
+                      </li>
+                  </ol>
+                  <div class="mt-4 mb-2 border-t border-slate-300 pt-4 px-1">
+                    <p class="text-lg font-semibold text-slate-900 mb-3">Poker Hands</p>
+                    <div class="grid grid-cols-1 gap-x-8 gap-y-1 text-sm text-slate-600">
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Royal Flush</span>
+                        <span>1000</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Straight Flush</span>
+                        <span>800</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Quads</span>
+                        <span>700</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Full House</span>
+                        <span>600</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Flush</span>
+                        <span>500</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Straight</span>
+                        <span>400</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Trips</span>
+                        <span>300</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">Two Pair</span>
+                        <span>200</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span class="text-slate-900">One Pair</span>
+                        <span>100</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
-
-<!-- Cash modal -->
-<div id="cash-modal" tabindex="-1" aria-hidden="true" data-modal-placement="top" class="hidden fixed flex top-0 left-0 right-0 text-left z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-  <div class="relative w-full max-w-2xl max-h-full">
-    <!-- Modal content -->
-    <div class="relative overflow-hidden bg-white rounded-lg shadow animate-enter-scale">
-      <div class="text-sm absolute top-[2.25rem] -left-[3.25rem] -rotate-45 bg-slate-400/70 text-white font-medium py-1 px-12 z-10">
-        COMING SOON
-      </div>
-      <!-- Modal header -->
-      <div class="p-4 flex items-start justify-between rounded-t">
-        <button type="button" class="text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm w-8 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-slate-600 dark:hover:text-white" data-modal-hide="cash-modal">
-          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-      </div>
-      <!-- Modal body -->
-      <div class="p-4 pt-0 space-y-6">
-        <div class="text-sm text-slate-900">
-          <div class="flex flex-col items-center">
-            <h3 class="mb-2 text-xl font-medium text-slate-900">Your Balance</h3>
-            <div class="flex items-center gap-2 mb-3">
-              <i class="fa-solid fa-money-bill-wave text-green-500 text-3xl"></i>
-              <span class="text-3xl font-bold">$1,000.00</span>
             </div>
-            <p class="mb-6 px-8 text-slate-500 text-center">You'll soon be able to use this to bet during your games.</p>
-            <div class="w-full mt-2 pt-4 border-t border-slate-200 text-xs text-slate-500 text-center">
-              <p>Note: this is <u>play money only</u>, not real currency. Don't even <i>think</i> about suing me.</p>
+        </div>
+    </div>
+  </div>
+
+  <!-- Cash modal -->
+  <div id="cash-modal" tabindex="-1" aria-hidden="true" data-modal-placement="top" class="hidden fixed flex top-0 left-0 right-0 text-left z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
+      <!-- Modal content -->
+      <div class="relative overflow-hidden bg-white rounded-lg shadow animate-enter-scale">
+        <!-- Modal header -->
+        <div class="p-4 pb-1 flex items-start justify-between rounded-t">
+          <button type="button" class="text-slate-400 bg-transparent hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm w-8 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-slate-600 dark:hover:text-white" data-modal-hide="cash-modal">
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <div class="p-4 pt-0 space-y-6">
+          <div class="text-sm text-slate-900">
+            <div class="flex flex-col items-center">
+              <h3 class="mb-1.5 text-lg font-normal text-slate-600">Your Balance</h3>
+              <div class="flex items-center gap-2 mb-3">
+                <i class="fa-solid fa-money-bill-wave text-green-500 text-3xl"></i>
+                <span class="cash-value text-4xl font-bold">$<%= number_with_delimiter(current_user.cash, delimiter: ',') %></span>
+              </div>
+              <p class="mb-6 px-4 text-slate-500 text-center">Use this to bet in your next game!</p>
+              <div class="w-full mt-2 pt-4 border-t border-slate-200 text-xs text-slate-500 text-center">
+                <p>Note: this is <u>play money only</u>, not real currency. Don't even <i>think</i> about suing me.</p>
+              </div>
             </div>
           </div>
         </div>

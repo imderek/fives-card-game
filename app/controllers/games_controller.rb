@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  include ActionView::Helpers::NumberHelper
+
   before_action :authenticate_user!
   before_action :set_game, except: [:index, :new, :create]
   skip_before_action :verify_authenticity_token, if: -> { request.format.turbo_stream? }
@@ -274,6 +276,9 @@ class GamesController < ApplicationController
         current_user.update!(cash: current_user.cash + @game.pot_size)
       end
 
+      # Call check_for_winner to trigger the header update
+      check_for_winner
+
       @game.broadcast_game_state
       head :ok
     else
@@ -436,14 +441,20 @@ class GamesController < ApplicationController
     completion_service = GameCompletionService.new(@game)
     completion_service.check_for_winner
     
-    # If game is completed, broadcast header update to both players
     if @game.completed? && @game.winner_id
-      # Broadcast to winner
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "user_#{@game.winner_id}",
-        target: "header",
-        partial: "shared/header",
-        locals: { current_user: User.find(@game.winner_id) }
+      winner = User.find(@game.winner_id)
+      
+      # Broadcast to update all elements with these classes
+      Turbo::StreamsChannel.broadcast_update_to(
+        "user_#{winner.id}",
+        targets: ".wins-value",
+        content: winner.total_wins
+      )
+      
+      Turbo::StreamsChannel.broadcast_update_to(
+        "user_#{winner.id}",
+        targets: ".cash-value",
+        content: "$#{number_with_delimiter(winner.cash, delimiter: ',')}"
       )
     end
   end
