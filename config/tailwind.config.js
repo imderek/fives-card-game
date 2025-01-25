@@ -79,6 +79,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        mono: ['B612 Mono', ...defaultTheme.fontFamily.mono],
       },
       colors: {
         primary: {
