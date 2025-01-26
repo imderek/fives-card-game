@@ -48,6 +48,16 @@ class User < ApplicationRecord
     Game.where(winner_id: id, is_private: false).count
   end
 
+  def total_points
+    Game.where("(player1_id = :id OR player2_id = :id) AND status = :status", 
+      id: id, 
+      status: Game.statuses[:completed])
+      .sum(Arel.sql("CASE 
+        WHEN player1_id = #{self.class.connection.quote(id)} THEN COALESCE(player1_total_score, 0)
+        ELSE COALESCE(player2_total_score, 0)
+      END"))
+  end
+
   # Class methods for finding bots
   def self.easy_bot
     find_by(email: 'easy bot')

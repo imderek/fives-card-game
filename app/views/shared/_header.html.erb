@@ -10,9 +10,9 @@
       <i class="fa-solid fa-trophy text-amber-500"></i>
       <span class="text-white" data-header-target="wins"><%= current_user.total_wins %></span>
     </button>
-    <button data-modal-target="cash-modal" data-modal-toggle="cash-modal" class="inline p-0 text-slate-500 hover:text-white leading-none">
-      <i class="fa-solid fa-money-bill-wave text-green-500"></i>
-      <span class="text-white">$1,000</span>
+    <button class="inline p-0 text-slate-500 hover:text-white leading-none">
+      <i class="fa-solid fa-chart-simple text-green-500"></i>
+      <span class="text-white"><%= number_with_delimiter(current_user.total_points, delimiter: ',') %></span>
     </button>
     <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="text-slate-400 hover:text-slate-300 rounded-lg">
       <i class="fa-solid fa-info-circle text-slate-500"></i>
