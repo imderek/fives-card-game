@@ -48,14 +48,17 @@ class User < ApplicationRecord
     Game.where(winner_id: id, is_private: false).count
   end
 
-  def total_points
-    Game.where("(player1_id = :id OR player2_id = :id) AND status = :status", 
-      id: id, 
-      status: Game.statuses[:completed])
-      .sum(Arel.sql("CASE 
-        WHEN player1_id = #{self.class.connection.quote(id)} THEN COALESCE(player1_total_score, 0)
-        ELSE COALESCE(player2_total_score, 0)
-      END"))
+  def calculate_total_points
+    # Create subqueries for both player positions
+    player1_points = Game.where(is_private: false)
+                        .where("player1_id = ? AND player1_total_score > 0", id)
+                        .sum(:player1_total_score)
+    
+    player2_points = Game.where(is_private: false)
+                        .where("player2_id = ? AND player2_total_score > 0", id)
+                        .sum(:player2_total_score)
+    
+    player1_points + player2_points
   end
 
   # Class methods for finding bots
