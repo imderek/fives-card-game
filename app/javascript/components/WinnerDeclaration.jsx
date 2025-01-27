@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useCountUp } from '../hooks/useCountUp';
+import { formatNumberWithMixedFonts } from '../utils/formatters';
 
 const WinnerDeclaration = ({ 
     game, 
@@ -9,14 +11,6 @@ const WinnerDeclaration = ({
 }) => {
     const [isVisible, setIsVisible] = useState(true);
     const [hasAnimatedPoints, setHasAnimatedPoints] = useState(false);
-
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setIsVisible(true);
-    //     }, 1000);
-
-    //     return () => clearTimeout(timer);
-    // }, []);
 
     useEffect(() => {
         if (!hasAnimatedPoints) {
@@ -76,6 +70,9 @@ const WinnerDeclaration = ({
     const rightName = isPlayer1 ? formatPlayerName(game.player2?.email) : formatPlayerName(game.player1?.email);
     const isLeftWinner = isPlayer1 ? (game.winner_id === game.player1_id) : (game.winner_id === game.player2_id);
 
+    const animatedLeftScore = useCountUp(leftScore || 0);
+    const animatedRightScore = useCountUp(rightScore || 0);
+
     return (
         <div className="w-full flex flex-col animate-enter-scale">
             <div className="winner-scores my-1 mx-4 md:mx-0 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
@@ -94,7 +91,7 @@ const WinnerDeclaration = ({
                             </div>
                         )}
                         <div className={`text-2xl ${isLeftWinner ? 'font-bold text-slate-900' : 'text-slate-900'}`}>
-                            {leftScore?.toLocaleString()}
+                            {formatNumberWithMixedFonts(animatedLeftScore)}
                         </div>
                         <div className={`text-sm font-medium ${isLeftWinner ? 'text-slate-900' : 'text-slate-900'}`}>
                             {leftName}
@@ -108,7 +105,7 @@ const WinnerDeclaration = ({
                             </div>
                         )}
                         <div className={`text-2xl ${!isLeftWinner ? 'font-bold text-slate-900' : 'text-slate-900'}`}>
-                            {rightScore?.toLocaleString()}
+                            {formatNumberWithMixedFonts(animatedRightScore)}
                         </div>
                         <div className={`text-sm font-medium ${!isLeftWinner ? 'text-slate-900' : 'text-slate-900'}`}>
                             {rightName}
