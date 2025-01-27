@@ -1,7 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import { useCountUp } from '../hooks/useCountUp';
-import { useAnimatedPoints } from '../hooks/useAnimatedPoints';
+import { useAnimatedPoints } from '../hooks/useAnimatedPoints'; // Temp disabled
 import { formatNumberWithMixedFonts } from '../utils/formatters';
+import { useWinnerConfetti } from '../hooks/useWinnerConfetti';
 
 const WinnerDeclaration = ({ 
     game, 
@@ -11,10 +13,16 @@ const WinnerDeclaration = ({
     isPlayer1 
 }) => {
     const [countUpComplete, setCountUpComplete] = useState(false);
+    const triggerConfetti = useWinnerConfetti();
     
     const onCountUpComplete = useCallback(() => {
         setCountUpComplete(true);
-    }, []);
+        
+        // Trigger confetti if player won
+        if (game.winner_id === currentUser.id) {
+            triggerConfetti('.winner-scores .flex');
+        }
+    }, [game.winner_id, currentUser.id, triggerConfetti]);
 
     // Determine which scores and names go on which side
     const leftScore = isPlayer1 ? game.player1_total_score : game.player2_total_score;
