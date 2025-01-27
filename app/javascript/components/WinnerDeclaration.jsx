@@ -7,15 +7,62 @@ const WinnerDeclaration = ({
     createNewGame,
     isPlayer1 
 }) => {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+    const [hasAnimatedPoints, setHasAnimatedPoints] = useState(false);
+
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         setIsVisible(true);
+    //     }, 1000);
+
+    //     return () => clearTimeout(timer);
+    // }, []);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsVisible(true);
-        }, 1000);
+        if (isVisible && !hasAnimatedPoints) {
+            const pointsValue = game.winner_id === currentUser.id ? 
+                (isPlayer1 ? game.player1_total_score : game.player2_total_score) : 0;
+            
+            if (pointsValue > 0) {
+                const headerPoints = document.querySelector('#header .fa-chart-simple').nextElementSibling;
+                const headerRect = headerPoints.getBoundingClientRect();
+                
+                const winnerScoreElement = document.querySelector(`.winner-scores ${game.winner_id === currentUser.id ? '.text-2xl.font-bold' : '.text-2xl'}`);
+                const scoreRect = winnerScoreElement.getBoundingClientRect();
 
-        return () => clearTimeout(timer);
-    }, []);
+                const numberOfChunks = Math.min(7, Math.ceil(pointsValue / 40));
+                const chunkSize = Math.ceil(pointsValue / numberOfChunks);
+                
+                for (let i = 0; i < numberOfChunks; i++) {
+                    setTimeout(() => {
+                        const floatingPoints = document.createElement('div');
+                        floatingPoints.className = 'absolute text-lg font-bold text-green-500 pointer-events-none';
+                        
+                        const randomOffset = Math.random() * 20 - 10;
+                        
+                        floatingPoints.style.left = `${scoreRect.left - 40 + randomOffset}px`;
+                        floatingPoints.style.top = `${scoreRect.top + 10}px`;
+                        floatingPoints.textContent = chunkSize.toString();
+                        
+                        const xDiff = (headerRect.left + 10) - (scoreRect.left - 40);
+                        const yDiff = (headerRect.top - 15) - (scoreRect.top + 10);
+                        
+                        floatingPoints.style.setProperty('--x-drift', `${xDiff}px`);
+                        floatingPoints.style.setProperty('--y-drift', `${yDiff}px`);
+                        floatingPoints.classList.add('animate-points-float');
+                        
+                        document.body.appendChild(floatingPoints);
+                        
+                        setTimeout(() => {
+                            floatingPoints.remove();
+                        }, 1500);
+                    }, i * 150);
+                }
+                
+                setHasAnimatedPoints(true);
+            }
+        }
+    }, [isVisible, hasAnimatedPoints]);
 
     if (!isVisible) return null;
 
@@ -28,7 +75,7 @@ const WinnerDeclaration = ({
 
     return (
         <div className="w-full flex flex-col animate-enter-scale">
-            <div className="my-1 mx-4 md:mx-0 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
+            <div className="winner-scores my-1 mx-4 md:mx-0 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
                 {/* Heading */}
                 <h1 className="mt-1 mb-4 text-xl font-bold text-slate-900 text-center">
                     {game.winner_id === currentUser.id ? "You Won!" : "You Lost"}
@@ -65,24 +112,9 @@ const WinnerDeclaration = ({
                         </div>
                     </div>
                 </div>
-                
-                {/* Back to Lobby Button */}
-                <div className="mt-4 flex flex-col items-center justify-center">
-                    {game.game_type === 'bot' && (
-                        <button 
-                            onClick={() => createNewGame(isPlayer1 ? game.player2?.email : game.player1?.email)}
-                            className="mb-2 btn btn-primary"
-                        >
-                            Rematch
-                        </button>
-                    )}
-                    <a href="/" className="btn btn-secondary">
-                        Back to Lobby
-                    </a>
-                </div>
             </div>
         </div>
     );
 };
 
-export default WinnerDeclaration; 
+export default WinnerDeclaration;

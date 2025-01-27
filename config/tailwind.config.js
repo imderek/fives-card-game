@@ -66,7 +66,25 @@ module.exports = {
         'fade-in': {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' }
-        }
+        },
+        'points-float': {
+          '0%': { 
+            opacity: '0',
+            transform: 'translateY(0px) translateX(0px)',
+          },
+          '10%': { 
+            opacity: '1',
+            transform: 'translateY(calc(var(--y-drift) * 0.1)) translateX(calc(var(--x-drift) * 0.1))',
+          },
+          '90%': { 
+            opacity: '1',
+            transform: 'translateY(calc(var(--y-drift) * 0.9)) translateX(calc(var(--x-drift) * 0.9))',
+          },
+          '100%': { 
+            opacity: '0',
+            transform: 'translateY(var(--y-drift)) translateX(var(--x-drift))',
+          }
+        },
       },
       animation: {
         'card-enter': 'card-enter 500ms ease-out forwards',
@@ -75,7 +93,8 @@ module.exports = {
         'scale-up': 'scale-up 200ms ease-out forwards',
         'particle-float': 'float-up 3s linear infinite',
         'twinkle': 'twinkle 3s ease-in-out infinite',
-        'fade-in': 'fade-in 300ms ease-out forwards'
+        'fade-in': 'fade-in 300ms ease-out forwards',
+        'points-float': 'points-float 1s ease-in-out forwards',
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
