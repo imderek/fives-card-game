@@ -6,7 +6,7 @@ export const useWinnerConfetti = () => {
         // Get the position of the element
         const element = document.querySelector(selector);
         const boxRect = element.getBoundingClientRect();
-        const originY = (boxRect.top + 25) / window.innerHeight;
+        const originY = (boxRect.top + 45) / window.innerHeight;
         
         const defaults = { 
             startVelocity: 15,
