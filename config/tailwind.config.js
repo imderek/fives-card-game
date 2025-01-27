@@ -73,7 +73,7 @@ module.exports = {
             transform: 'translateY(0px) translateX(0px)',
           },
           '10%': { 
-            opacity: '1',
+            opacity: '0',
             transform: 'translateY(calc(var(--y-drift) * 0.1)) translateX(calc(var(--x-drift) * 0.1))',
           },
           '90%': { 
@@ -94,7 +94,7 @@ module.exports = {
         'particle-float': 'float-up 3s linear infinite',
         'twinkle': 'twinkle 3s ease-in-out infinite',
         'fade-in': 'fade-in 300ms ease-out forwards',
-        'points-float': 'points-float 1s ease-in-out forwards',
+        'points-float': 'points-float 1s ease-in forwards',
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],

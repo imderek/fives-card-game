@@ -19,7 +19,7 @@ const WinnerDeclaration = ({
     // }, []);
 
     useEffect(() => {
-        if (isVisible && !hasAnimatedPoints) {
+        if (!hasAnimatedPoints) {
             const pointsValue = game.winner_id === currentUser.id ? 
                 (isPlayer1 ? game.player1_total_score : game.player2_total_score) : 0;
             
@@ -30,19 +30,22 @@ const WinnerDeclaration = ({
                 const winnerScoreElement = document.querySelector(`.winner-scores ${game.winner_id === currentUser.id ? '.text-2xl.font-bold' : '.text-2xl'}`);
                 const scoreRect = winnerScoreElement.getBoundingClientRect();
 
-                const numberOfChunks = Math.min(7, Math.ceil(pointsValue / 40));
-                const chunkSize = Math.ceil(pointsValue / numberOfChunks);
+                // Calculate chunks of 1000s with remainder
+                const baseChunkSize = 1000;
+                const remainder = pointsValue % baseChunkSize;
+                const numberOfFullChunks = Math.floor(pointsValue / baseChunkSize);
+                const chunks = remainder > 0 ? [remainder, ...Array(numberOfFullChunks).fill(baseChunkSize)] : Array(numberOfFullChunks).fill(baseChunkSize);
                 
-                for (let i = 0; i < numberOfChunks; i++) {
+                chunks.forEach((chunkSize, i) => {
                     setTimeout(() => {
                         const floatingPoints = document.createElement('div');
-                        floatingPoints.className = 'absolute text-lg font-bold text-green-500 pointer-events-none';
+                        floatingPoints.className = 'absolute text-base font-bold text-green-500 pointer-events-none';
                         
                         const randomOffset = Math.random() * 20 - 10;
                         
                         floatingPoints.style.left = `${scoreRect.left - 40 + randomOffset}px`;
                         floatingPoints.style.top = `${scoreRect.top + 10}px`;
-                        floatingPoints.textContent = chunkSize.toString();
+                        floatingPoints.textContent = `+${chunkSize}`;
                         
                         const xDiff = (headerRect.left + 10) - (scoreRect.left - 40);
                         const yDiff = (headerRect.top - 15) - (scoreRect.top + 10);
@@ -57,12 +60,12 @@ const WinnerDeclaration = ({
                             floatingPoints.remove();
                         }, 1500);
                     }, i * 150);
-                }
+                });
                 
                 setHasAnimatedPoints(true);
             }
         }
-    }, [isVisible, hasAnimatedPoints]);
+    }, [game, currentUser.id, isPlayer1, hasAnimatedPoints]);
 
     if (!isVisible) return null;
 
@@ -111,6 +114,21 @@ const WinnerDeclaration = ({
                             {rightName}
                         </div>
                     </div>
+                </div>
+
+                {/* Back to Lobby Button */}
+                <div className="mt-4 flex flex-col items-center justify-center">
+                    {game.game_type === 'bot' && (
+                        <button 
+                            onClick={() => createNewGame(isPlayer1 ? game.player2?.email : game.player1?.email)}
+                            className="mb-2 btn btn-primary"
+                        >
+                            Rematch
+                        </button>
+                    )}
+                    <a href="/" className="btn btn-secondary">
+                        Back to Lobby
+                    </a>
                 </div>
             </div>
         </div>
