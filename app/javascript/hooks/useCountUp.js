@@ -1,31 +1,26 @@
 import { useState, useEffect } from 'react';
 
-export const useCountUp = (endValue, duration = 1875, onComplete) => {
+export const useCountUp = (endValue, incrementsPerSecond = 20, onComplete) => {
     const [count, setCount] = useState(0);
     
     useEffect(() => {
-        let startTime;
-        let animationFrame;
+        let intervalId;
+        const INCREMENT = 10;
+        const interval = 250 / incrementsPerSecond; // Time between each increment
         
-        const easeOut = t => 1 - Math.pow(1 - t, 3); // Cubic ease out function
+        intervalId = setInterval(() => {
+            setCount(currentCount => {
+                const nextCount = Math.min(currentCount + INCREMENT, endValue);
+                if (nextCount === endValue && onComplete) {
+                    clearInterval(intervalId);
+                    onComplete();
+                }
+                return nextCount;
+            });
+        }, interval);
         
-        const animate = (currentTime) => {
-            if (!startTime) startTime = currentTime;
-            const progress = (currentTime - startTime) / duration;
-            
-            if (progress < 1) {
-                const easedProgress = easeOut(progress);
-                setCount(Math.floor(endValue * easedProgress / 10) * 10);
-                animationFrame = requestAnimationFrame(animate);
-            } else {
-                setCount(endValue);
-                if (onComplete) onComplete();
-            }
-        };
-        
-        animationFrame = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(animationFrame);
-    }, [endValue, duration, onComplete]);
+        return () => clearInterval(intervalId);
+    }, [endValue, incrementsPerSecond, onComplete]);
     
     return count;
 }; 

@@ -31,8 +31,8 @@ const WinnerDeclaration = ({
     const rightName = isPlayer1 ? formatPlayerName(game.player2?.email) : formatPlayerName(game.player1?.email);
     const isLeftWinner = isPlayer1 ? (game.winner_id === game.player1_id) : (game.winner_id === game.player2_id);
 
-    const animatedLeftScore = useCountUp(leftScore || 0, 1875, onCountUpComplete);
-    const animatedRightScore = useCountUp(rightScore || 0, 1875);
+    const animatedLeftScore = useCountUp(leftScore || 0, 20, onCountUpComplete);
+    const animatedRightScore = useCountUp(rightScore || 0, 20);
     
     // useAnimatedPoints(game, currentUser, isPlayer1, countUpComplete);
 
