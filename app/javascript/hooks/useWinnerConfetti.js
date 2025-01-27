@@ -19,15 +19,15 @@ export const useWinnerConfetti = () => {
             origin: { y: originY }
         };
         
-        // Single burst from two positions
+        // Single burst from two positions with 40 particles each
         confetti({
             ...defaults,
-            particleCount: 80,
+            particleCount: 40,
             origin: { x: 0.3, y: originY }
         });
         confetti({
             ...defaults,
-            particleCount: 80,
+            particleCount: 40,
             origin: { x: 0.7, y: originY }
         });
     }, []);
