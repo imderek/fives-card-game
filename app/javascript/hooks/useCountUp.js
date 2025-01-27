@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useCountUp = (endValue, duration = 1875) => {
+export const useCountUp = (endValue, duration = 1875, onComplete) => {
     const [count, setCount] = useState(0);
     
     useEffect(() => {
@@ -19,12 +19,13 @@ export const useCountUp = (endValue, duration = 1875) => {
                 animationFrame = requestAnimationFrame(animate);
             } else {
                 setCount(endValue);
+                if (onComplete) onComplete();
             }
         };
         
         animationFrame = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrame);
-    }, [endValue, duration]);
+    }, [endValue, duration, onComplete]);
     
     return count;
 }; 

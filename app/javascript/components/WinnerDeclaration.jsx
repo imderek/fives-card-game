@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useCountUp } from '../hooks/useCountUp';
+import { useAnimatedPoints } from '../hooks/useAnimatedPoints';
 import { formatNumberWithMixedFonts } from '../utils/formatters';
 
 const WinnerDeclaration = ({ 
@@ -9,59 +10,11 @@ const WinnerDeclaration = ({
     createNewGame,
     isPlayer1 
 }) => {
-    const [isVisible, setIsVisible] = useState(true);
-    const [hasAnimatedPoints, setHasAnimatedPoints] = useState(false);
-
-    useEffect(() => {
-        if (!hasAnimatedPoints) {
-            const pointsValue = game.winner_id === currentUser.id ? 
-                (isPlayer1 ? game.player1_total_score : game.player2_total_score) : 0;
-            
-            if (pointsValue > 0) {
-                const headerPoints = document.querySelector('#header .fa-chart-simple').nextElementSibling;
-                const headerRect = headerPoints.getBoundingClientRect();
-                
-                const winnerScoreElement = document.querySelector(`.winner-scores ${game.winner_id === currentUser.id ? '.text-2xl.font-bold' : '.text-2xl'}`);
-                const scoreRect = winnerScoreElement.getBoundingClientRect();
-
-                // Calculate chunks of 1000s with remainder
-                const baseChunkSize = 1000;
-                const remainder = pointsValue % baseChunkSize;
-                const numberOfFullChunks = Math.floor(pointsValue / baseChunkSize);
-                const chunks = remainder > 0 ? [remainder, ...Array(numberOfFullChunks).fill(baseChunkSize)] : Array(numberOfFullChunks).fill(baseChunkSize);
-                
-                chunks.forEach((chunkSize, i) => {
-                    setTimeout(() => {
-                        const floatingPoints = document.createElement('div');
-                        floatingPoints.className = 'absolute text-base font-bold text-green-500 pointer-events-none';
-                        
-                        const randomOffset = Math.random() * 20 - 10;
-                        
-                        floatingPoints.style.left = `${scoreRect.left - 40 + randomOffset}px`;
-                        floatingPoints.style.top = `${scoreRect.top + 10}px`;
-                        floatingPoints.textContent = `+${chunkSize}`;
-                        
-                        const xDiff = (headerRect.left + 10) - (scoreRect.left - 40);
-                        const yDiff = (headerRect.top - 15) - (scoreRect.top + 10);
-                        
-                        floatingPoints.style.setProperty('--x-drift', `${xDiff}px`);
-                        floatingPoints.style.setProperty('--y-drift', `${yDiff}px`);
-                        floatingPoints.classList.add('animate-points-float');
-                        
-                        document.body.appendChild(floatingPoints);
-                        
-                        setTimeout(() => {
-                            floatingPoints.remove();
-                        }, 1500);
-                    }, i * 150);
-                });
-                
-                setHasAnimatedPoints(true);
-            }
-        }
-    }, [game, currentUser.id, isPlayer1, hasAnimatedPoints]);
-
-    if (!isVisible) return null;
+    const [countUpComplete, setCountUpComplete] = useState(false);
+    
+    const onCountUpComplete = useCallback(() => {
+        setCountUpComplete(true);
+    }, []);
 
     // Determine which scores and names go on which side
     const leftScore = isPlayer1 ? game.player1_total_score : game.player2_total_score;
@@ -70,8 +23,10 @@ const WinnerDeclaration = ({
     const rightName = isPlayer1 ? formatPlayerName(game.player2?.email) : formatPlayerName(game.player1?.email);
     const isLeftWinner = isPlayer1 ? (game.winner_id === game.player1_id) : (game.winner_id === game.player2_id);
 
-    const animatedLeftScore = useCountUp(leftScore || 0);
-    const animatedRightScore = useCountUp(rightScore || 0);
+    const animatedLeftScore = useCountUp(leftScore || 0, 1875, onCountUpComplete);
+    const animatedRightScore = useCountUp(rightScore || 0, 1875);
+    
+    useAnimatedPoints(game, currentUser, isPlayer1, countUpComplete);
 
     return (
         <div className="w-full flex flex-col animate-enter-scale">
