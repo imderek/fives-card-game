@@ -31,6 +31,11 @@ module.exports = {
           '50%': { transform: 'scale(1.07)' },
           '100%': { transform: 'scale(1.0)' }
         },
+        'scale-up-win': {
+          '0%': { transform: 'scale(1.0)' },
+          '40%': { transform: 'scale(1.3)' },
+          '100%': { transform: 'scale(1.0)' }
+        },
         'float-up': {
           '0%': { 
             opacity: '0',
@@ -85,16 +90,30 @@ module.exports = {
             transform: 'translateY(var(--y-drift)) translateX(var(--x-drift))',
           }
         },
+        'winner-box': {
+          '0%': { 
+            borderColor: colors.slate[300],
+            boxShadow: '0 0 0 rgba(0, 0, 0, 0)',
+            borderWidth: '1px',
+          },
+          '100%': { 
+            borderColor: colors.amber[500],
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            borderWidth: '2px',
+          }
+        },
       },
       animation: {
         'card-enter': 'card-enter 500ms ease-out forwards',
         'enter-scale': 'enter-scale 200ms ease-out forwards',
         'shimmer': 'shimmer 4s linear infinite',
         'scale-up': 'scale-up 200ms ease-out forwards',
+        'scale-up-win': 'scale-up-win 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         'particle-float': 'float-up 3s linear infinite',
         'twinkle': 'twinkle 3s ease-in-out infinite',
         'fade-in': 'fade-in 300ms ease-out forwards',
         'points-float': 'points-float 1s ease-in forwards',
+        'winner-box': 'winner-box 400ms ease-out forwards',
       },
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],

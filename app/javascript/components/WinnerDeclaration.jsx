@@ -26,43 +26,39 @@ const WinnerDeclaration = ({
     const animatedLeftScore = useCountUp(leftScore || 0, 1875, onCountUpComplete);
     const animatedRightScore = useCountUp(rightScore || 0, 1875);
     
-    useAnimatedPoints(game, currentUser, isPlayer1, countUpComplete);
+    // useAnimatedPoints(game, currentUser, isPlayer1, countUpComplete);
 
     return (
         <div className="w-full flex flex-col animate-enter-scale">
-            <div className="winner-scores my-1 mx-4 md:mx-0 px-3 pt-2 pb-3 bg-white rounded-lg relative z-40">
-                {/* Heading */}
-                <h1 className="mt-1 mb-4 text-xl font-bold text-slate-900 text-center">
-                    {game.winner_id === currentUser.id ? "You Won!" : "You Lost"}
+            <div className="winner-scores my-1 mx-4 md:mx-0 px-3 pt-3 pb-3 bg-white rounded-lg relative z-40">
+                {/* Heading - Now includes trophy */}
+                <h1 className={`mt-1 mb-4 text-xl font-bold text-slate-900 text-center flex items-center justify-center gap-2 ${countUpComplete && game.winner_id === currentUser.id ? 'animate-scale-up-win' : ''}`}>
+                    {countUpComplete && game.winner_id === currentUser.id && (
+                        <i className="fa fa-trophy text-amber-500 text-xl"></i>
+                    )}
+                    {countUpComplete ? 
+                        (game.winner_id === currentUser.id ? "You Won!" : "You Lost") : 
+                        "Game Over"
+                    }
                 </h1>
 
-                {/* Scores */}
+                {/* Score boxes - removed trophy icons */}
                 <div className="flex items-center justify-center gap-4 mb-3">
                     {/* Left Score */}
-                    <div className={`relative flex flex-1 flex-col items-center justify-center ${isLeftWinner ? 'border-amber-500 shadow-2xl' : 'border-slate-300'} border rounded-lg py-3 px-6 h-24`}>
-                        {isLeftWinner && (
-                            <div className="absolute -top-4 bg-white z-1 p-1 px-2">
-                                <i className="fa fa-trophy text-amber-500 text-xl animate-bounce relative top-1"></i>
-                            </div>
-                        )}
-                        <div className={`text-2xl ${isLeftWinner ? 'font-bold text-slate-900' : 'text-slate-900'}`}>
+                    <div className={`relative flex flex-1 flex-col items-center justify-center border rounded-lg py-3 px-6 h-24 border-slate-300 ${countUpComplete && isLeftWinner ? 'animate-winner-box' : ''}`}>
+                        <div className={`text-2xl ${countUpComplete && isLeftWinner ? 'font-bold' : ''} text-slate-900`}>
                             {formatNumberWithMixedFonts(animatedLeftScore)}
                         </div>
-                        <div className={`text-sm font-medium ${isLeftWinner ? 'text-slate-900' : 'text-slate-900'}`}>
+                        <div className={`text-sm font-medium text-slate-900`}>
                             {leftName}
                         </div>
                     </div>
                     {/* Right Score */}
-                    <div className={`relative flex flex-1 flex-col items-center justify-center ${!isLeftWinner ? 'border-amber-500 shadow-2xl' : 'border-slate-300'} border rounded-lg py-3 px-6 h-24`}>
-                        {!isLeftWinner && (
-                            <div className="absolute -top-4 bg-white z-1 p-1 px-2">
-                                <i className="fa fa-trophy text-amber-500 text-xl"></i>
-                            </div>
-                        )}
-                        <div className={`text-2xl ${!isLeftWinner ? 'font-bold text-slate-900' : 'text-slate-900'}`}>
+                    <div className={`relative flex flex-1 flex-col items-center justify-center border rounded-lg py-3 px-6 h-24 border-slate-300 ${countUpComplete && !isLeftWinner ? 'animate-winner-box' : ''}`}>
+                        <div className={`text-2xl ${countUpComplete && !isLeftWinner ? 'font-bold' : ''} text-slate-900`}>
                             {formatNumberWithMixedFonts(animatedRightScore)}
                         </div>
-                        <div className={`text-sm font-medium ${!isLeftWinner ? 'text-slate-900' : 'text-slate-900'}`}>
+                        <div className={`text-sm font-medium text-slate-900`}>
                             {rightName}
                         </div>
                     </div>
