@@ -52,7 +52,8 @@ class GamesController < ApplicationController
       [
         bot.email,
         bot.games.completed.count,
-        bot.average_completed_game_score&.round || 'N/A'
+        bot.average_completed_game_score&.round || 'N/A',
+        bot.win_rate&.round || 'N/A'
       ]
     end
   end

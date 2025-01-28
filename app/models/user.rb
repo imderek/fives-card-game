@@ -74,6 +74,17 @@ class User < ApplicationRecord
     find_by(email: 'hard bot')
   end
 
+  def win_rate
+    completed_games = Game.where("(player1_id = :id OR player2_id = :id) AND is_private = false", id: id)
+                         .where(status: :completed)
+    
+    total_games = completed_games.count
+    return nil if total_games.zero?
+    
+    wins = completed_games.where(winner_id: id).count
+    ((wins.to_f / total_games) * 100).round(2)
+  end
+
   private
   
   def generate_remember_token
