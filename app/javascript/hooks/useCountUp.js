@@ -8,11 +8,14 @@ export const useCountUp = (endValue, incrementsPerSecond = 20, onComplete) => {
         const interval = 250 / incrementsPerSecond;
         let progress = 0;
         
+        // Scale the speed based on the size of endValue
+        const durationScale = Math.max(1, endValue / 1000); // Adjust this ratio as needed
+        
         intervalId = setInterval(() => {
-            progress = Math.min(progress + (interval / 3000), 1);
+            progress = Math.min(progress + (interval / (3000 * durationScale)), 1);
             
             // Strong ease out that really slows down at the end
-            const easeOutCubic = 1 - Math.pow(1 - progress, 4); // Increased power for stronger end slowdown
+            const easeOutCubic = 1 - Math.pow(1 - progress, 4);
             const nextCount = Math.round(endValue * easeOutCubic / 10) * 10;
             
             setCount(nextCount);

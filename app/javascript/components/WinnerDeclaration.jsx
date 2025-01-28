@@ -16,20 +16,23 @@ const WinnerDeclaration = ({
     const triggerConfetti = useWinnerConfetti();
     
     const onComplete = useCallback(() => {
-        setCountUpComplete(true);
-        if (game.winner_id === currentUser.id) {
-            triggerConfetti('.winner-scores .flex');
-        }
+        requestAnimationFrame(() => {
+            setCountUpComplete(true);
+            if (game.winner_id === currentUser.id) {
+                triggerConfetti('.winner-scores .flex');
+            }
+        });
     }, [game.winner_id, currentUser.id, triggerConfetti]);
 
     const animatedLeftScore = useCountUp(
         isPlayer1 ? game.player1_total_score : game.player2_total_score,
         20,
-        onComplete
+        game.winner_id === (isPlayer1 ? game.player1_id : game.player2_id) ? onComplete : undefined
     );
     const animatedRightScore = useCountUp(
         isPlayer1 ? game.player2_total_score : game.player1_total_score,
-        20
+        20,
+        game.winner_id === (isPlayer1 ? game.player2_id : game.player1_id) ? onComplete : undefined
     );
 
     // Move these calculations before the callback
