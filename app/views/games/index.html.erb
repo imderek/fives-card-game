@@ -107,8 +107,8 @@
           </tr>
         </thead>
         <tbody>
-          <% @bot_stats.each_with_index do |bot, index| %>
             <tr>
+          <% @bot_stats.each_with_index do |bot, index| %>
               <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> font-medium"><%= bot[0].titleize %></td>
               <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> text-right font-mono"><%= bot[1] %></td>
               <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> text-right font-mono"><%= bot[2] %></td>

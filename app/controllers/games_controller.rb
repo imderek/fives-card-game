@@ -48,41 +48,13 @@ class GamesController < ApplicationController
       User.hard_bot
     ]
 
-    benchmark_message = StringIO.new
-    benchmark_message.puts "\n\n==================== BOT STATS BENCHMARK ====================\n\n"
-    
-    total_time = Benchmark.ms do
-      @bot_stats = bots.compact.map do |bot|
-        benchmark_message.puts "🤖 Processing #{bot.email}"
-        
-        games_count = nil
-        games_time = Benchmark.ms do
-          games_count = bot.games.completed.count
-        end
-        
-        avg_score = nil
-        score_time = Benchmark.ms do
-          avg_score = bot.average_completed_game_score&.round(2) || 'N/A'
-        end
-        
-        benchmark_message.puts "  ⏱ Games count query: #{games_time.round(1)}ms"
-        benchmark_message.puts "  ⏱ Average score query: #{score_time.round(1)}ms"
-        benchmark_message.puts "  📊 Total bot time: #{(games_time + score_time).round(1)}ms"
-        benchmark_message.puts "  ----------------------------------------"
-        
-        [
-          bot.email,
-          games_count,
-          avg_score
-        ]
-      end
+    @bot_stats = bots.compact.map do |bot|
+      [
+        bot.email,
+        bot.games.completed.count,
+        bot.average_completed_game_score&.round || 'N/A'
+      ]
     end
-    
-    benchmark_message.puts "\n🏁 TOTAL BOT STATS TIME: #{total_time.round(1)}ms"
-    benchmark_message.puts "\n=========================================================\n\n"
-    
-    # Send the entire benchmark message to the logger
-    Rails.logger.info(benchmark_message.string)
   end
 
   def show
