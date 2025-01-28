@@ -5,18 +5,22 @@ export const useCountUp = (endValue, incrementsPerSecond = 20, onComplete) => {
     
     useEffect(() => {
         let intervalId;
-        const INCREMENT = 10;
-        const interval = 250 / incrementsPerSecond; // Time between each increment
+        const interval = 250 / incrementsPerSecond;
+        let progress = 0;
         
         intervalId = setInterval(() => {
-            setCount(currentCount => {
-                const nextCount = Math.min(currentCount + INCREMENT, endValue);
-                if (nextCount === endValue && onComplete) {
-                    clearInterval(intervalId);
-                    onComplete();
-                }
-                return nextCount;
-            });
+            progress = Math.min(progress + (interval / 3000), 1);
+            
+            // Strong ease out that really slows down at the end
+            const easeOutCubic = 1 - Math.pow(1 - progress, 4); // Increased power for stronger end slowdown
+            const nextCount = Math.round(endValue * easeOutCubic / 10) * 10;
+            
+            setCount(nextCount);
+            
+            if (progress === 1) {
+                clearInterval(intervalId);
+                if (onComplete) onComplete();
+            }
         }, interval);
         
         return () => clearInterval(intervalId);

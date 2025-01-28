@@ -15,25 +15,30 @@ const WinnerDeclaration = ({
     const [countUpComplete, setCountUpComplete] = useState(false);
     const triggerConfetti = useWinnerConfetti();
     
-    const onCountUpComplete = useCallback(() => {
+    const onComplete = useCallback(() => {
         setCountUpComplete(true);
-        
-        // Trigger confetti if player won
         if (game.winner_id === currentUser.id) {
             triggerConfetti('.winner-scores .flex');
         }
     }, [game.winner_id, currentUser.id, triggerConfetti]);
 
-    // Determine which scores and names go on which side
+    const animatedLeftScore = useCountUp(
+        isPlayer1 ? game.player1_total_score : game.player2_total_score,
+        20,
+        onComplete
+    );
+    const animatedRightScore = useCountUp(
+        isPlayer1 ? game.player2_total_score : game.player1_total_score,
+        20
+    );
+
+    // Move these calculations before the callback
     const leftScore = isPlayer1 ? game.player1_total_score : game.player2_total_score;
     const rightScore = isPlayer1 ? game.player2_total_score : game.player1_total_score;
     const leftName = isPlayer1 ? formatPlayerName(game.player1?.email) : formatPlayerName(game.player2?.email);
     const rightName = isPlayer1 ? formatPlayerName(game.player2?.email) : formatPlayerName(game.player1?.email);
     const isLeftWinner = isPlayer1 ? (game.winner_id === game.player1_id) : (game.winner_id === game.player2_id);
 
-    const animatedLeftScore = useCountUp(leftScore || 0, 20, onCountUpComplete);
-    const animatedRightScore = useCountUp(rightScore || 0, 20);
-    
     // useAnimatedPoints(game, currentUser, isPlayer1, countUpComplete);
 
     return (
