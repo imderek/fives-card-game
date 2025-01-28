@@ -40,13 +40,13 @@ const WinnerDeclaration = ({
         <div className="w-full flex flex-col animate-enter-scale">
             <div className="winner-scores my-1 mx-4 md:mx-0 px-3 pt-3 pb-3 bg-white rounded-lg relative z-40">
                 {/* Heading - Now includes trophy */}
-                <h1 className={`mt-1 mb-4 text-xl leading-7 font-normal text-slate-900 text-center flex items-center justify-center gap-2 ${countUpComplete && game.winner_id === currentUser.id ? 'animate-scale-up-win !text-2xl !leading-none !font-bold' : ''}`}>
+                <h1 className={`mt-1 mb-4 text-lg leading-7 font-medium text-slate-900 text-center flex items-center justify-center gap-2 ${countUpComplete && game.winner_id === currentUser.id ? 'animate-scale-up-win !text-xl !leading-none !font-bold' : ''}`}>
                     {countUpComplete && game.winner_id === currentUser.id && (
                         <i className="fa fa-trophy text-amber-500 text-xl"></i>
                     )}
                     {countUpComplete ? 
                         (game.winner_id === currentUser.id ? "You Won!" : "You Lost") : 
-                        "Game Over"
+                        "Calculating scores..."
                     }
                 </h1>
 
@@ -57,7 +57,7 @@ const WinnerDeclaration = ({
                         <div className={`text-2xl ${countUpComplete && isLeftWinner ? 'font-bold' : ''} text-slate-900`}>
                             {formatNumberWithMixedFonts(animatedLeftScore)}
                         </div>
-                        <div className={`text-sm font-medium text-slate-900`}>
+                        <div className={`text-sm font-medium text-slate-500`}>
                             {leftName}
                         </div>
                     </div>
@@ -66,7 +66,7 @@ const WinnerDeclaration = ({
                         <div className={`text-2xl ${countUpComplete && !isLeftWinner ? 'font-bold' : ''} text-slate-900`}>
                             {formatNumberWithMixedFonts(animatedRightScore)}
                         </div>
-                        <div className={`text-sm font-medium text-slate-900`}>
+                        <div className={`text-sm font-medium text-slate-500`}>
                             {rightName}
                         </div>
                     </div>
