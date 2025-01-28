@@ -16,12 +16,10 @@ const WinnerDeclaration = ({
     const triggerConfetti = useWinnerConfetti();
     
     const onComplete = useCallback(() => {
-        requestAnimationFrame(() => {
-            setCountUpComplete(true);
-            if (game.winner_id === currentUser.id) {
-                triggerConfetti('.winner-scores .flex');
-            }
-        });
+        setCountUpComplete(true);
+        if (game.winner_id === currentUser.id) {
+            triggerConfetti('.winner-scores .flex');
+        }
     }, [game.winner_id, currentUser.id, triggerConfetti]);
 
     const animatedLeftScore = useCountUp(
