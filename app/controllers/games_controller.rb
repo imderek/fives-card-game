@@ -40,6 +40,21 @@ class GamesController < ApplicationController
                      .group('winner_id, users.email')
                      .order('wins_count DESC')
                      .limit(7)
+
+    # Bot stats
+    bots = [
+      User.easy_bot,
+      User.medium_bot,
+      User.hard_bot
+    ]
+
+    @bot_stats = bots.compact.map do |bot|
+      [
+        bot.email,
+        bot.games.completed.count,
+        bot.average_completed_game_score&.round(2) || 'N/A'
+      ]
+    end
   end
 
   def show

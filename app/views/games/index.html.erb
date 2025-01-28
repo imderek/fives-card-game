@@ -29,7 +29,7 @@
   </div>
 
   <!-- Leaderboard -->
-  <h1 class="text-xl font-medium mb-3 dark:text-white">Leaderboard</h1>
+  <h1 class="text-xl font-medium mb-3 text-white">Leaderboard</h1>
   <!-- Leaderboard Container-->
   <div class="grid gap-4 mb-5">
     <div class="p-3 pt-1 pb-4 flex flex-col gap-3 justify-between text-sm text-white bg-slate-700 rounded-lg shadow-xl">
@@ -91,6 +91,31 @@
           <% end %>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Bot Stats -->
+  <h1 class="text-xl mb-3 text-white font-medium">Bot Stats</h1>
+  <div class="grid gap-4 mb-5">
+    <div class="p-3 pb-4 text-sm text-white bg-slate-700 rounded-lg shadow-xl">
+      <table class="w-full">
+        <thead class="text-slate-400 border-b border-slate-600">
+          <tr>
+            <th class="py-1 pb-2 text-left font-medium">Bot</th>
+            <th class="py-1 pb-2 text-right font-medium">Games Played</th>
+            <th class="py-1 pb-2 text-right font-medium">Avg Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @bot_stats.each_with_index do |bot, index| %>
+            <tr>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> font-medium"><%= bot[0].titleize %></td>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> text-right font-mono"><%= bot[1] %></td>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> text-right font-mono"><%= bot[2] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 
