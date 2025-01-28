@@ -24,22 +24,22 @@ const Scoreboard = ({
                     </div>
 
                     {/* Current player's score */}
-                    <div className={`py-2 ${isCurrentPlayerTurn ? 'border-b-4 border-amber-500' : 'border-b-4 border-transparent'} relative flex flex-1 flex-col items-center justify-center`}>
-                        <div className="text-xl font-bold">
+                    <div className={`mx-4 h-full py-2 ${isCurrentPlayerTurn ? 'border-b-2 border-amber-500' : 'border-b-2 border-transparent'} relative flex flex-1 flex-col items-center justify-center`}>
+                        <div className="hidden text-xl font-bold">
                             {playerScore.toLocaleString()}
                         </div>
-                        <div className="text-xs font-medium text-slate-200">{playerName}</div>
+                        <div className="text-sm font-medium text-white">{playerName}</div>
                     </div>
 
                     {/* Divider */}
-                    <div className="w-px h-12 bg-slate-500/50"></div>
+                    <div className="w-px h-7 bg-slate-500/50"></div>
 
                     {/* Opponent's score */}
-                    <div className={`py-2 ${!isCurrentPlayerTurn ? 'border-b-4 border-amber-500' : 'border-b-4 border-transparent'} relative flex flex-1 flex-col items-center justify-center`}>
-                        <div className="text-xl font-bold text-slate-400">
+                    <div className={`mx-4 h-full py-2 ${!isCurrentPlayerTurn ? 'border-b-2 border-amber-500' : 'border-b-2 border-transparent'} relative flex flex-1 flex-col items-center justify-center`}>
+                        <div className="hidden text-xl font-bold text-slate-400">
                             {(!winner && opponentScore > 0) ? '???' : opponentScore.toLocaleString()}
                         </div>
-                        <div className="text-xs font-medium text-slate-400">{opponentName}</div>
+                        <div className="text-sm font-medium text-slate-400">{opponentName}</div>
                     </div>
                 </div>
             </div>
