@@ -14,7 +14,7 @@
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-br from-slate-500 to-slate-800 border-b-4 border-slate-800 hover:bg-gradient-to-br hover:from-slate-400 hover:to-slate-700;
+    @apply bg-gradient-to-br from-slate-500 to-slate-800 border-b-4 border-slate-700 hover:bg-gradient-to-br hover:from-slate-400 hover:to-slate-700;
   }
 
   .btn-outline {

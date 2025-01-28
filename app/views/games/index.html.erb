@@ -10,7 +10,6 @@
       <div class="flex flex-row items-stretch justify-center gap-2.5">
         <!-- Play a friend -->
         <a href="<%= new_game_path(type: :pvp) %>" class="text-[.925rem] overflow-hidden relative flex flex-col justify-center px-2 py-[0.8rem] pt-[1rem] btn btn-primary">
-          <div class="absolute -left-7 top-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-[0.7rem] text-white px-8 py-0.5 -rotate-45 leading-[16.8px]">NEW</div>
           <div class="flex justify-center text-lg -space-x-0.5">
             <i class="mb-1.5 fa-solid fa-user"></i>
             <i class="mb-1.5 fa-regular fa-user"></i>
@@ -107,11 +106,11 @@
           </tr>
         </thead>
         <tbody>
-            <tr>
           <% @bot_stats.each_with_index do |bot, index| %>
-              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> font-medium"><%= bot[0].titleize %></td>
-              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> text-right font-mono"><%= bot[1] %></td>
-              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-1.5' %> text-right font-mono"><%= bot[2] %></td>
+            <tr>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> font-medium"><%= bot[0].titleize %></td>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right font-mono"><%= bot[1] %></td>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right font-mono"><%= bot[2] %></td>
             </tr>
           <% end %>
         </tbody>
