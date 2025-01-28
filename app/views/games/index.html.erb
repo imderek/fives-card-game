@@ -108,7 +108,29 @@
         <tbody>
           <% @bot_stats.each_with_index do |bot, index| %>
             <tr>
-              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> font-medium"><%= bot[0].titleize %></td>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> font-medium">
+                <div class="flex flex-row items-center gap-3">
+                  <!-- Strength meter -->
+                  <div class="flex flex-row items-center gap-0.5">
+                    <% case bot[0].split.first # Get first word of "easy bot", "medium bot", etc %>
+                    <% when 'easy' %>
+                      <div class="w-1.5 h-4 bg-green-500 rounded-sm"></div>
+                      <div class="w-1.5 h-4 bg-slate-500/70 rounded-sm"></div>
+                      <div class="w-1.5 h-4 bg-slate-500/70 rounded-sm"></div>
+                    <% when 'medium' %>
+                      <div class="w-1.5 h-4 bg-amber-500 rounded-sm"></div>
+                      <div class="w-1.5 h-4 bg-amber-500 rounded-sm"></div>
+                      <div class="w-1.5 h-4 bg-slate-500/70 rounded-sm"></div>
+                    <% when 'hard' %>
+                      <div class="w-1.5 h-4 bg-red-500 rounded-sm"></div>
+                      <div class="w-1.5 h-4 bg-red-500 rounded-sm"></div>
+                      <div class="w-1.5 h-4 bg-red-500 rounded-sm"></div>
+                    <% end %>
+                    <div class="w-1.5 h-4 bg-slate-500/70 rounded-sm"></div>
+                  </div>
+                  <%= bot[0].titleize %>
+                </div>
+              </td>
               <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right font-mono"><%= bot[1] %></td>
               <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right font-mono"><%= bot[2] %></td>
             </tr>
