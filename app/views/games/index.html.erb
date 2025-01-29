@@ -134,6 +134,24 @@
             <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right font-mono"><%= bot[1] %></td>
           </tr>
         <% end %>
+        <tr>
+          <td class="pt-2 font-medium">
+            <div class="flex flex-row items-center gap-3">
+              <!-- Strength meter -->
+              <div class="flex flex-row items-center gap-0.5">
+                <div class="w-1.5 h-4 bg-purple-500 rounded-sm"></div>
+                <div class="w-1.5 h-4 bg-purple-500 rounded-sm"></div>
+                <div class="w-1.5 h-4 bg-purple-500 rounded-sm"></div>
+                <div class="w-1.5 h-4 bg-purple-500 rounded-sm"></div>
+              </div>
+              Nightmare Bot
+            </div>
+          </td>
+          <td class="pt-2 text-right">
+            <span class="font-mono"><%= 90.0.to_s.split('.')[0] %></span>.<span class="font-mono"><%= 90.0.to_s.split('.')[1] %></span><span class="ml-0.5">%</span>
+          </td>
+          <td class="pt-2 text-right font-mono"><%= 2800 %></td>
+        </tr>
       </tbody>
     </table>
   </div>
