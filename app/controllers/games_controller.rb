@@ -51,9 +51,8 @@ class GamesController < ApplicationController
     @bot_stats = bots.compact.map do |bot|
       [
         bot.email,
-        bot.games.completed.count,
         bot.average_completed_game_score&.round || 'N/A',
-        bot.win_rate&.round || 'N/A'
+        bot.win_rate ? "%.1f" % bot.win_rate.round(1) : 'N/A',
       ]
     end
   end

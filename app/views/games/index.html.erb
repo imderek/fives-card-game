@@ -131,8 +131,10 @@
                   <%= bot[0].titleize %>
                 </div>
               </td>
-              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right"><span class="font-mono"><%= bot[3] %></span>%</td>
-              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right font-mono"><%= bot[2] %></td>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right">
+                <span class="font-mono"><%= bot[2].to_s.split('.')[0] %></span>.<span class="font-mono"><%= bot[2].to_s.split('.')[1] %></span><span class="ml-0.5">%</span>
+              </td>
+              <td class="<%= index == 0 ? 'pt-2.5' : 'pt-2' %> text-right font-mono"><%= bot[1] %></td>
             </tr>
           <% end %>
         </tbody>
