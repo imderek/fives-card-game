@@ -70,3 +70,5 @@ gem "devise", "~> 4.9"
 gem "jsbundling-rails", "~> 1.3"
 
 gem 'terminal-table'
+
+gem "rails-controller-testing", "~> 1.0"
