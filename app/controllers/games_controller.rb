@@ -145,22 +145,14 @@ class GamesController < ApplicationController
         played_card = params[:card].merge(player_id: current_user.id)
         
         if play_card_and_update_game(played_card)
-          scoring_service = GameScoringService.new(@game)
-          scoring_service.update_column_scores
-          scoring_service.complete_game  # Check if game is complete after scoring
-          
+          # Update scores using GameScoringService
+          GameScoringService.new(@game).update_column_scores
           @game.broadcast_game_state  # First broadcast with updated scores
           
           if bot_turn?
             make_bot_move 
             # Update scores again after bot move
-            current_scores = @game.column_scores || {}
-            (0..7).each do |col|
-              player_id = col < 4 ? @game.player1_id : @game.player2_id
-              cards = @game.board_cards_for_player(player_id, col)
-              current_scores[col.to_s] = scoring_service.score_partial_hand(cards)
-            end
-            @game.update!(column_scores: current_scores)
+            GameScoringService.new(@game).update_column_scores
           end
           
           @game.skip_broadcast = false
@@ -328,7 +320,7 @@ class GamesController < ApplicationController
       Rails.logger.debug "Save successful: #{success}"
       Rails.logger.debug "Final game state after save: #{@game.attributes.inspect}"
 
-      # Check for winner using the GameCompletionService
+      # Check for winner using the GameScoringService
       check_for_winner
 
       success
@@ -399,8 +391,8 @@ class GamesController < ApplicationController
   end
 
   def check_for_winner
-    completion_service = GameCompletionService.new(@game)
-    completion_service.check_for_winner
+    scoring_service = GameScoringService.new(@game)
+    scoring_service.complete_game
     
     # If game is completed, broadcast header update to both players
     if @game.completed? && @game.winner_id
