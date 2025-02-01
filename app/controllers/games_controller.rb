@@ -145,22 +145,10 @@ class GamesController < ApplicationController
         played_card = params[:card].merge(player_id: current_user.id)
         
         if play_card_and_update_game(played_card)
-          # Update scores for both players' columns
-          current_scores = @game.column_scores || {}
+          scoring_service = GameScoringService.new(@game)
+          scoring_service.update_column_scores
+          scoring_service.complete_game  # Check if game is complete after scoring
           
-          # Score player 1's columns (0-3)
-          (0..3).each do |col|
-            cards = @game.board_cards_for_player(@game.player1_id, col)
-            current_scores[col.to_s] = GameCompletionService.new(@game).score_partial_hand(cards)
-          end
-          
-          # Score player 2's columns (4-7)
-          (4..7).each do |col|
-            cards = @game.board_cards_for_player(@game.player2_id, col)
-            current_scores[col.to_s] = GameCompletionService.new(@game).score_partial_hand(cards)
-          end
-          
-          @game.update!(column_scores: current_scores)
           @game.broadcast_game_state  # First broadcast with updated scores
           
           if bot_turn?
@@ -170,7 +158,7 @@ class GamesController < ApplicationController
             (0..7).each do |col|
               player_id = col < 4 ? @game.player1_id : @game.player2_id
               cards = @game.board_cards_for_player(player_id, col)
-              current_scores[col.to_s] = GameCompletionService.new(@game).score_partial_hand(cards)
+              current_scores[col.to_s] = scoring_service.score_partial_hand(cards)
             end
             @game.update!(column_scores: current_scores)
           end
