@@ -214,20 +214,7 @@ class DemoGameCreator
   end
 
   def calculate_scores(game)
-    current_scores = {}
-    
-    # Score player 1's columns (0-3)
-    (0..3).each do |col|
-      cards = game.board_cards_for_player(game.player1_id, col)
-      current_scores[col.to_s] = GameCompletionService.new(game).score_partial_hand(cards)
-    end
-
-    # Score player 2's columns (4-7)
-    (4..7).each do |col|
-      cards = game.board_cards_for_player(game.player2_id, col)
-      current_scores[col.to_s] = GameCompletionService.new(game).score_partial_hand(cards)
-    end
-
-    game.update!(column_scores: current_scores)
+    # Use GameScoringService to update column scores
+    GameScoringService.new(game).update_column_scores
   end
 end 

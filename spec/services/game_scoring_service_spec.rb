@@ -23,6 +23,43 @@ RSpec.describe GameScoringService do
   end
 
   describe '#complete_game' do
+    before do
+      # Set up a game that's ready to complete
+      game.player1_hand = [
+        { suit: '♠', value: 'A' },
+        { suit: '♠', value: 'K' }
+      ]
+      game.player2_hand = [
+        { suit: '♥', value: 'Q' },
+        { suit: '♥', value: 'J' }
+      ]
+      
+      # Fill the board with some cards to make the game complete
+      game.board_cards = [
+        { player_id: game.player1_id, column: 0, suit: '♣', value: '2' },
+        { player_id: game.player1_id, column: 0, suit: '♣', value: '3' },
+        { player_id: game.player1_id, column: 0, suit: '♣', value: '4' },
+        { player_id: game.player1_id, column: 0, suit: '♣', value: '5' },
+        { player_id: game.player1_id, column: 0, suit: '♣', value: '6' },
+        
+        { player_id: game.player2_id, column: 4, suit: '♦', value: '7' },
+        { player_id: game.player2_id, column: 4, suit: '♦', value: '8' },
+        { player_id: game.player2_id, column: 4, suit: '♦', value: '9' },
+        { player_id: game.player2_id, column: 4, suit: '♦', value: '10' },
+        { player_id: game.player2_id, column: 4, suit: '♦', value: 'J' }
+      ]
+      game.save!
+    end
+
+    it 'includes hand scores in column_scores' do
+      service.complete_game
+
+      expect(game.reload.column_scores).to include(
+        'player1_hand' => kind_of(Integer),
+        'player2_hand' => kind_of(Integer)
+      )
+    end
+
     context 'when game is not complete' do
       before do
         # Set up incomplete columns
