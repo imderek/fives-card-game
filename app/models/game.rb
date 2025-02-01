@@ -76,17 +76,26 @@ class Game < ApplicationRecord
     # Convert column to integer if it's a string
     column_index = card[:column].to_i
     
-    # Get current board state
-    board_state = GameBoardSerializer.new(self).as_json
+    # Get cards in the target column for this player
+    column_cards = board_cards_for_player(card[:player_id], column_index)
     
-    # Determine which player's columns to check
-    player_key = card[:player_id] == player1_id ? :player_1 : :player_2
+    # Check if column is full (max 5 cards)
+    return false if column_cards.length >= 5
     
-    # Get the current number of cards in the target column
-    current_column_cards = board_state[player_key][:columns][column_index][:cards].size
+    # Check if it's the player's turn
+    return false if card[:player_id] != current_turn
     
-    # Check if adding a card would exceed the maximum (5 cards)
-    current_column_cards < 5
+    # Check if the card is in the player's hand
+    player_hand = card[:player_id] == player1_id ? player1_hand : player2_hand
+    card_in_hand = player_hand.any? { |hand_card| 
+      hand_card[:suit] == card[:suit] && hand_card[:value] == card[:value]
+    }
+    
+    # Check if the column is valid for the player
+    valid_columns = card[:player_id] == player1_id ? (0..3) : (4..7)
+    column_in_range = valid_columns.include?(column_index)
+    
+    card_in_hand && column_in_range
   end
   
   # Add helper methods for game types
