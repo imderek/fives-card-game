@@ -80,60 +80,12 @@ class GamesController < ApplicationController
   end
 
   def create
-    @game = Game.new
-    @game.player1 = current_user
+    @game = GameCreationService.new(current_user, game_params).call
 
-    # Create demo games for admin user
-    if params[:type] == "demo"
-      medium_bot = User.where("email LIKE ?", "%medium%").first
-
-      DemoGameCreator.create_game(
-        player1: current_user,
-        player2: medium_bot,
-        scenario: :completed_powerful
-      )
-
-      DemoGameCreator.create_game(
-        player1: current_user,
-        player2: medium_bot,
-        scenario: :incompleted_powerful
-      )
-
-      redirect_to games_path, notice: "Demos created!"
-      return
-    end
-    
-    if params.dig(:game, :bot_difficulty).present?
-      setup_bot_game
+    if @game.persisted?
+      redirect_to @game, notice: 'Game was successfully created.'
     else
-      setup_pvp_game
-    end
-
-    if @game.save
-      # Broadcast to each player's specific stream with their respective current_user
-      [@game.player1_id, @game.player2_id].each do |player_id|
-        Turbo::StreamsChannel.broadcast_prepend_to(
-          "user_#{player_id}_games",
-          target: "games_list",
-          partial: "games/game",
-          locals: { game: @game, current_user: User.find(player_id), new_game: true }
-        )
-        # Remove no_games_message element if it exists
-        Turbo::StreamsChannel.broadcast_remove_to(
-          "user_#{player_id}_games",
-          target: "no_games_message"
-        )
-      end
-
-      respond_to do |format|
-        format.html { redirect_to @game }
-        format.json { render json: { id: @game.id }, status: :created }
-      end
-    else
-      respond_to do |format|
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: { errors: @game.errors }, status: :unprocessable_entity }
-      end
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -250,7 +202,7 @@ class GamesController < ApplicationController
   end
 
   def game_params
-    params.require(:game).permit(:player2_id)
+    params.require(:game).permit(:bot_difficulty, :player2_id)
   end
 
   def valid_move?(card)
