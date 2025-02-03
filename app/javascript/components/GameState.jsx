@@ -1,5 +1,4 @@
 import React from 'react';
-import Card from './Card';
 import PlayerHand from './PlayerHand';
 import GameBoard from './GameBoard';
 import { useGameChannel } from '../hooks/useGameChannel';
