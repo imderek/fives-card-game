@@ -35,14 +35,18 @@ class GameScoringService
   def game_complete?
     return false if @game.completed?
     
-    # Check if all columns that have cards are complete (5 cards)
-    (0..7).all? do |col|
+    # Count cards in each column
+    column_counts = (0..7).map do |col|
       cards = @game.board_cards_for_player(
         col < 4 ? @game.player1_id : @game.player2_id,
         col
       )
-      cards.empty? || cards.length == 5
+      cards.length
     end
+
+    # Game is complete if all non-empty columns have exactly 5 cards
+    column_counts.all? { |count| count == 0 || count == 5 } &&
+      column_counts.any? { |count| count > 0 } # At least one column has cards
   end
 
   def calculate_final_scores

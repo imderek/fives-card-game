@@ -80,12 +80,24 @@ class GamesController < ApplicationController
   end
 
   def create
-    @game = GameCreationService.new(current_user, game_params).call
-
-    if @game.persisted?
-      render json: { id: @game.id }, status: :ok
+    @game = Game.new(player1: current_user)
+    
+    if game_params[:bot_difficulty].present?
+      setup_bot_game
     else
-      render json: { errors: @game.errors.full_messages }, status: :unprocessable_entity
+      setup_pvp_game
+    end
+
+    respond_to do |format|
+      if @game.save
+        format.json { render json: { id: @game.id }, status: :ok }
+        format.turbo_stream { redirect_to game_path(@game) }
+        format.html { redirect_to game_path(@game) }
+      else
+        format.json { render json: { errors: @game.errors.full_messages }, status: :unprocessable_entity }
+        format.turbo_stream { render :new }
+        format.html { render :new }
+      end
     end
   end
 
@@ -330,7 +342,7 @@ class GamesController < ApplicationController
 
   def setup_bot_game
     # Use dig to safely navigate nested params, fallback to 'easy' if any part is nil
-    difficulty = params.dig(:game, :bot_difficulty) || 'easy'
+    difficulty = game_params[:bot_difficulty] || 'easy'
     bot_user = User.find_by(email: "#{difficulty} bot")
     
     @game.player2 = bot_user
