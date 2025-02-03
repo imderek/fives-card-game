@@ -106,7 +106,11 @@ class PokerHandScoringService
   end
 
   def generate_possible_hands(cards)
-    wild_indices = cards.each_with_index.select { |card, _| card[:value] == 'W' }.map(&:last)
+    # Update wild card detection to check for 'W' prefix
+    wild_indices = cards.each_with_index.select { |card, _| 
+      card[:value].to_s.start_with?('W') && card[:suit] == '★'
+    }.map(&:last)
+    
     return [cards] if wild_indices.empty?
 
     # All possible regular card values
