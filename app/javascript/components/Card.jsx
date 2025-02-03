@@ -1,6 +1,13 @@
 import React from 'react';
 
 const Card = React.forwardRef(({ card, playable = false, playersHand = false, onPlay, isSelected = false, facedown = false, isAnimating = false, style }, ref) => {
+  const isWild = card.value.startsWith('W');
+  
+  const getWildDisplay = () => {
+    if (!isWild) return null;
+    return '★';  // Just show the star symbol
+  };
+
   const cardStyles = `
     relative transition-all duration-150 ease-out rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.2)]
     ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem]' :
@@ -42,8 +49,8 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
         </div>
       ) : (
         <div className="w-full h-full flex flex-col items-start p-0.5 px-1.5">
-          <div className={`${card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : 'text-black'} text-md`}>
-            {card.value}{card.suit}
+          <div className={`${isWild ? 'text-purple-500' : card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : 'text-black'} text-md`}>
+            {isWild ? getWildDisplay() : `${card.value}${card.suit}`}
           </div>
         </div>
       )}
