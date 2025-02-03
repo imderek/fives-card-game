@@ -18,7 +18,8 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
     ${card.isPlaceholder ? 'w-[3.7rem] h-[4.7rem]' :
       playable || playersHand ? 'w-[3.7rem] h-[4.7rem]' : 'w-12 h-[4rem] sm:h-[3rem] sm:text-sm'}
     ${isSelected ? 'selected-card ring ring-amber-500 border border-amber-600/80 translate-y-[-7px] !shadow-[-8px_3px_10px_rgba(0,0,0,0.2)]' : ''}
-    border border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400
+    border
+    ${isWild && !facedown ? '!border-none bg-gradient-to-tl from-green-300 via-blue-500 to-80% to-purple-500' : 'border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'}
     ${isAnimating ? 'fixed transition-all duration-300 ease-out z-[100]' : ''}
   `.trim();
 
@@ -54,7 +55,7 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
         </div>
       ) : (
         <div className="w-full h-full flex flex-col items-start p-0.5 px-1.5">
-          <div className={`${card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : 'text-black'} text-md`}>
+          <div className={`${card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : isWild ? 'text-white' : 'text-black'} text-md`}>
             {isWild ? getWildDisplay() : `${card.value}${card.suit}`}
           </div>
         </div>
