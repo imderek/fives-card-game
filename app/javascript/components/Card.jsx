@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParticles } from '../hooks/useParticles';
 
 const Card = React.forwardRef(({ card, playable = false, playersHand = false, onPlay, isSelected = false, facedown = false, isAnimating = false, style }, ref) => {
   if (!card) {
@@ -37,7 +38,7 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
       playable || playersHand ? 'w-[3.7rem] h-[4.7rem]' : 'w-12 h-[4rem] sm:h-[3rem] sm:text-sm'}
     ${isSelected ? isWild ? 'selected-card ring ring-white !border-none translate-y-[-7px] !shadow-[-8px_3px_10px_rgba(0,0,0,0.2)]' : 'selected-card ring ring-amber-500 border border-amber-600/80 translate-y-[-7px] !shadow-[-8px_3px_10px_rgba(0,0,0,0.2)]' : ''}
     border
-    ${isWild && !facedown ? 'wild-card border-fuchsia-300 bg-gradient-to-br from-purple-600 from-20% via-rose-400 via-60% to-yellow-300' : 'border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'}
+    ${isWild && !facedown ? 'wild-card !border-fuchsia-300 bg-gradient-to-br from-purple-500 from-30% via-rose-400 via-60% to-yellow-300' : 'border-white bg-gradient-to-br from-slate-200 from-10% via-white via-30% to-slate-400'}
     ${isAnimating ? 'fixed transition-all duration-300 ease-out z-[100]' : ''}
   `.trim();
 
@@ -47,6 +48,18 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
       onPlay(card);
     }
   };
+
+  const renderParticles = useParticles({
+    count: 7,
+    particleColor: 'bg-white',
+    glowColor: 'shadow-fuchsia-200',
+    active: isWild && !facedown,
+    spread: true,
+    customStyles: {
+      top: '0.5rem',
+      opacity: '0.9'
+    }
+  });
 
   return (
     <div 
@@ -60,6 +73,8 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
         ...style
       }}
     >
+      {playable && isSelected && renderParticles()}
+      
       {facedown ? (
         <div className="w-full h-full flex items-center justify-center">
           <svg width="30" height="30" viewBox="0 0 30 30" className="text-slate-500/70">

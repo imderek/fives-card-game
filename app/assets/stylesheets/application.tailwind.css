@@ -36,7 +36,7 @@
 }
 
 /* wild card */
-.wild-card:before {
+/* .wild-card:before {
   content: '';
   position: absolute;
   top: 0;
@@ -45,6 +45,7 @@
   height: 100%;
   background: linear-gradient(to bottom right, theme('colors.purple.600') 20%, theme('colors.rose.400') 60%, theme('colors.yellow.300') 100%);
   border-radius: 0.5rem;
-  opacity: 0.5;
+  opacity: 0.9;
+  z-index: -1;
   filter: blur(7px);
-}
+} */

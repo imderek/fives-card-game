@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Card from './Card';
 import { evaluatePokerHand } from '../utils/pokerHandEvaluator';
+import { useParticles } from '../hooks/useParticles';
 
 const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPlayerColumn, winner, shouldObscureOpponentDetails }) => {
   const [prevScore, setPrevScore] = React.useState(0);
@@ -105,36 +106,16 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
     return 'text-slate-400';
   };
 
-  const renderParticles = () => {
-    // Only show particles for player columns or when there's a winner
-    if (score < 700 || (!isPlayerColumn && !winner && shouldObscureOpponentDetails)) return null;
-    
-    const isHighTier = score >= 800;
-    const particleColor = isHighTier ? 'bg-white' : 'bg-purple-300';
-    const glowColor = isHighTier ? 'shadow-white' : 'shadow-purple-400';
-    
-    return (
-      <>
-        {[...Array(7)].map((_, i) => {
-          const segmentWidth = 50 / 6;
-          const segmentStart = 25 + (segmentWidth * i);
-          
-          return (
-            <div
-              key={`particle-${i}`}
-              className={`absolute w-[0.2rem] h-[0.2rem] rounded-full ${particleColor} ${glowColor} animate-particle-float z-20 shadow-[0_0_3px_1px_rgba(168,85,247,0.9)]`}
-              style={{
-                left: `${segmentStart + (Math.random() * segmentWidth)}%`,
-                top: '0.25rem', // this is where the particles start relative to the column
-                '--x-drift': `${(Math.random() * 20 - 10)}px`,
-                animationDelay: `-${Math.random() * 2000}ms`,
-              }}
-            />
-          );
-        })}
-      </>
-    );
-  };
+  const shouldShowParticles = score >= 700 && (isPlayerColumn || winner || !shouldObscureOpponentDetails);
+  const isHighTier = score >= 800;
+  
+  const renderParticles = useParticles({
+    count: 7,
+    isHighTier,
+    particleColor: isHighTier ? 'bg-white' : 'bg-purple-300',
+    glowColor: isHighTier ? 'shadow-white' : 'shadow-purple-400',
+    active: shouldShowParticles
+  });
 
   const handlePlayCard = (columnIndex) => {
     if (!selectedCard || !columnRef.current || !selectedCard.initialPosition) return;
