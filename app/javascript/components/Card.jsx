@@ -1,7 +1,12 @@
 import React from 'react';
 
 const Card = React.forwardRef(({ card, playable = false, playersHand = false, onPlay, isSelected = false, facedown = false, isAnimating = false, style }, ref) => {
-  const isWild = card.value.startsWith('W');
+  if (!card) {
+    console.warn('Card component received null or undefined card prop');
+    return null;
+  }
+
+  const isWild = card.value?.startsWith('W') && card.suit === '★';
   
   const getWildDisplay = () => {
     if (!isWild) return null;
@@ -49,7 +54,7 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
         </div>
       ) : (
         <div className="w-full h-full flex flex-col items-start p-0.5 px-1.5">
-          <div className={`${isWild ? 'text-purple-500' : card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : 'text-black'} text-md`}>
+          <div className={`${card.suit === '♥' || card.suit === '♦' ? 'text-red-500' : 'text-black'} text-md`}>
             {isWild ? getWildDisplay() : `${card.value}${card.suit}`}
           </div>
         </div>
