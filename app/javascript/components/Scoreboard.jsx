@@ -25,7 +25,7 @@ const Scoreboard = ({
 
                     {/* Current player's score */}
                     <div className={`mx-4 h-full py-2 ${isCurrentPlayerTurn ? 'border-b-2 border-amber-500' : 'border-b-2 border-transparent'} relative flex flex-1 flex-col items-center justify-center`}>
-                        <div className="hidden text-xl font-bold">
+                        <div className=" text-xl font-bold">
                             {playerScore.toLocaleString()}
                         </div>
                         <div className="text-sm font-medium text-white">{playerName}</div>
@@ -36,7 +36,7 @@ const Scoreboard = ({
 
                     {/* Opponent's score */}
                     <div className={`mx-4 h-full py-2 ${!isCurrentPlayerTurn ? 'border-b-2 border-amber-500' : 'border-b-2 border-transparent'} relative flex flex-1 flex-col items-center justify-center`}>
-                        <div className="hidden text-xl font-bold text-slate-400">
+                        <div className=" text-xl font-bold text-slate-400">
                             {(!winner && opponentScore > 0) ? '???' : opponentScore.toLocaleString()}
                         </div>
                         <div className="text-sm font-medium text-slate-400">{opponentName}</div>

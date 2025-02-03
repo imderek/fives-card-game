@@ -2,6 +2,14 @@ class PokerHandScoringService
   def score_hand(cards)
     return 0 if cards.empty?
     
+    # Generate all possible hands by replacing wild cards
+    possible_hands = generate_possible_hands(cards)
+    
+    # Score each possible hand and return the highest score
+    possible_hands.map { |hand| score_concrete_hand(hand) }.max
+  end
+
+  def score_concrete_hand(cards)
     values = cards.map { |card| card_value_to_int(card[:value]) }
     suits = cards.map { |card| card[:suit] }
     
@@ -95,5 +103,30 @@ class PokerHandScoringService
 
   def highest_card(values)
     values.max
+  end
+
+  def generate_possible_hands(cards)
+    wild_indices = cards.each_with_index.select { |card, _| card[:value] == 'W' }.map(&:last)
+    return [cards] if wild_indices.empty?
+
+    # All possible regular card values
+    possible_values = ('2'..'10').to_a + ['J', 'Q', 'K', 'A']
+    suits = ['♠', '♣', '♥', '♦']
+
+    # Generate all combinations
+    combinations = possible_values.product(suits)
+    generate_combinations(cards, wild_indices, combinations)
+  end
+
+  def generate_combinations(cards, wild_indices, combinations, current_index = 0)
+    return [cards.dup] if current_index >= wild_indices.size
+
+    result = []
+    combinations.each do |value, suit|
+      new_cards = cards.dup
+      new_cards[wild_indices[current_index]] = { value: value, suit: suit }
+      result.concat(generate_combinations(new_cards, wild_indices, combinations, current_index + 1))
+    end
+    result
   end
 end 

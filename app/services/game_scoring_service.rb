@@ -10,13 +10,17 @@ class GameScoringService
     # Score player 1's columns (0-3)
     (0..3).each do |col|
       cards = @game.board_cards_for_player(@game.player1_id, col)
-      current_scores[col.to_s] = @scoring_service.score_partial_hand(cards)
+      # Use score_partial_hand for incomplete columns, score_hand for complete ones
+      score = cards.length == 5 ? @scoring_service.score_hand(cards) : @scoring_service.score_partial_hand(cards)
+      current_scores[col.to_s] = score
     end
     
     # Score player 2's columns (4-7)
     (4..7).each do |col|
       cards = @game.board_cards_for_player(@game.player2_id, col)
-      current_scores[col.to_s] = @scoring_service.score_partial_hand(cards)
+      # Use score_partial_hand for incomplete columns, score_hand for complete ones
+      score = cards.length == 5 ? @scoring_service.score_hand(cards) : @scoring_service.score_partial_hand(cards)
+      current_scores[col.to_s] = score
     end
     
     @game.update!(column_scores: current_scores)
@@ -72,10 +76,10 @@ class GameScoringService
   def calculate_player_score(player_id)
     column_range = player_id == @game.player1_id ? (0..3) : (4..7)
     
-    # Score from columns
+    # Score from columns (only complete columns of 5 cards)
     column_score = column_range.sum do |col|
       cards = @game.board_cards_for_player(player_id, col)
-      @scoring_service.score_hand(cards)
+      cards.length == 5 ? @scoring_service.score_hand(cards) : 0
     end
 
     # Score from remaining cards in hand
