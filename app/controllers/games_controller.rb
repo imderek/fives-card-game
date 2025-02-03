@@ -80,23 +80,18 @@ class GamesController < ApplicationController
   end
 
   def create
-    @game = Game.new(player1: current_user)
-    
-    if game_params[:bot_difficulty].present?
-      setup_bot_game
-    else
-      setup_pvp_game
-    end
+    service = GameCreationService.new(current_user)
+    @game = service.create(game_params)
 
-    respond_to do |format|
-      if @game.save
-        format.json { render json: { id: @game.id }, status: :ok }
-        format.turbo_stream { redirect_to game_path(@game) }
-        format.html { redirect_to game_path(@game) }
-      else
-        format.json { render json: { errors: @game.errors.full_messages }, status: :unprocessable_entity }
-        format.turbo_stream { render :new }
-        format.html { render :new }
+    if @game
+      respond_to do |format|
+        format.html { redirect_to @game }
+        format.json { render json: { id: @game.id }, status: :created }
+      end
+    else
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: { errors: @game.errors }, status: :unprocessable_entity }
       end
     end
   end
@@ -338,20 +333,6 @@ class GamesController < ApplicationController
     return false unless @game.current_turn == @game.player2_id
     
     @game.player2.email.include?("bot")
-  end
-
-  def setup_bot_game
-    # Use dig to safely navigate nested params, fallback to 'easy' if any part is nil
-    difficulty = game_params[:bot_difficulty] || 'easy'
-    bot_user = User.find_by(email: "#{difficulty} bot")
-    
-    @game.player2 = bot_user
-    @game.game_type = :bot
-  end
-
-  def setup_pvp_game
-    @game.player2_id = params[:game][:player2_id]
-    @game.game_type = :pvp
   end
 
   def check_for_winner
