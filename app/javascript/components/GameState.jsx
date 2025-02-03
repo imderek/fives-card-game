@@ -234,12 +234,19 @@ const GameState = ({ game: initialGame, currentUser }) => {
                 })
             });
 
-            if (response.ok) {
-                const data = await response.json();
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            if (data && data.id) {
                 window.location.href = `/games/${data.id}`;
+            } else {
+                throw new Error('Invalid game data received');
             }
         } catch (error) {
             console.error('Error creating new game:', error);
+            // Optionally show an error message to the user
         }
     };
 

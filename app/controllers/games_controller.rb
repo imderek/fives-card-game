@@ -83,9 +83,9 @@ class GamesController < ApplicationController
     @game = GameCreationService.new(current_user, game_params).call
 
     if @game.persisted?
-      redirect_to @game, notice: 'Game was successfully created.'
+      render json: { id: @game.id }, status: :ok
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: @game.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
