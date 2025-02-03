@@ -1,7 +1,7 @@
 import React from 'react';
 import BoardColumn from './BoardColumn';
 
-const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName, playerName, winner, isPlayer1 }) => {
+const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName, playerName, winner, isPlayer1, shouldObscureOpponentDetails }) => {
   // Group cards by column
   const groupedCards = cards.reduce((acc, card) => {
     if (!acc[card.column]) {
@@ -39,6 +39,7 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
             onPlayCardToColumn={onPlayCardToColumn}
             isPlayerColumn={true}
             winner={winner}
+            shouldObscureOpponentDetails={false}
           />
         ))}
       </div>
@@ -57,6 +58,7 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
             onPlayCardToColumn={onPlayCardToColumn}
             isPlayerColumn={false}
             winner={winner}
+            shouldObscureOpponentDetails={shouldObscureOpponentDetails}
           />
         ))}
       </div>

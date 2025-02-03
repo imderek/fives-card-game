@@ -22,6 +22,7 @@ const getBotDifficulty = (email) => {
 const GameState = ({ game: initialGame, currentUser }) => {
     const [selectedCard, setSelectedCard] = React.useState(null);
     const [optimisticState, setOptimisticState] = React.useState(null);
+    const shouldObscureOpponentDetails = true;
     
     // Try to get stored game state on mount
     React.useEffect(() => {
@@ -287,6 +288,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                         isCurrentPlayerTurn={game.current_turn === currentUser.id}
                         isBot={isBot}
                         winner={game.winner_id}
+                        shouldObscureOpponentDetails={shouldObscureOpponentDetails}
                     />
                 )}
 
@@ -330,6 +332,7 @@ const GameState = ({ game: initialGame, currentUser }) => {
                     playerName={playerName}
                     winner={game.winner_id}
                     isPlayer1={isPlayer1}
+                    shouldObscureOpponentDetails={shouldObscureOpponentDetails}
                 />
                 <div className="w-full">
                     {/* Opponent's hand */}
