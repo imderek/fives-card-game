@@ -69,5 +69,69 @@ RSpec.describe PokerHandScoringService do
         expect(service.score_hand(cards)).to eq(13) # K = 13
       end
     end
+
+    context 'with wild cards' do
+      it 'uses wild card to complete a royal flush' do
+        cards = [
+          { suit: '♠', value: 'A' },
+          { suit: '♠', value: 'K' },
+          { suit: '♠', value: 'Q' },
+          { suit: '♠', value: 'J' },
+          { suit: '★', value: 'W1' }  # Wild card should become 10♠
+        ]
+        expect(service.score_hand(cards)).to eq(1000)
+      end
+
+      it 'uses wild card optimally in multiple possible hands' do
+        cards = [
+          { suit: '♠', value: '8' },
+          { suit: '♣', value: '8' },
+          { suit: '♥', value: '8' },
+          { suit: '★', value: 'W1' }  # Wild card should become 8♦ for four of a kind
+        ]
+        expect(service.score_hand(cards)).to eq(700)  # Four of a kind
+      end
+
+      it 'handles multiple wild cards' do
+        cards = [
+          { suit: '♠', value: 'A' },
+          { suit: '♠', value: 'K' },
+          { suit: '★', value: 'W1' },  # Should become Q♠
+          { suit: '★', value: 'W2' },  # Should become J♠
+          { suit: '★', value: 'W3' }   # Should become 10♠
+        ]
+        expect(service.score_hand(cards)).to eq(1000)  # Royal Flush
+      end
+
+      it 'uses wild card for straight flush over four of a kind' do
+        cards = [
+          { suit: '♥', value: '7' },
+          { suit: '♥', value: '8' },
+          { suit: '♥', value: '9' },
+          { suit: '♥', value: '10' },
+          { suit: '★', value: 'W1' }  # Should become 6♥ for straight flush
+        ]
+        expect(service.score_hand(cards)).to eq(800)  # Straight flush
+      end
+
+      it 'uses wild card to make a pair over high card' do
+        cards = [
+          { suit: '♠', value: 'K' },
+          { suit: '★', value: 'W1' }  # Should become K♣/♥/♦ for a pair
+        ]
+        expect(service.score_hand(cards)).to eq(100)  # Pair of Kings
+      end
+
+      it 'uses wild card for best possible score in edge cases' do
+        cards = [
+          { suit: '♠', value: '5' },
+          { suit: '♠', value: '6' },
+          { suit: '♠', value: '7' },
+          { suit: '♠', value: '9' },
+          { suit: '★', value: 'W1' }  # Should become 8♠ for straight flush
+        ]
+        expect(service.score_hand(cards)).to eq(800)  # Straight flush
+      end
+    end
   end
 end 
