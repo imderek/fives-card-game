@@ -19,6 +19,14 @@ module BotStrategies
     def find_best_move
       hand_cards = game.player2_hand
       
+      # Situation 1: Use wild cards strategically
+      wild_cards = hand_cards.select { |card| card[:value] == 'Joker' }
+      if wild_cards.any?
+        if best_wild_move = find_best_wild_card_move(wild_cards.first)
+          return best_wild_move
+        end
+      end
+
       # Situation 3: Look for multiples in hand that match with board
       hand_cards.each do |card|
         # Check for quads first, then trips, then pairs
@@ -91,6 +99,49 @@ module BotStrategies
       when 'J' then 11
       else value.to_i
       end
+    end
+
+    # Add new helper method for wild card strategy
+    def find_best_wild_card_move(wild_card)
+      # First priority: Complete a quad
+      available_columns.each do |column|
+        column_cards = game.board_cards_for_player(game.player2_id, column) || []
+        next if column_cards.length >= 5
+
+        value_counts = column_cards.each_with_object(Hash.new(0)) { |card, counts| counts[card[:value]] += 1 }
+        if value_counts.any? { |_, count| count == 3 }
+          return { card: wild_card, column: column }
+        end
+      end
+
+      # Second priority: Complete a triple
+      available_columns.each do |column|
+        column_cards = game.board_cards_for_player(game.player2_id, column) || []
+        next if column_cards.length >= 5
+
+        value_counts = column_cards.each_with_object(Hash.new(0)) { |card, counts| counts[card[:value]] += 1 }
+        if value_counts.any? { |_, count| count == 2 }
+          return { card: wild_card, column: column }
+        end
+      end
+
+      # Third priority: Add to a pair
+      available_columns.each do |column|
+        column_cards = game.board_cards_for_player(game.player2_id, column) || []
+        next if column_cards.length >= 5
+
+        value_counts = column_cards.each_with_object(Hash.new(0)) { |card, counts| counts[card[:value]] += 1 }
+        if value_counts.any? { |_, count| count == 1 }
+          return { card: wild_card, column: column }
+        end
+      end
+
+      # Fourth priority: Start a new column if available
+      if empty_column = find_empty_column
+        return { card: wild_card, column: empty_column }
+      end
+
+      nil
     end
   end
 end 

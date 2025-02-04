@@ -96,5 +96,88 @@ RSpec.describe BotStrategies::HardBot do
         expect(move[:column]).to eq(4)  # But should still prefer leftmost column
       end
     end
+
+    context 'when using wild cards' do
+      it 'uses wild card to complete a quad' do
+        game.board_cards = [
+          { suit: '♠', value: '7', player_id: game.player2_id, column: 4 },
+          { suit: '♣', value: '7', player_id: game.player2_id, column: 4 },
+          { suit: '♥', value: '7', player_id: game.player2_id, column: 4 }
+        ]
+        game.player2_hand = [
+          { suit: '★', value: 'Joker' },
+          { suit: '♠', value: '2' }
+        ]
+
+        move = bot.make_move
+        expect(move).to eq({
+          suit: '★',
+          value: 'Joker',
+          player_id: game.player2_id,
+          column: 4
+        })
+      end
+
+      it 'uses wild card to complete a triple' do
+        game.board_cards = [
+          { suit: '♠', value: 'K', player_id: game.player2_id, column: 4 },
+          { suit: '♣', value: 'K', player_id: game.player2_id, column: 4 }
+        ]
+        game.player2_hand = [
+          { suit: '★', value: 'Joker' },
+          { suit: '♠', value: '2' }
+        ]
+
+        move = bot.make_move
+        expect(move).to eq({
+          suit: '★',
+          value: 'Joker',
+          player_id: game.player2_id,
+          column: 4
+        })
+      end
+
+      it 'uses wild card to enhance a single card' do
+        game.board_cards = [
+          { suit: '♠', value: 'A', player_id: game.player2_id, column: 4 }
+        ]
+        game.player2_hand = [
+          { suit: '★', value: 'Joker' },
+          { suit: '♠', value: '2' }
+        ]
+
+        move = bot.make_move
+        expect(move).to eq({
+          suit: '★',
+          value: 'Joker',
+          player_id: game.player2_id,
+          column: 4
+        })
+      end
+
+      it 'prefers completing higher value combinations' do
+        game.board_cards = [
+          # Two 7s in one column
+          { suit: '♠', value: '7', player_id: game.player2_id, column: 4 },
+          { suit: '♣', value: '7', player_id: game.player2_id, column: 4 },
+          # Three Kings in another column
+          { suit: '♠', value: 'K', player_id: game.player2_id, column: 5 },
+          { suit: '♣', value: 'K', player_id: game.player2_id, column: 5 },
+          { suit: '♥', value: 'K', player_id: game.player2_id, column: 5 }
+        ]
+        game.player2_hand = [
+          { suit: '★', value: 'Joker' },
+          { suit: '♠', value: '2' }
+        ]
+
+        move = bot.make_move
+        expect(move).to eq({
+          suit: '★',
+          value: 'Joker',
+          player_id: game.player2_id,
+          column: 5  # Should choose column 5 to complete the Kings quad
+        })
+      end
+    end
   end
 end 
