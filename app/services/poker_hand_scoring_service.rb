@@ -115,43 +115,102 @@ class PokerHandScoringService
     non_wild_cards = cards.reject.with_index { |_, i| wild_indices.include?(i) }
     wild_count = wild_indices.size
     
-    # For partial hands (less than 5 cards), optimize for highest score
-    if cards.length < 5
-      if non_wild_cards.empty?
-        # All wild cards - make highest value cards
-        return [generate_high_cards(wild_count)]
-      else
-        # Make best hand with existing cards
-        high_card = non_wild_cards.max_by { |c| card_value_to_int(c[:value]) }
-        return [non_wild_cards + generate_matching_cards(high_card[:value], wild_count)]
+    # Fast path for 3+ wild cards
+    if wild_count >= 3
+      # For partial hands, make four of a kind with highest card
+      if cards.length < 5
+        if non_wild_cards.empty?
+          return [generate_high_cards(wild_count)]
+        else
+          high_card = non_wild_cards.max_by { |c| card_value_to_int(c[:value]) }
+          return [non_wild_cards + generate_matching_cards(high_card[:value], wild_count)]
+        end
+      end
+      
+      # For 5-card hands, make the best possible hand
+      result = Array.new(5)
+      
+      # Place non-wild cards first
+      cards.each_with_index do |card, index|
+        next if wild_indices.include?(index)
+        result[index] = card
+      end
+
+      # For 5-card hands with 3+ wild cards, ALWAYS make a Royal Flush
+      # (this is always better than four of a kind)
+      suit = non_wild_cards.first&.dig(:suit) || '♠'
+      royal_flush = [
+        { value: '10', suit: suit },
+        { value: 'J', suit: suit },
+        { value: 'Q', suit: suit },
+        { value: 'K', suit: suit },
+        { value: 'A', suit: suit }
+      ]
+
+      # Skip values we already have
+      existing_values = non_wild_cards.map { |c| c[:value] }.to_set
+      needed_cards = royal_flush.reject { |c| existing_values.include?(c[:value]) }
+      needed_index = 0
+
+      # Fill empty positions
+      result.each_with_index do |card, i|
+        next if card
+        result[i] = needed_cards[needed_index]
+        needed_index += 1
+      end
+
+      return [result.compact]
+    end
+
+    # Handle 1-2 wild cards
+    possible_values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
+    suits = ['♠', '♣', '♥', '♦']
+    
+    if wild_count == 2 && cards.length == 5
+      # For 5-card hands with 2 wild cards, prioritize straight flushes and four of a kind
+      if can_complete_royal_flush?(non_wild_cards, 2)
+        suit = non_wild_cards.first&.dig(:suit) || '♠'
+        royal_values = ['10', 'J', 'Q', 'K', 'A']
+        existing_values = non_wild_cards.map { |c| c[:value] }
+        needed_values = royal_values - existing_values
+        
+        result = cards.map.with_index do |card, i|
+          if wild_indices.include?(i)
+            { value: needed_values.shift, suit: suit }
+          else
+            card
+          end
+        end
+        return [result]
+      elsif high_card = non_wild_cards.find { |c| card_value_to_int(c[:value]) >= 11 }
+        # Make four of a kind with high cards
+        result = non_wild_cards.dup
+        suits = ['♠', '♣', '♥', '♦'].reject { |s| s == high_card[:suit] }
+        wild_indices.each_with_index do |wi, i|
+          result[wi] = { value: high_card[:value], suit: suits[i] }
+        end
+        return [result]
       end
     end
 
-    # For 5-card hands, try to make the best possible hand
-    suit = non_wild_cards.first&.dig(:suit) || '♠'
+    # Generate all possible combinations for remaining cases
+    combinations = possible_values.product(suits).map { |value, suit| { value: value, suit: suit } }
+    results = []
     
-    # Try to make a royal flush first
-    if can_complete_royal_flush?(non_wild_cards, wild_count)
-      royal_values = ['A', 'K', 'Q', 'J', '10']
-      existing_values = non_wild_cards.map { |c| c[:value] }
-      missing_values = (royal_values - existing_values).take(wild_count)
-      return [non_wild_cards + missing_values.map { |v| { value: v, suit: suit } }]
+    def generate_combinations(cards, wild_indices, combinations, current_index = 0, acc = [])
+      if current_index >= wild_indices.size
+        return [cards.dup]
+      end
+
+      results = []
+      combinations.each do |combo|
+        cards[wild_indices[current_index]] = combo
+        results.concat(generate_combinations(cards, wild_indices, combinations, current_index + 1))
+      end
+      results
     end
-    
-    # Try straight flush
-    if can_complete_straight_flush?(non_wild_cards, wild_count)
-      values = non_wild_cards.map { |c| card_value_to_int(c[:value]) }.sort
-      missing = find_straight_values(values, wild_count)
-      return [non_wild_cards + missing.map { |v| { value: int_to_card_value(v), suit: suit } }]
-    end
-    
-    # Otherwise make the best hand possible (usually four of a kind or full house)
-    if non_wild_cards.any?
-      high_card = non_wild_cards.max_by { |c| card_value_to_int(c[:value]) }
-      [non_wild_cards + generate_matching_cards(high_card[:value], wild_count)]
-    else
-      [generate_royal_flush_cards(wild_count)]
-    end
+
+    generate_combinations(cards.dup, wild_indices, combinations)
   end
 
   def can_complete_royal_flush?(cards, wild_count)
