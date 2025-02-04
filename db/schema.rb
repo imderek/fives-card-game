@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_21_223545) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_03_000000) do
   create_table "contact_deals", force: :cascade do |t|
     t.integer "contact_id", null: false
     t.integer "deal_id", null: false
@@ -67,6 +67,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_21_223545) do
     t.integer "player1_total_score"
     t.integer "player2_total_score"
     t.boolean "is_private", default: false
+    t.integer "player1_bet", default: 0
+    t.integer "player2_bet", default: 0
+    t.integer "pot_size", default: 0
     t.index ["player1_id"], name: "index_games_on_player1_id"
     t.index ["player2_id"], name: "index_games_on_player2_id"
   end
@@ -129,6 +132,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_21_223545) do
     t.index ["deal_id"], name: "index_tasks_on_deal_id"
   end
 
+  create_table "user_preferences", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "key", null: false
+    t.string "value_type", null: false
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "key"], name: "index_user_preferences_on_user_id_and_key", unique: true
+    t.index ["user_id"], name: "index_user_preferences_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -148,6 +162,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_21_223545) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.integer "cash", default: 1000, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -165,5 +180,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_21_223545) do
   add_foreign_key "organization_memberships", "users"
   add_foreign_key "subscriptions", "organizations"
   add_foreign_key "tasks", "deals"
+  add_foreign_key "user_preferences", "users"
   add_foreign_key "users", "organizations"
 end

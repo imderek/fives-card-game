@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :games_as_player2, class_name: 'Game', foreign_key: 'player2_id', dependent: :destroy
   has_many :won_games, class_name: 'Game', foreign_key: 'winner_id', dependent: :destroy
 
+  has_many :preferences, class_name: 'UserPreference'
+
   # Skip password validation
   def password_required?
     false
@@ -83,6 +85,31 @@ class User < ApplicationRecord
     
     wins = completed_games.where(winner_id: id).count
     ((wins.to_f / total_games) * 100).round(2)
+  end
+
+  def get_preference(key, default = nil)
+    preference = preferences.find_by(key: key)
+    preference&.typed_value || default
+  end
+  
+  def set_preference(key, value)
+    value_type = case value
+                 when TrueClass, FalseClass then 'boolean'
+                 when Integer then 'integer'
+                 when Float then 'float'
+                 when Array then 'array'
+                 else 'string'
+                 end
+    
+    serialized_value = value_type == 'array' ? value.to_json : value.to_s
+    
+    preferences
+      .find_or_initialize_by(key: key)
+      .update!(value_type: value_type, value: serialized_value)
+  end
+  
+  def wild_cards_enabled?
+    get_preference('wild_cards_enabled', false)
   end
 
   private

@@ -134,13 +134,18 @@ class Game < ApplicationRecord
     values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     standard_cards = suits.product(values).map { |suit, value| { suit: suit, value: value } }
     
-    # Generate 4 unique wild cards with wild_id as part of the value
-    wild_cards = (1..4).map do |i|
-      { suit: '★', value: "W#{i}" }  # Include the number in the value
+    # Only add wild cards if the player1 has them enabled
+    cards = if player1.wild_cards_enabled?
+      # Generate 4 unique wild cards with wild_id as part of the value
+      wild_cards = (1..4).map do |i|
+        { suit: '★', value: "W#{i}" }  # Include the number in the value
+      end
+      standard_cards + wild_cards
+    else
+      standard_cards
     end
     
-    # Combine and shuffle all cards
-    (standard_cards + wild_cards).shuffle
+    cards.shuffle
   end
   
   def draw_initial_hand
