@@ -96,8 +96,16 @@ const generateCombinations = (cards, wildIndices, combinations, currentIndex = 0
   return result;
 };
 
+const evaluationCache = new Map();
+
 export const evaluatePokerHand = (cards) => {
   if (!cards.length) return { name: '', score: 0 };
+
+  // Create a cache key from the cards
+  const cacheKey = cards.map(c => `${c.value}${c.suit}`).join('|');
+  if (evaluationCache.has(cacheKey)) {
+    return evaluationCache.get(cacheKey);
+  }
 
   // Generate all possible hands by replacing wild cards
   const possibleHands = generatePossibleHands(cards);
@@ -130,7 +138,11 @@ export const evaluatePokerHand = (cards) => {
   });
 
   // Return the highest scoring hand
-  return scores.reduce((best, current) => 
+  const result = scores.reduce((best, current) => 
     current.score > best.score ? current : best
   );
+
+  // Cache and return the result
+  evaluationCache.set(cacheKey, result);
+  return result;
 }; 
