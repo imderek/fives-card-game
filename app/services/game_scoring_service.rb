@@ -61,9 +61,9 @@ class GameScoringService
     @game.player1_total_score = calculate_player_score(@game.player1_id)
     @game.player2_total_score = calculate_player_score(@game.player2_id)
 
-    # Add hand scores to column_scores
-    current_scores["player1_hand"] = @scoring_service.score_partial_hand(@game.player1_hand)
-    current_scores["player2_hand"] = @scoring_service.score_partial_hand(@game.player2_hand)
+    # Add hand scores to column_scores - use score_hand instead of score_partial_hand
+    current_scores["player1_hand"] = @scoring_service.score_hand(@game.player1_hand)
+    current_scores["player2_hand"] = @scoring_service.score_hand(@game.player2_hand)
 
     # Save both total scores and column scores
     @game.update(
@@ -82,9 +82,9 @@ class GameScoringService
       cards.length == 5 ? @scoring_service.score_hand(cards) : 0
     end
 
-    # Score from remaining cards in hand
+    # Score from remaining cards in hand - use score_hand instead of score_partial_hand
     hand = player_id == @game.player1_id ? @game.player1_hand : @game.player2_hand
-    hand_score = @scoring_service.score_partial_hand(hand)
+    hand_score = @scoring_service.score_hand(hand)
 
     column_score + hand_score
   end
