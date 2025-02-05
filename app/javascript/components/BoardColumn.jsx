@@ -182,7 +182,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
       >
         {/* Hand name and score */}
         {delayedHandName && (
-          <div className="text-xs text-center text-white relative top-[-0.1rem] sm:top-0 sm:leading-[.85rem]">
+          <div className={`${isPlayerColumn || winner || !shouldObscureOpponentDetails ? '' : 'hidden'} text-xs text-center relative top-[-0.1rem] sm:top-0 sm:leading-[.85rem]`}>
             <div className="line-clamp-1">
               {isPlayerColumn || winner ? delayedHandName : (shouldObscureOpponentDetails ? 'TBD' : delayedHandName)}
             </div>
