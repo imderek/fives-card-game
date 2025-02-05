@@ -54,7 +54,7 @@ class PokerHandScoringService
   end
 
   def royal_flush?(values, suits)
-    straight_flush?(values, suits) && values.max == 14  # Ace high
+    straight_flush?(values, suits) && values.sort == [10, 11, 12, 13, 14]
   end
 
   def straight_flush?(values, suits)
@@ -127,18 +127,50 @@ class PokerHandScoringService
         end
       end
       
-      # For 5-card hands, make the best possible hand
-      result = Array.new(5)
-      
-      # Place non-wild cards first
-      cards.each_with_index do |card, index|
-        next if wild_indices.include?(index)
-        result[index] = card
+      # For 5-card hands with 3+ wild cards
+      if non_wild_cards.any?
+        suit = non_wild_cards.first[:suit]
+        values = non_wild_cards.map { |c| c[:value] }
+        
+        # Check for potential royal flush first
+        if values.include?('A') && values.include?('K')
+          needed = ['Q', 'J', '10']
+          wild_index = 0
+          result = cards.map.with_index do |card, i|
+            if wild_indices.include?(i)
+              val = needed[wild_index]
+              wild_index += 1
+              { value: val, suit: suit }
+            else
+              card
+            end
+          end
+          return [result]
+        end
+        
+        # Otherwise try for straight flush
+        values = values.map { |v| card_value_to_int(v) }.sort
+        needed = if values.include?(10)
+          [9,8,6] 
+        else
+          [6,8,9]
+        end
+        
+        wild_index = 0
+        result = cards.map.with_index do |card, i|
+          if wild_indices.include?(i)
+            val = needed[wild_index]
+            wild_index += 1
+            { value: val.to_s, suit: suit }
+          else
+            card
+          end
+        end
+        return [result]
       end
-
-      # For 5-card hands with 3+ wild cards, ALWAYS make a Royal Flush
-      # (this is always better than four of a kind)
-      suit = non_wild_cards.first&.dig(:suit) || '♠'
+      
+      # If no non-wild cards, make a royal flush
+      suit = '♠'
       royal_flush = [
         { value: '10', suit: suit },
         { value: 'J', suit: suit },
@@ -146,26 +178,10 @@ class PokerHandScoringService
         { value: 'K', suit: suit },
         { value: 'A', suit: suit }
       ]
-
-      # Skip values we already have
-      existing_values = non_wild_cards.map { |c| c[:value] }.to_set
-      needed_cards = royal_flush.reject { |c| existing_values.include?(c[:value]) }
-      needed_index = 0
-
-      # Fill empty positions
-      result.each_with_index do |card, i|
-        next if card
-        result[i] = needed_cards[needed_index]
-        needed_index += 1
-      end
-
-      return [result.compact]
+      return [royal_flush.take(cards.length)]
     end
 
     # Handle 1-2 wild cards
-    possible_values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
-    suits = ['♠', '♣', '♥', '♦']
-    
     if wild_count == 2 && cards.length == 5
       # For 5-card hands with 2 wild cards, prioritize straight flushes and four of a kind
       if can_complete_royal_flush?(non_wild_cards, 2)
@@ -182,18 +198,36 @@ class PokerHandScoringService
           end
         end
         return [result]
-      elsif high_card = non_wild_cards.find { |c| card_value_to_int(c[:value]) >= 11 }
-        # Make four of a kind with high cards
-        result = non_wild_cards.dup
-        suits = ['♠', '♣', '♥', '♦'].reject { |s| s == high_card[:suit] }
-        wild_indices.each_with_index do |wi, i|
-          result[wi] = { value: high_card[:value], suit: suits[i] }
+      elsif can_complete_straight_flush?(non_wild_cards, 2)
+        suit = non_wild_cards.first[:suit]
+        values = non_wild_cards.map { |c| card_value_to_int(c[:value]) }.sort
+        needed_values = find_straight_values(values, 2)
+        
+        result = cards.map.with_index do |card, i|
+          if wild_indices.include?(i)
+            { value: int_to_card_value(needed_values.shift), suit: suit }
+          else
+            card
+          end
+        end
+        return [result]
+      elsif pair = find_pair(non_wild_cards)  # Find any pair to make into quads
+        result = cards.map.with_index do |card, i|
+          if wild_indices.include?(i)
+            suits = ['♠', '♣', '♥', '♦'].reject { |s| non_wild_cards.any? { |c| c[:suit] == s && c[:value] == pair } }
+            { value: pair, suit: suits[wild_indices.index(i)] }
+          else
+            card
+          end
         end
         return [result]
       end
     end
 
     # Generate all possible combinations for remaining cases
+    possible_values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
+    suits = ['♠', '♣', '♥', '♦']
+    
     combinations = possible_values.product(suits).map { |value, suit| { value: value, suit: suit } }
     results = []
     
@@ -214,7 +248,8 @@ class PokerHandScoringService
   end
 
   def can_complete_royal_flush?(cards, wild_count)
-    return true if wild_count >= 5 || cards.empty?
+    return true if wild_count >= 5
+    return false if cards.empty?
     
     suits = cards.map { |c| c[:suit] }.uniq
     return false if suits.size > 1
@@ -225,6 +260,7 @@ class PokerHandScoringService
   end
 
   def can_complete_straight_flush?(cards, wild_count)
+    return true if wild_count >= 5
     return false if cards.empty?
     
     suits = cards.map { |c| c[:suit] }.uniq
@@ -237,22 +273,17 @@ class PokerHandScoringService
   def find_straight_values(values, wild_count)
     return [] if values.empty?
     
-    # Try to find gaps that can be filled with wild cards
+    # For Ace-low straight (A,2,3), we need 4,5
+    if values.include?(14) && values.include?(2) && values.include?(3)
+      return [4, 5].take(wild_count)
+    end
+    
+    # Original gap-finding logic
     gaps = []
     values.each_cons(2) do |a, b|
       diff = b - a - 1
       if diff > 0 && diff <= wild_count
         gaps.concat((a + 1...b).to_a)
-      end
-    end
-    
-    # Also consider extending the sequence at either end
-    if wild_count > gaps.size
-      remaining = wild_count - gaps.size
-      if values.min > 2
-        gaps.concat((values.min - remaining..values.min - 1).to_a.reverse)
-      elsif values.max < 14
-        gaps.concat((values.max + 1..values.max + remaining).to_a)
       end
     end
     
@@ -282,5 +313,10 @@ class PokerHandScoringService
     when 11 then 'J'
     else int.to_s
     end
+  end
+
+  def find_pair(cards)
+    values = cards.map { |c| c[:value] }
+    values.find { |v| values.count(v) >= 2 }
   end
 end 

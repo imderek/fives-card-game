@@ -114,6 +114,50 @@ RSpec.describe PokerHandScoringService do
         expect(service.score_hand(cards)).to eq(800)  # Straight flush
       end
 
+      it 'uses wild card for straight flush over trips' do
+        cards = [
+          { suit: '♥', value: '2' },
+          { suit: '♥', value: '3' },
+          { suit: '♥', value: 'A' },
+          { suit: '★', value: 'W1' },
+          { suit: '★', value: 'W2' }
+        ]
+        expect(service.score_hand(cards)).to eq(800)  # Straight flush
+      end
+
+      it 'uses wild card for quads over full house' do
+        cards = [
+          { suit: '♣', value: 'K' },
+          { suit: '♣', value: 'A' },
+          { suit: '★', value: 'W1' },
+          { suit: '★', value: 'W2' },
+          { suit: '♥', value: 'K' }
+        ]
+        expect(service.score_hand(cards)).to eq(700)  # Quads
+      end
+
+      it 'uses wild card for straight flush over four of a kind' do
+        cards = [
+          { suit: '♥', value: '7' },
+          { suit: '♥', value: '8' },
+          { suit: '♥', value: '9' },
+          { suit: '♥', value: '10' },
+          { suit: '★', value: 'W1' }  # Should become 6♥ for straight flush
+        ]
+        expect(service.score_hand(cards)).to eq(800)  # Straight flush
+      end
+
+      it 'uses wild card for straight flush over flush' do
+        cards = [
+          { suit: '♥', value: '10' },
+          { suit: '♥', value: '7' },
+          { suit: '★', value: 'W1' },
+          { suit: '★', value: 'W2' },
+          { suit: '★', value: 'W3' }
+        ]
+        expect(service.score_hand(cards)).to eq(800)  # Straight flush
+      end
+
       it 'uses wild card to make a pair over high card' do
         cards = [
           { suit: '♠', value: 'K' },
