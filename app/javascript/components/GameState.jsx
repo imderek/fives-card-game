@@ -354,15 +354,17 @@ const GameState = ({ game: initialGame, currentUser }) => {
                         )}
                     </div>
 
-                    <div className="w-full px-6 sm:p-0">
-                        <a 
-                            href="/" 
-                            data-turbo="true"
-                            className="block text-center border border-slate-500/50 rounded-lg mb-6 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70"
-                        >
-                            Back to Lobby
-                        </a>
-                    </div>
+                    {currentUser.email !== 'derek' && (
+                      <div className="w-full px-6 sm:p-0">
+                          <a 
+                              href="/" 
+                              data-turbo="true"
+                              className="block text-center border border-slate-500/50 rounded-lg mb-6 px-4 py-3 text-sm text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-white/70"
+                          >
+                              Back to Lobby
+                          </a>
+                      </div>
+                    )}
                 </div>
             </div>
         </div>

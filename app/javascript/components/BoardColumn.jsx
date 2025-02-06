@@ -39,7 +39,7 @@ const BoardColumn = ({ cards = [], index, selectedCard, onPlayCardToColumn, isPl
   const isColumnFull = cards.length >= 5;
 
   const getColumnStrengthClasses = (score, isPlayerColumn) => {
-    const baseClasses = "min-w-[4.5rem] min-h-[14.25rem] sm:min-h-[11.5rem] p-2 sm:p-1 relative column transition-colors duration-150 flex flex-col gap-1 w-full z-0";
+    const baseClasses = `min-w-[4.5rem] ${(shouldObscureOpponentDetails && !isPlayerColumn && !winner) ? 'min-h-[11.8rem]' : 'min-h-[14.25rem]'} sm:min-h-[11.5rem] p-2 sm:p-1 relative column transition-colors duration-150 flex flex-col gap-1 w-full z-0`;
     
     // Only show special styles for player columns or when there's a winner
     if (shouldObscureOpponentDetails && !isPlayerColumn && !winner) {
