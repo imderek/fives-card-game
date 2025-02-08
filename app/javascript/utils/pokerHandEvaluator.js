@@ -214,7 +214,9 @@ const generateOptimizedCombinations = (cards, wildIndices, nonWildCards) => {
     
     let valueIndex = 0;
     wildIndices.forEach(index => {
-      bestHand[index] = { value: neededValues[valueIndex++], suit };
+      if (valueIndex < neededValues.length) {
+        bestHand[index] = { value: neededValues[valueIndex++], suit };
+      }
     });
     return [bestHand];
   }
@@ -305,12 +307,18 @@ const findStraightValues = (values, wildCount) => {
 };
 
 const intToCardValue = (value) => {
-  switch (value) {
-    case 14: return 'A';
-    case 13: return 'K';
-    case 12: return 'Q';
-    case 11: return 'J';
-    default: return value.toString();
+  if (value == null) return '';
+  
+  const strValue = value.toString();
+  
+  if (strValue.startsWith('W')) return strValue;
+  
+  switch (strValue) {
+    case '14': return 'A';
+    case '13': return 'K';
+    case '12': return 'Q';
+    case '11': return 'J';
+    default: return strValue;
   }
 };
 
