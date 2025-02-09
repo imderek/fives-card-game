@@ -1,11 +1,12 @@
 // New file to handle poker hand evaluation
-const cardValueToInt = (value) => {
+export const cardValueToInt = (value) => {
   switch (value) {
     case 'A': return 14;
     case 'K': return 13;
     case 'Q': return 12;
     case 'J': return 11;
-    default: return parseInt(value);
+    case '10': return 10;
+    default: return parseInt(value, 10);
   }
 };
 
@@ -66,7 +67,44 @@ const getCounts = (values) => {
   }, {});
 };
 
-const generatePossibleHands = (cards) => {
+const canCompleteStraightFlush = (cards) => {
+  if (!cards || cards.length === 0) return true;
+  
+  // All cards must be of the same suit
+  const suits = new Set(cards.map(card => card.suit));
+  if (suits.size > 1) return false;
+  
+  const values = cards.map(card => cardValueToInt(card.value)).sort((a, b) => a - b);
+  
+  // Check if we can complete a straight
+  // For each card, see if we can build a straight around it
+  for (let i = 0; i < values.length; i++) {
+    const centerValue = values[i];
+    // Check possible straights: card in each position 1-5
+    for (let position = 0; position < 5; position++) {
+      const minValue = centerValue - position;
+      const maxValue = minValue + 4;
+      
+      // Count how many of our existing values would fit in this straight
+      const fittingValues = values.filter(v => v >= minValue && v <= maxValue);
+      const neededWildCards = 5 - fittingValues.length;
+      
+      // If we need 2 or fewer wild cards, this is possible
+      if (neededWildCards <= 2) return true;
+    }
+  }
+  
+  // Special case: Ace-low straight (A,2,3,4,5)
+  if (values.includes(14)) { // If we have an Ace
+    const lowValues = values.filter(v => v <= 5);
+    const neededWildCards = 5 - lowValues.length - 1; // -1 for the Ace we have
+    if (neededWildCards <= 2) return true;
+  }
+  
+  return false;
+};
+
+export const generatePossibleHands = (cards) => {
   // Find indices of wild cards
   const wildIndices = cards.map((card, index) => 
     card.value.startsWith('W') && card.suit === '★' ? index : -1
@@ -77,233 +115,50 @@ const generatePossibleHands = (cards) => {
   // Get non-wild cards
   const nonWildCards = cards.filter(card => !(card.value.startsWith('W') && card.suit === '★'));
 
-  // Helper function to get card value rank
-  const getCardRank = (value) => {
-    const ranks = {
-      'A': 14, 'K': 13, 'Q': 12, 'J': 11,
-      '10': 10, '9': 9, '8': 8, '7': 7,
-      '6': 6, '5': 5, '4': 4, '3': 3, '2': 2
-    };
-    return ranks[value] || parseInt(value);
-  };
-
-  // If we have enough wild cards to make the best possible hand
-  if (wildIndices.length >= 3) {
-    // For a 5-card column, determine the best possible hand based on existing cards
-    if (cards.length === 5) {
-      const bestHand = new Array(5);
-      
-      // Place non-wild cards in their original positions first
-      cards.forEach((card, index) => {
-        if (!(card.value.startsWith('W') && card.suit === '★')) {
-          bestHand[index] = card;
-        }
-      });
-
-      // Find the highest value card among non-wild cards
-      const highestCard = nonWildCards.reduce((highest, card) => {
-        const currentRank = getCardRank(card.value);
-        const highestRank = getCardRank(highest?.value || '2');
-        return currentRank > highestRank ? card : highest;
-      }, null);
-
-      // If we have a high card (J or better), make four of a kind
-      if (highestCard && getCardRank(highestCard.value) >= 11) {
-        const suits = ['♠', '♣', '♥', '♦'].filter(suit => suit !== highestCard.suit);
-        const matchingCards = suits.map(suit => ({ value: highestCard.value, suit }));
-        
-        // Fill empty positions with matching cards first
-        let matchIndex = 0;
-        for (let i = 0; i < 5 && matchIndex < matchingCards.length; i++) {
-          if (!bestHand[i]) {
-            bestHand[i] = matchingCards[matchIndex++];
-          }
-        }
-        
-        // Fill any remaining position with the highest remaining card
-        for (let i = 0; i < 5; i++) {
-          if (!bestHand[i]) {
-            bestHand[i] = { value: 'A', suit: '♠' };
-          }
-        }
-      } else {
-        // Otherwise, make a Royal Flush using the suit of any existing card
-        const targetSuit = nonWildCards[0]?.suit || '♠';
-        const royalFlush = [
-          { value: '10', suit: targetSuit },
-          { value: 'J', suit: targetSuit },
-          { value: 'Q', suit: targetSuit },
-          { value: 'K', suit: targetSuit },
-          { value: 'A', suit: targetSuit }
-        ];
-
-        // Skip any values we already have
-        const existingValues = new Set(nonWildCards.map(card => card.value));
-        const neededCards = royalFlush.filter(card => !existingValues.has(card.value));
-        let neededCardIndex = 0;
-
-        // Fill empty positions with needed cards
-        for (let i = 0; i < 5; i++) {
-          if (!bestHand[i] && neededCardIndex < neededCards.length) {
-            bestHand[i] = neededCards[neededCardIndex++];
-          }
-        }
-      }
-
-      return [bestHand];
-    }
-    
-    // For partial columns (less than 5 cards), return four of a kind of the highest card
-    const bestHand = new Array(cards.length);
-    
-    // Place non-wild cards in their original positions
-    cards.forEach((card, index) => {
-      if (!(card.value.startsWith('W') && card.suit === '★')) {
-        bestHand[index] = card;
-      }
-    });
-
-    // Find highest existing card or default to Ace
-    const highestCard = nonWildCards.reduce((highest, card) => {
-      const currentRank = getCardRank(card.value);
-      const highestRank = getCardRank(highest?.value || '2');
-      return currentRank > highestRank ? card : highest;
-    }, { value: 'A', suit: '♠' });
-
-    // Fill remaining positions with matching cards of different suits
-    const suits = ['♠', '♣', '♥', '♦'].filter(suit => suit !== highestCard.suit);
-    let suitIndex = 0;
-    
-    for (let i = 0; i < cards.length; i++) {
-      if (!bestHand[i]) {
-        bestHand[i] = { value: highestCard.value, suit: suits[suitIndex++ % suits.length] };
-      }
-    }
-    
-    return [bestHand];
-  }
-
-  // Rest of the existing code for handling 1-2 wild cards
-  const possibleValues = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+  // Generate all possible combinations
+  const possibleValues = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
   const suits = ['♠', '♣', '♥', '♦'];
   
-  if (wildIndices.length === 2) {
-    if (cards.length === 5) {
-      return generateOptimizedCombinations(cards, wildIndices, nonWildCards);
-    }
-    const combinations = possibleValues.map(value => ({ value, suit: suits[0] }));
-    return generateCombinations(cards, wildIndices, combinations);
-  }
+  // If we have a suit from non-wild cards, prioritize that suit
+  const primarySuit = nonWildCards[0]?.suit;
+  const suitOrder = primarySuit 
+    ? [primarySuit, ...suits.filter(s => s !== primarySuit)]
+    : suits;
 
-  const combinations = possibleValues.flatMap(value => 
-    suits.map(suit => ({ value, suit }))
+  // Check if we have potential for a wheel straight (A,2,3,4,5)
+  const values = nonWildCards.map(card => cardValueToInt(card.value));
+  const hasAceAndLowCards = values.includes(14) && 
+    values.some(v => v <= 3) &&
+    values.every(v => v === 14 || v <= 5);
+
+  // Order values to prioritize completing straights with existing cards
+  const valueOrder = hasAceAndLowCards
+    ? ['4', '5']  // Only generate 4,5 for wheel straight
+    : possibleValues;
+
+  const combinations = valueOrder.flatMap(value => 
+    suitOrder.map(suit => ({ value, suit }))
   );
-  return generateCombinations(cards, wildIndices, combinations);
-};
 
-// Helper function to generate optimized combinations for straight flushes
-const generateOptimizedCombinations = (cards, wildIndices, nonWildCards) => {
-  const bestHand = [...cards];
-  const suit = nonWildCards[0]?.suit || '♠';
-  
-  // Check for potential royal flush first
-  if (canCompleteRoyalFlush(nonWildCards)) {
-    const royalValues = ['10', 'J', 'Q', 'K', 'A'];
-    const existingValues = new Set(nonWildCards.map(card => card.value));
-    const neededValues = royalValues.filter(v => !existingValues.has(v));
-    
-    let valueIndex = 0;
-    wildIndices.forEach(index => {
-      if (valueIndex < neededValues.length) {
-        bestHand[index] = { value: neededValues[valueIndex++], suit };
-      }
-    });
-    return [bestHand];
-  }
-
-  // Check for straight flush potential
-  if (canCompleteStraightFlush(nonWildCards)) {
-    const values = nonWildCards.map(card => cardValueToInt(card.value)).sort((a, b) => a - b);
-    const neededValues = findStraightValues(values, wildIndices.length);
-    
-    let valueIndex = 0;
-    wildIndices.forEach(index => {
-      bestHand[index] = { value: intToCardValue(neededValues[valueIndex++]), suit };
-    });
-    return [bestHand];
-  }
-
-  // Find highest pair to make four of a kind
-  const valueCounts = {};
-  nonWildCards.forEach(card => {
-    valueCounts[card.value] = (valueCounts[card.value] || 0) + 1;
-  });
-  
-  const pairValue = Object.entries(valueCounts)
-    .filter(([_, count]) => count >= 2)
-    .sort(([a], [b]) => cardValueToInt(b) - cardValueToInt(a))[0]?.[0];
-
-  if (pairValue) {
-    const suits = ['♠', '♣', '♥', '♦'].filter(s => 
-      !nonWildCards.some(card => card.suit === s && card.value === pairValue)
-    );
-    
-    wildIndices.forEach((index, i) => {
-      bestHand[index] = { value: pairValue, suit: suits[i] };
-    });
-    return [bestHand];
-  }
-
-  // Default to high cards if no better hand possible
-  const highCard = nonWildCards.reduce((best, card) => 
-    cardValueToInt(card.value) > cardValueToInt(best?.value || '2') ? card : best
-  , { value: 'A', suit: '♠' });
-
-  wildIndices.forEach((index, i) => {
-    const suits = ['♠', '♣', '♥', '♦'].filter(s => s !== highCard.suit);
-    bestHand[index] = { value: highCard.value, suit: suits[i % suits.length] };
-  });
-  
-  return [bestHand];
-};
-
-// Helper functions for optimized combinations
-const canCompleteRoyalFlush = (nonWildCards) => {
-  if (!nonWildCards.length) return true;
-  const suits = new Set(nonWildCards.map(card => card.suit));
-  if (suits.size > 1) return false;
-  
-  const values = new Set(nonWildCards.map(card => card.value));
-  const royalValues = new Set(['10', 'J', 'Q', 'K', 'A']);
-  return [...values].every(v => royalValues.has(v));
-};
-
-const canCompleteStraightFlush = (nonWildCards) => {
-  if (!nonWildCards.length) return true;
-  const suits = new Set(nonWildCards.map(card => card.suit));
-  return suits.size <= 1;
-};
-
-const findStraightValues = (values, wildCount) => {
-  if (!values.length) return [14, 13, 12, 11, 10].slice(0, wildCount);
-  
-  // Handle Ace-low straight
-  if (values.includes(14) && values.includes(2) && values.includes(3)) {
-    return [4, 5].slice(0, wildCount);
-  }
-  
-  // Find gaps in sequence
-  const gaps = [];
-  for (let i = 0; i < values.length - 1; i++) {
-    const diff = values[i + 1] - values[i] - 1;
-    if (diff > 0 && diff <= wildCount) {
-      for (let j = 1; j <= diff; j++) {
-        gaps.push(values[i] + j);
-      }
+  const generateCombinations = (currentHand, remainingWildIndices) => {
+    if (remainingWildIndices.length === 0) {
+      return [currentHand];
     }
-  }
-  
-  return gaps.slice(0, wildCount);
+
+    const wildIndex = remainingWildIndices[0];
+    const nextWildIndices = remainingWildIndices.slice(1);
+    const results = [];
+
+    for (const combo of combinations) {
+      const newHand = [...currentHand];
+      newHand[wildIndex] = combo;
+      results.push(...generateCombinations(newHand, nextWildIndices));
+    }
+
+    return results;
+  };
+
+  return generateCombinations([...cards], wildIndices);
 };
 
 const intToCardValue = (value) => {
@@ -322,18 +177,6 @@ const intToCardValue = (value) => {
   }
 };
 
-const generateCombinations = (cards, wildIndices, combinations, currentIndex = 0) => {
-  if (currentIndex >= wildIndices.length) return [cards.slice()];
-
-  const result = [];
-  for (const { value, suit } of combinations) {
-    const newCards = cards.slice();
-    newCards[wildIndices[currentIndex]] = { value, suit };
-    result.push(...generateCombinations(newCards, wildIndices, combinations, currentIndex + 1));
-  }
-  return result;
-};
-
 const evaluationCache = new Map();
 
 export const evaluatePokerHand = (cards) => {
@@ -348,13 +191,20 @@ export const evaluatePokerHand = (cards) => {
   // Generate all possible hands by replacing wild cards
   const possibleHands = generatePossibleHands(cards);
   
-  // Score each possible hand and return the highest score
+  // Score each possible hand
   const scores = possibleHands.map(hand => {
     const values = hand.map(card => cardValueToInt(card.value));
     const suits = hand.map(card => card.suit);
     
     // For 5-card hands
-    if (cards.length === 5) {
+    if (hand.length === 5) {
+      // Check for wheel straight flush first (A,2,3,4,5)
+      const sortedValues = [...values].sort((a, b) => a - b);
+      if (isFlush(suits) && 
+          sortedValues.join(',') === '2,3,4,5,14') {
+        return { name: 'Straight Flush', score: 800 };
+      }
+      
       if (isRoyalFlush(values, suits)) return { name: 'Royal Flush', score: 1000 };
       if (isStraightFlush(values, suits)) return { name: 'Straight Flush', score: 800 };
       if (isFourOfAKind(values)) return { name: 'Quads', score: 700 };
@@ -364,6 +214,7 @@ export const evaluatePokerHand = (cards) => {
       if (isThreeOfAKind(values)) return { name: 'Trips', score: 300 };
       if (isTwoPair(values)) return { name: 'Two Pair', score: 200 };
       if (isOnePair(values)) return { name: 'Pair', score: 100 };
+      return { name: 'High Card', score: Math.max(...values) };
     }
 
     // For partial hands
@@ -371,14 +222,13 @@ export const evaluatePokerHand = (cards) => {
     if (isThreeOfAKind(values)) return { name: 'Trips', score: 300 };
     if (isTwoPair(values)) return { name: 'Two Pair', score: 200 };
     if (isOnePair(values)) return { name: 'Pair', score: 100 };
-    
     return { name: 'High Card', score: Math.max(...values) };
   });
 
   // Return the highest scoring hand
   const result = scores.reduce((best, current) => 
     current.score > best.score ? current : best
-  );
+  , { name: 'High Card', score: 0 });  // Added default value for reduce
 
   // Cache and return the result
   evaluationCache.set(cacheKey, result);

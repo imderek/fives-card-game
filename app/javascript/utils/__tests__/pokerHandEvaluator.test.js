@@ -1,4 +1,4 @@
-import { evaluatePokerHand } from '../pokerHandEvaluator';
+import { evaluatePokerHand, generatePossibleHands, cardValueToInt } from '../pokerHandEvaluator';
 
 describe('evaluatePokerHand', () => {
   it('returns empty hand for empty input', () => {
@@ -129,5 +129,37 @@ describe('evaluatePokerHand', () => {
       ];
       expect(evaluatePokerHand(cards)).toEqual({ name: 'Pair', score: 100 });
     });
+  });
+});
+
+describe('generatePossibleHands', () => {
+  it('generates correct combinations for wheel straight flush', () => {
+    const cards = [
+      { suit: '♥', value: '2' },
+      { suit: '♥', value: '3' },
+      { suit: '♥', value: 'A' },
+      { suit: '★', value: 'W1' },
+      { suit: '★', value: 'W2' }
+    ];
+    
+    const hands = generatePossibleHands(cards);
+    
+    // Log first few combinations to understand what's being generated
+    // console.log('First 5 combinations:', JSON.stringify(hands.slice(0, 5), null, 2));
+    
+    // Check if any combinations form a wheel straight flush
+    const wheelStraightFlush = hands.find(hand => {
+      const values = hand.map(card => cardValueToInt(card.value)).sort((a, b) => a - b);
+      const suits = hand.map(card => card.suit);
+      // Log the values we're checking
+      // console.log('Checking hand:', values, suits);
+      return values.join(',') === '2,3,4,5,14' && suits.every(s => s === '♥');
+    });
+    
+    expect(wheelStraightFlush).toBeTruthy();
+    
+    if (wheelStraightFlush) {
+      // console.log('Found wheel straight flush:', JSON.stringify(wheelStraightFlush, null, 2));
+    }
   });
 }); 
