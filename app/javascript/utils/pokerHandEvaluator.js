@@ -120,21 +120,27 @@ export const generatePossibleHands = (cards) => {
   const suits = ['♠', '♣', '♥', '♦'];
   
   // If we have a suit from non-wild cards, prioritize that suit
-  const primarySuit = nonWildCards[0]?.suit;
+  const existingSuits = new Set(nonWildCards.map(card => card.suit));
+  const primarySuit = existingSuits.size === 1 ? nonWildCards[0].suit : null;
   const suitOrder = primarySuit 
-    ? [primarySuit, ...suits.filter(s => s !== primarySuit)]
+    ? [primarySuit]  // If all cards are same suit, only use that suit for wild cards
     : suits;
 
   // Check if we have potential for a wheel straight (A,2,3,4,5)
   const values = nonWildCards.map(card => cardValueToInt(card.value));
-  const hasAceAndLowCards = values.includes(14) && 
-    values.some(v => v <= 3) &&
-    values.every(v => v === 14 || v <= 5);
+  const hasAce = values.includes(14);
+  const hasLowCards = values.some(v => v <= 5);
+  const isWheelPotential = hasAce && hasLowCards && values.every(v => v === 14 || v <= 5);
 
-  // Order values to prioritize completing straights with existing cards
-  const valueOrder = hasAceAndLowCards
-    ? ['4', '5']  // Only generate 4,5 for wheel straight
-    : possibleValues;
+  // If we have a potential wheel straight and all cards are the same suit,
+  // only generate the missing low cards in that suit
+  let valueOrder = possibleValues;
+  if (isWheelPotential && primarySuit) {
+    const missingLowValues = [2, 3, 4, 5]
+      .filter(v => !values.includes(v))
+      .map(v => v.toString());
+    valueOrder = missingLowValues;
+  }
 
   const combinations = valueOrder.flatMap(value => 
     suitOrder.map(suit => ({ value, suit }))

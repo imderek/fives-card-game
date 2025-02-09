@@ -129,6 +129,17 @@ describe('evaluatePokerHand', () => {
       ];
       expect(evaluatePokerHand(cards)).toEqual({ name: 'Pair', score: 100 });
     });
+
+    it('uses wild cards to complete A-5 straight flush in hearts', () => {
+      const cards = [
+        { suit: '♥', value: 'A' },
+        { suit: '♥', value: '4' },
+        { suit: '★', value: 'W1' },  // Should become 5♥
+        { suit: '♥', value: '3' },
+        { suit: '★', value: 'W2' }   // Should become 2♥
+      ];
+      expect(evaluatePokerHand(cards)).toEqual({ name: 'Straight Flush', score: 800 });
+    });
   });
 });
 
