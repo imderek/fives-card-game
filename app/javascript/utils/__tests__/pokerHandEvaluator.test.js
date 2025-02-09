@@ -140,6 +140,78 @@ describe('evaluatePokerHand', () => {
       ];
       expect(evaluatePokerHand(cards)).toEqual({ name: 'Straight Flush', score: 800 });
     });
+
+    it('handles four wild cards efficiently', () => {
+      const cards = [
+        { suit: '★', value: 'W1' },
+        { suit: '★', value: 'W2' },
+        { suit: '★', value: 'W3' },
+        { suit: '★', value: 'W4' },
+        { suit: '♠', value: '8' }  // With an 8, we can only make a straight flush
+      ];
+      
+      // This should complete quickly and not stack overflow
+      const result = evaluatePokerHand(cards);
+      
+      // With 4 wild cards and an 8, we should make a straight flush
+      expect(result).toEqual({ name: 'Straight Flush', score: 800 });
+    });
+
+    it('handles four wild cards in a column with other cards', () => {
+      const cards = [
+        { suit: '★', value: 'W1', column: 0 },
+        { suit: '★', value: 'W2', column: 0 },
+        { suit: '★', value: 'W3', column: 0 },
+        { suit: '★', value: 'W4', column: 0 },
+        { suit: '♣', value: '8', column: 1 },
+        { suit: '♠', value: '8', column: 1 }
+      ];
+      
+      // This should complete quickly and not stack overflow
+      const result = evaluatePokerHand(cards.filter(card => card.column === 0));
+      
+      // With 4 wild cards, we should always be able to make a royal flush
+      expect(result).toEqual({ name: 'Royal Flush', score: 1000 });
+    });
+
+    it('handles four wild cards with high card to make royal flush', () => {
+      const cards = [
+        { suit: '★', value: 'W1' },
+        { suit: '★', value: 'W2' },
+        { suit: '★', value: 'W3' },
+        { suit: '★', value: 'W4' },
+        { suit: '♠', value: 'K' }  // High card allows royal flush
+      ];
+      
+      const result = evaluatePokerHand(cards);
+      expect(result).toEqual({ name: 'Royal Flush', score: 1000 });
+    });
+
+    it('handles four wild cards with low card to make straight flush', () => {
+      const cards = [
+        { suit: '★', value: 'W1' },
+        { suit: '★', value: 'W2' },
+        { suit: '★', value: 'W3' },
+        { suit: '★', value: 'W4' },
+        { suit: '♠', value: '5' }  // Low card means best is straight flush
+      ];
+      
+      const result = evaluatePokerHand(cards);
+      expect(result).toEqual({ name: 'Straight Flush', score: 800 });
+    });
+
+    it('handles four wild cards in a column with low card', () => {
+      const cards = [
+        { suit: '★', value: 'W1', column: 0 },
+        { suit: '★', value: 'W2', column: 0 },
+        { suit: '★', value: 'W3', column: 0 },
+        { suit: '★', value: 'W4', column: 0 },
+        { suit: '♠', value: '3', column: 0 }
+      ];
+      
+      const result = evaluatePokerHand(cards.filter(card => card.column === 0));
+      expect(result).toEqual({ name: 'Straight Flush', score: 800 });
+    });
   });
 });
 
