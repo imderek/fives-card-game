@@ -12,7 +12,7 @@ const Card = React.forwardRef(({ card, playable = false, playersHand = false, on
   const getWildDisplay = () => {
     if (!isWild) return null;
     return (
-      <span className={`text-purple-100 -top-0.5 relative text-sm font-semibold`}>J</span>
+      <span className={`text-white -top-[.2rem] relative text-xs font-semibold`}><i className="fa-solid fa-crown"></i></span>
       // <svg 
       //   width="12"
       //   height="12"

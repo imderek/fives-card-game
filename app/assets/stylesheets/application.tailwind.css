@@ -49,7 +49,7 @@
   position: absolute;
   inset: 2px;
   border-radius: calc(0.5rem - 2px);
-  background: linear-gradient(to bottom right, theme('colors.violet.950') 20%, theme('colors.violet.900') 60%);
+  background: linear-gradient(to bottom right, #000 1%, theme('colors.violet.900') 80%);
   z-index: -1;
 }
 
