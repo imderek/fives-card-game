@@ -35,10 +35,10 @@
       <!-- Tabs -->
       <ul class="flex flex-wrap gap-3 -mb-px" id="leaderboardTabs" data-tabs-toggle="#leaderboardContent" data-tabs-active-classes="border-amber-500 text-white" data-tabs-inactive-classes="border-transparent text-slate-400 hover:text-white" role="tablist">
         <li class="" role="presentation">
-          <button class="inline-block py-3 px-1 pb-2.5 border-b-2 border-amber-500 text-white" id="wins-tab" data-tabs-target="#wins" type="button" role="tab" aria-controls="wins" aria-selected="true"><i class="mr-1 fa-solid fa-trophy"></i> Wins</button>
+          <button class="inline-block py-3 px-1 pb-2.5 border-b-2 border-amber-500 text-white hover:text-white" id="scores-tab" data-tabs-target="#scores" type="button" role="tab" aria-controls="scores" aria-selected="true"><i class="mr-1 fa-solid fa-star"></i> Top Scores</button>
         </li>
         <li class="" role="presentation">
-          <button class="inline-block py-3 px-1 pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-white" id="scores-tab" data-tabs-target="#scores" type="button" role="tab" aria-controls="scores" aria-selected="false"><i class="mr-1 fa-solid fa-star"></i> Top Scores</button>
+          <button class="inline-block py-3 px-1 pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-white" id="wins-tab" data-tabs-target="#wins" type="button" role="tab" aria-controls="wins" aria-selected="false"><i class="mr-1 fa-solid fa-trophy"></i> Wins</button>
         </li>
         <li class="" role="presentation">
           <button class="inline-block py-3 px-1 pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-white" id="points-tab" data-tabs-target="#points" type="button" role="tab" aria-controls="points" aria-selected="false"><i class="mr-1 fa-solid fa-chart-simple"></i> Points</button>
@@ -47,22 +47,8 @@
     </div>
 
     <div id="leaderboardContent">
-      <!-- Most Wins Tab -->
-      <div class="space-y-3" id="wins" role="tabpanel" aria-labelledby="wins-tab">
-        <% @win_counts.each_with_index do |game, index| %>
-          <div class="flex flex-row justify-between items-center">
-            <div class="flex flex-row gap-2 items-center">
-              <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
-              <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.winner.email.first.upcase %></div>
-              <div class="font-medium"><%= game.winner.email.titleize %></div>
-            </div>
-            <div class="font-mono"><%= game.wins_count %></div>
-          </div>
-        <% end %>
-      </div>
-
       <!-- Top Scores Tab -->
-      <div class="hidden space-y-3" id="scores" role="tabpanel" aria-labelledby="scores-tab">
+      <div class="space-y-3" id="scores" role="tabpanel" aria-labelledby="scores-tab">
         <% @high_scores.each_with_index do |game, index| %>
           <div class="flex flex-row justify-between items-center">
             <div class="flex flex-row gap-2 items-center">
@@ -71,6 +57,20 @@
               <div class="font-medium"><%= game.player1.email.titleize %></div>
             </div>
             <div class="font-mono"><%= game.high_score %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Most Wins Tab -->
+      <div class="hidden space-y-3" id="wins" role="tabpanel" aria-labelledby="wins-tab">
+        <% @win_counts.each_with_index do |game, index| %>
+          <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row gap-2 items-center">
+              <div class="inline-block w-2 mr-1 text-slate-400 text-center"><%= index + 1 %></div>
+              <div class="w-6 h-6 rounded-full bg-gradient-to-b shadow-lg <%= ['from-red-500 to-red-600', 'from-blue-500 to-blue-600', 'from-green-500 to-green-600', 'from-purple-500 to-purple-600', 'from-amber-500 to-amber-600', 'from-pink-500 to-pink-600', 'from-indigo-500 to-indigo-600'][index % 7] %> text-white flex items-center justify-center"><%= game.winner.email.first.upcase %></div>
+              <div class="font-medium"><%= game.winner.email.titleize %></div>
+            </div>
+            <div class="font-mono"><%= game.wins_count %></div>
           </div>
         <% end %>
       </div>
