@@ -13,10 +13,12 @@ window.Stimulus = application
 // Import controllers manually
 import BotSelectionController from "./controllers/bot_selection_controller"
 import DropdownController from "./controllers/dropdown_controller"
+import UserPreferenceController from "./controllers/user_preference_controller"
 
 // Register controllers
 application.register("bot-selection", BotSelectionController)
 application.register("dropdown", DropdownController)
+application.register("user-preference", UserPreferenceController)
 
 // Initialize Flowbite after each Turbo navigation
 document.addEventListener('turbo:load', () => {

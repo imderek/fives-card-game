@@ -40,4 +40,6 @@ Rails.application.routes.draw do
   end
 
   resources :players, only: [:index]
+
+  post '/user_preferences/update', to: 'user_preferences#update'
 end
