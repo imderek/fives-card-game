@@ -34,19 +34,23 @@
       </svg>
       <span class="sr-only">Close menu</span>
    </button>
-  <div class="py-4 overflow-y-auto">
+  <div class="py-2 overflow-y-auto">
       <ul class="space-y-2 font-medium">
-         <li>
-            <a href="/games/new" class="text-slate-900 border border-amber-500 bg-amber-50 rounded-lg px-3.5 py-3 flex items-center group">
+         <li class="hidden">
+            <%= link_to new_game_path(type: :pvp), 
+                data: { turbo_frame: "_top" },
+                class: "text-slate-900 border border-amber-500 bg-amber-50 rounded-lg px-3.5 py-3 flex items-center group" do %>
                <i class="fa-solid fa-plus-circle text-amber-500"></i>
                <span class="ms-3">New Game</span>
-            </a>
+            <% end %>
          </li>
          <li>
-            <a href="#" class="flex items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group">
+            <%= link_to root_path, 
+                data: { turbo_frame: "_top" },
+                class: "flex items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group" do %>
                <i class="w-6 text-center fa-solid fa-couch text-slate-400"></i>
                <span class="ms-2.5">Lobby</span>
-            </a>
+            <% end %>
          </li>
          <li>
             <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="flex w-full items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group">
@@ -82,7 +86,7 @@
             </ul>
          </li>
          <li>
-            <%= button_to destroy_user_session_path, method: :delete, class: "flex w-full items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group" do %>
+            <%= button_to destroy_user_session_path, method: :delete, data: { turbo_frame: "_top" }, class: "flex w-full items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group" do %>
                <i class="w-6 text-center fa-solid fa-right-from-bracket text-slate-400"></i>
                <span class="ms-2.5">Log Out</span>
             <% end %>
