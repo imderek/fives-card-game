@@ -81,3 +81,20 @@ document.addEventListener("turbo:before-render", (event) => {
     }, 100);
   }
 });
+
+// Listen for Turbo Stream updates to the header
+document.addEventListener('turbo:before-stream-render', (event) => {
+  const streamElement = event.target;
+  if (streamElement.getAttribute('target') === 'header') {
+    setTimeout(() => {
+      initFlowbite();
+    }, 100);
+  }
+});
+
+// Also try on regular render event
+document.addEventListener('turbo:render', () => {
+  if (document.getElementById('header')) {
+    initFlowbite();
+  }
+});
