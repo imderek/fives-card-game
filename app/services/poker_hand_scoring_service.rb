@@ -2,6 +2,14 @@ class PokerHandScoringService
   def score_hand(cards)
     return 0 if cards.empty?
     
+    # Special handling for 4+ wild cards
+    wild_count = cards.count { |card| card[:value].to_s.start_with?('W') && card[:suit] == '★' }
+    if wild_count >= 4
+      non_wild_cards = cards.reject { |card| card[:value].to_s.start_with?('W') && card[:suit] == '★' }
+      base_card = non_wild_cards.first
+      return 800  # With 4+ wild cards, we can always make at least a straight flush
+    end
+    
     # Generate all possible hands by replacing wild cards
     possible_hands = generate_possible_hands(cards)
     

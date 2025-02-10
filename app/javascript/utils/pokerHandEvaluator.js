@@ -111,6 +111,44 @@ export const generatePossibleHands = (cards) => {
   ).filter(i => i !== -1);
 
   if (wildIndices.length === 0) return [cards];
+  if (wildIndices.length > 3) {
+    // With 4+ wild cards, we can make the best possible hand with the remaining cards
+    const nonWildCards = cards.filter(card => !(card.value.startsWith('W') && card.suit === '★'));
+    const suit = nonWildCards.length > 0 ? nonWildCards[0].suit : '♠';
+    
+    if (nonWildCards.length === 0) {
+      // If all cards are wild, make a royal flush
+      return [[
+        { suit: suit, value: 'A' },
+        { suit: suit, value: 'K' },
+        { suit: suit, value: 'Q' },
+        { suit: suit, value: 'J' },
+        { suit: suit, value: '10' }
+      ]];
+    }
+
+    // Check if we can make a royal flush with the non-wild card
+    const nonWildValue = cardValueToInt(nonWildCards[0].value);
+    if (nonWildValue >= 10 || nonWildValue === 14) { // 10, J, Q, K, or A
+      // We can make a royal flush
+      const royalFlushCards = ['A', 'K', 'Q', 'J', '10']
+        .filter(value => cardValueToInt(value) !== nonWildValue)
+        .map(value => ({ suit: suit, value }));
+      return [[...nonWildCards, ...royalFlushCards]];
+    } else {
+      // Make the highest possible straight flush using the non-wild card
+      const straightValues = [
+        nonWildValue + 4,
+        nonWildValue + 3,
+        nonWildValue + 2,
+        nonWildValue + 1,
+        nonWildValue
+      ].map(val => intToCardValue(val))
+       .filter(val => val !== nonWildCards[0].value)
+       .map(value => ({ suit: suit, value }));
+      return [[...nonWildCards, ...straightValues]];
+    }
+  }
 
   // Get non-wild cards
   const nonWildCards = cards.filter(card => !(card.value.startsWith('W') && card.suit === '★'));
@@ -122,9 +160,7 @@ export const generatePossibleHands = (cards) => {
   // If we have a suit from non-wild cards, prioritize that suit
   const existingSuits = new Set(nonWildCards.map(card => card.suit));
   const primarySuit = existingSuits.size === 1 ? nonWildCards[0].suit : null;
-  const suitOrder = primarySuit 
-    ? [primarySuit]  // If all cards are same suit, only use that suit for wild cards
-    : suits;
+  const suitOrder = primarySuit ? [primarySuit] : suits;
 
   // Check if we have potential for a wheel straight (A,2,3,4,5)
   const values = nonWildCards.map(card => cardValueToInt(card.value));
@@ -146,25 +182,33 @@ export const generatePossibleHands = (cards) => {
     suitOrder.map(suit => ({ value, suit }))
   );
 
-  const generateCombinations = (currentHand, remainingWildIndices) => {
-    if (remainingWildIndices.length === 0) {
-      return [currentHand];
+  // Use iteration instead of recursion
+  const results = [];
+  const stack = [{ currentHand: [...cards], remainingIndices: wildIndices, combinationIndex: 0 }];
+
+  while (stack.length > 0) {
+    const { currentHand, remainingIndices, combinationIndex } = stack.pop();
+
+    if (remainingIndices.length === 0) {
+      results.push(currentHand);
+      continue;
     }
 
-    const wildIndex = remainingWildIndices[0];
-    const nextWildIndices = remainingWildIndices.slice(1);
-    const results = [];
+    const wildIndex = remainingIndices[0];
+    const nextIndices = remainingIndices.slice(1);
 
-    for (const combo of combinations) {
+    for (let i = combinationIndex; i < combinations.length; i++) {
       const newHand = [...currentHand];
-      newHand[wildIndex] = combo;
-      results.push(...generateCombinations(newHand, nextWildIndices));
+      newHand[wildIndex] = combinations[i];
+      stack.push({ 
+        currentHand: newHand, 
+        remainingIndices: nextIndices, 
+        combinationIndex: 0 
+      });
     }
+  }
 
-    return results;
-  };
-
-  return generateCombinations([...cards], wildIndices);
+  return results;
 };
 
 const intToCardValue = (value) => {
