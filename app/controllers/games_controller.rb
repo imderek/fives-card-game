@@ -232,52 +232,38 @@ class GamesController < ApplicationController
     success = false
     
     begin
-      Rails.logger.debug "Playing card: #{played_card.inspect}"
-      Rails.logger.debug "Initial hand state: #{@game.player1_hand.inspect}" if played_card[:player_id] == @game.player1_id
-      Rails.logger.debug "Initial hand state: #{@game.player2_hand.inspect}" if played_card[:player_id] == @game.player2_id
-      
       update_board_state(played_card)
       
       # Remove card from player's hand and update current turn
       if played_card[:player_id] == @game.player1_id
         # Remove the played card
-        Rails.logger.debug "Before removing card from player1 hand: #{@game.player1_hand.inspect}"
         @game.player1_hand.delete_if { |card| 
           card[:suit] == played_card[:suit] && card[:value] == played_card[:value] 
         }
-        Rails.logger.debug "After removing card from player1 hand: #{@game.player1_hand.inspect}"
         
         # Draw a new card and add it to hand
         drawn_card = @game.deck.pop
         if drawn_card
-          Rails.logger.debug "Player 1 drew: #{drawn_card.inspect}"
           @game.player1_hand = @game.player1_hand + [drawn_card]
-          Rails.logger.debug "Final player1 hand: #{@game.player1_hand.inspect}"
         end
         
         @game.current_turn = @game.player2_id
       else
         # Remove the played card
-        Rails.logger.debug "Before removing card from player2 hand: #{@game.player2_hand.inspect}"
         @game.player2_hand.delete_if { |card| 
           card[:suit] == played_card[:suit] && card[:value] == played_card[:value] 
         }
-        Rails.logger.debug "After removing card from player2 hand: #{@game.player2_hand.inspect}"
         
         # Draw a new card and add it to hand
         drawn_card = @game.deck.pop
         if drawn_card
-          Rails.logger.debug "Player 2 drew: #{drawn_card.inspect}"
           @game.player2_hand = @game.player2_hand + [drawn_card]
-          Rails.logger.debug "Final player2 hand: #{@game.player2_hand.inspect}"
         end
         
         @game.current_turn = @game.player1_id
       end
 
       success = @game.save
-      Rails.logger.debug "Save successful: #{success}"
-      Rails.logger.debug "Final game state after save: #{@game.attributes.inspect}"
 
       # Check for winner using the GameScoringService
       check_for_winner
@@ -291,21 +277,15 @@ class GamesController < ApplicationController
   end
 
   def make_bot_move
-    Rails.logger.debug "Making bot move for game #{@game.id}"
-    
     strategy = BotService.get_strategy(@game)
     bot_move = strategy.make_move
     
     if bot_move
-      Rails.logger.debug "Bot playing move: #{bot_move.inspect}"
       play_card_and_update_game(bot_move)
     end
   end
 
   def update_board_state(played_card)
-    Rails.logger.debug "Updating board state with card: #{played_card.inspect}"
-    Rails.logger.debug "Player1 ID: #{@game.player1_id}, Player2 ID: #{@game.player2_id}"
-    
     # Initialize board_cards if nil
     @game.board_cards ||= []
     
@@ -314,10 +294,8 @@ class GamesController < ApplicationController
       suit: played_card[:suit],
       value: played_card[:value],
       player_id: played_card[:player_id],
-      column: played_card[:column].to_i  # Just convert to integer, no adjustment
+      column: played_card[:column].to_i
     }
-    
-    Rails.logger.debug "Final board_cards: #{@game.board_cards.inspect}"
   end
 
   def render_success_response
