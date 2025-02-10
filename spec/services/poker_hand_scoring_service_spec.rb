@@ -176,6 +176,19 @@ RSpec.describe PokerHandScoringService do
         ]
         expect(service.score_hand(cards)).to eq(800)  # Straight flush
       end
+
+      it 'handles four wild cards with a low card to make straight flush' do
+        cards = [
+          { suit: '★', value: 'W1' },
+          { suit: '★', value: 'W2' },
+          { suit: '★', value: 'W3' },
+          { suit: '★', value: 'W4' },
+          { suit: '♠', value: '4' }
+        ]
+        
+        result = service.score_hand(cards)
+        expect(service.score_hand(cards)).to eq(800)  # Straight flush
+      end
     end
   end
 end 
