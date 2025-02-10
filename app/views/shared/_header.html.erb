@@ -6,18 +6,16 @@
     <%= link_to "Fiives", "/", class: "text-white hover:text-slate-300", data: { turbo: false } %>
   </h1>
   <div class="w-2/3 flex flex-row items-center justify-end gap-3.5 text-[.925rem] leading-none">
-    <button class="inline p-0 text-slate-500 hover:text-white leading-none">
-      <i class="fa-solid fa-trophy text-amber-500"></i>
-      <span class="text-white" data-header-target="wins"><%= current_user.total_wins %></span>
-    </button>
-    <button class="inline p-0 text-slate-500 hover:text-white leading-none">
-      <i class="fa-solid fa-chart-simple text-green-500"></i>
-      <span class="text-white"><%= number_with_delimiter(current_user.calculate_total_points, delimiter: ',') %></span>
-    </button>
-    <%# <button data-modal-target="instructions-modal" data-modal-toggle="instructions-modal" class="text-slate-400 hover:text-slate-300 rounded-lg">
-      <i class="fa-solid fa-info-circle text-slate-500"></i>
-      <span class="text-slate-400">Help</span>
-    </button> %>
+    <% if current_user.total_wins > 0 %>
+      <button class="inline p-0 text-slate-500 hover:text-white leading-none">
+        <i class="fa-solid fa-trophy text-amber-500"></i>
+        <span class="text-white" data-header-target="wins"><%= current_user.total_wins %></span>
+      </button>
+      <button class="inline p-0 text-slate-500 hover:text-white leading-none">
+        <i class="fa-solid fa-chart-simple text-green-500"></i>
+        <span class="text-white"><%= number_with_delimiter(current_user.calculate_total_points, delimiter: ',') %></span>
+      </button>
+    <% end %>
     <button type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" data-drawer-placement="right" aria-controls="drawer-navigation" class="text-slate-400 hover:text-slate-300 rounded-lg">
       <i class="fa-solid fa-bars text-slate-500"></i>
       <span class="text-white">Menu</span>
