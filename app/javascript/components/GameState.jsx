@@ -104,14 +104,14 @@ const GameState = ({ game: initialGame, currentUser }) => {
     const playerName = formatPlayerName(currentUser?.email);
     const isBot = getBotDifficulty(isPlayer1 ? game?.player2?.email : game?.player1?.email) !== null;
     
-    console.log('Game State Debug:', {
-        currentUser,
-        game,
-        isPlayer1,
-        opponentName,
-        player1: game?.player1,
-        player2: game?.player2
-    });
+    // console.log('Game State Debug:', {
+    //     currentUser,
+    //     game,
+    //     isPlayer1,
+    //     opponentName,
+    //     player1: game?.player1,
+    //     player2: game?.player2
+    // });
 
     // When we receive a new server state, clear optimistic state if it matches
     React.useEffect(() => {

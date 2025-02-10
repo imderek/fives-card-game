@@ -27,7 +27,7 @@ export const useGameChannel = (gameId, userId) => {
           })
           .then(response => response.json())
           .then(data => {
-            console.log('Initial game state:', data.game);
+            // console.log('Initial game state:', data.game);
             if (data.game) {
               setGameState(data.game);
             }
@@ -40,13 +40,13 @@ export const useGameChannel = (gameId, userId) => {
         },
 
         received(data) {
-          console.log('Received update:', {
-            recipient_id: data.recipient_id,
-            currentUserId,
-            isMyUpdate: data.recipient_id === currentUserId,
-            status: data.game.status,
-            winner_id: data.game.winner_id
-          });
+          // console.log('Received update:', {
+          //   recipient_id: data.recipient_id,
+          //   currentUserId,
+          //   isMyUpdate: data.recipient_id === currentUserId,
+          //   status: data.game.status,
+          //   winner_id: data.game.winner_id
+          // });
           
           setGameState(prevState => {
             if (!prevState) return data.game;
@@ -93,16 +93,16 @@ export const useGameChannel = (gameId, userId) => {
               }
             }
 
-            console.log('State update:', {
-              prevState: {
-                player1_hand: prevState.player1_hand?.length,
-                player2_hand: prevState.player2_hand?.length,
-              },
-              newState: {
-                player1_hand: newState.player1_hand?.length,
-                player2_hand: newState.player2_hand?.length,
-              }
-            });
+            // console.log('State update:', {
+            //   prevState: {
+            //     player1_hand: prevState.player1_hand?.length,
+            //     player2_hand: prevState.player2_hand?.length,
+            //   },
+            //   newState: {
+            //     player1_hand: newState.player1_hand?.length,
+            //     player2_hand: newState.player2_hand?.length,
+            //   }
+            // });
 
             return newState;
           });

@@ -21,9 +21,6 @@ const PlayerHand = ({ cards, isCurrentPlayer, canPlay, onPlayCard, onDiscard, ca
       x: cardRect.left + window.scrollX,
       y: cardRect.top + window.scrollY
     };
-
-    // Debug log
-    console.log('Initial Position:', initialPosition);
     
     onPlayCard({
       ...card,
