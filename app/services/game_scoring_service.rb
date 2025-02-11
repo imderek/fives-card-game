@@ -29,9 +29,20 @@ class GameScoringService
   def complete_game
     return unless game_complete?
 
+    # First, ensure column scores are updated
+    update_column_scores
+    
+    # Then calculate final scores
     calculate_final_scores
+    
+    # Determine winner
     determine_winner
-    mark_game_completed if @game.winner_id
+    
+    # Mark game as completed
+    @game.update!(
+      status: :completed,
+      winner_id: @game.winner_id
+    )
   end
 
   private
@@ -48,9 +59,8 @@ class GameScoringService
       cards.length
     end
 
-    # Game is complete if all non-empty columns have exactly 5 cards
-    column_counts.all? { |count| count == 0 || count == 5 } &&
-      column_counts.any? { |count| count > 0 } # At least one column has cards
+    # Game is complete only when ALL columns have exactly 5 cards
+    column_counts.all? { |count| count == 5 }
   end
 
   def calculate_final_scores
@@ -96,11 +106,5 @@ class GameScoringService
       @game.winner_id = @game.player2_id
     end
     # If scores are equal, winner remains nil (it's a tie)
-  end
-
-  def mark_game_completed
-    @game.update(
-      status: :completed
-    )
   end
 end 
