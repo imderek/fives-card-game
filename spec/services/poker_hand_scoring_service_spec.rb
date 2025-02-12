@@ -213,6 +213,17 @@ RSpec.describe PokerHandScoringService do
         ]
         expect(service.score_hand(cards)).to eq(600)  # Should be a full house (JJJ over 1010)
       end
+
+      it 'uses two wild cards to complete straight flush with J-high' do
+        cards = [
+          { suit: '♥', value: 'J' },
+          { suit: '♥', value: '9' },
+          { suit: '★', value: 'W1' },  # Should become 10♥
+          { suit: '♥', value: '8' },
+          { suit: '★', value: 'W2' }   # Should become 7♥
+        ]
+        expect(service.score_hand(cards)).to eq(800)  # Straight flush (J,10,9,8,7)
+      end
     end
 
     context 'with more than 5 cards' do

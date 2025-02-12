@@ -294,7 +294,9 @@ class PokerHandScoringService
     return false if suits.size > 1
     
     values = cards.map { |c| card_value_to_int(c[:value]) }.sort
-    find_straight_values(values, wild_count).any?
+    needed_values = find_straight_values(values, wild_count)
+    # Check if we can actually complete a straight flush with the wild cards
+    needed_values.length <= wild_count
   end
 
   def find_straight_values(values, wild_count)
@@ -305,16 +307,19 @@ class PokerHandScoringService
       return [4, 5].take(wild_count)
     end
     
-    # Original gap-finding logic
-    gaps = []
-    values.each_cons(2) do |a, b|
-      diff = b - a - 1
-      if diff > 0 && diff <= wild_count
-        gaps.concat((a + 1...b).to_a)
-      end
+    # Find all possible gaps that could complete a straight
+    min_val = values.min
+    max_val = values.max
+    
+    # Consider all possible straight ranges that could include our values
+    possible_ranges = (max_val - 4..min_val + 4).map { |start| (start..start + 4).to_a }
+    
+    possible_ranges.each do |range|
+      missing = range - values
+      return missing if missing.length <= wild_count && (range & values).sort == values.sort
     end
     
-    gaps.take(wild_count)
+    []
   end
 
   def generate_matching_cards(value, count)

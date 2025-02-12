@@ -10,7 +10,6 @@ class GameScoringService
     # Score player 1's columns (0-3)
     (0..3).each do |col|
       cards = @game.board_cards_for_player(@game.player1_id, col)
-      # Use score_partial_hand for incomplete columns, score_hand for complete ones
       score = cards.length == 5 ? @scoring_service.score_hand(cards) : @scoring_service.score_partial_hand(cards)
       current_scores[col.to_s] = score
     end
@@ -18,12 +17,18 @@ class GameScoringService
     # Score player 2's columns (4-7)
     (4..7).each do |col|
       cards = @game.board_cards_for_player(@game.player2_id, col)
-      # Use score_partial_hand for incomplete columns, score_hand for complete ones
       score = cards.length == 5 ? @scoring_service.score_hand(cards) : @scoring_service.score_partial_hand(cards)
       current_scores[col.to_s] = score
     end
     
+    # Score hands
+    current_scores["player1_hand"] = @scoring_service.score_hand(@game.player1_hand) if @game.player1_hand.present?
+    current_scores["player2_hand"] = @scoring_service.score_hand(@game.player2_hand) if @game.player2_hand.present?
+    
     @game.update!(column_scores: current_scores)
+    
+    # Calculate final scores after updating column scores
+    calculate_final_scores
   end
 
   def complete_game
@@ -67,13 +72,13 @@ class GameScoringService
     # Get current column scores
     current_scores = @game.column_scores || {}
 
-    # Calculate total scores
-    @game.player1_total_score = calculate_player_score(@game.player1_id)
-    @game.player2_total_score = calculate_player_score(@game.player2_id)
-
-    # Add hand scores to column_scores - use score_hand instead of score_partial_hand
+    # Add hand scores to column_scores first
     current_scores["player1_hand"] = @scoring_service.score_hand(@game.player1_hand)
     current_scores["player2_hand"] = @scoring_service.score_hand(@game.player2_hand)
+
+    # Then calculate total scores
+    @game.player1_total_score = calculate_player_score(@game.player1_id)
+    @game.player2_total_score = calculate_player_score(@game.player2_id)
 
     # Save both total scores and column scores
     @game.update(

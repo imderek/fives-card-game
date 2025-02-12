@@ -167,5 +167,61 @@ RSpec.describe GameScoringService do
         expect(service.send(:game_complete?)).to be false
       end
     end
+
+    context 'with wild cards' do
+      it 'correctly scores complex hand with multiple wild cards' do
+        game.board_cards = [
+          # Column 0: Two pair (Jacks and Fives)
+          { player_id: game.player1_id, column: 0, suit: '♣', value: '5' },
+          { player_id: game.player1_id, column: 0, suit: '♥', value: '5' },
+          { player_id: game.player1_id, column: 0, suit: '♦', value: 'J' },
+          { player_id: game.player1_id, column: 0, suit: '♣', value: 'J' },
+          { player_id: game.player1_id, column: 0, suit: '♣', value: '9' },
+
+          # Column 1: Full house (Three 6s over pair of Aces)
+          { player_id: game.player1_id, column: 1, suit: '♦', value: '6' },
+          { player_id: game.player1_id, column: 1, suit: '♥', value: '6' },
+          { player_id: game.player1_id, column: 1, suit: '♣', value: '6' },
+          { player_id: game.player1_id, column: 1, suit: '♦', value: 'A' },
+          { player_id: game.player1_id, column: 1, suit: '♣', value: 'A' },
+
+          # Column 2: Two pair (Queens and Threes)
+          { player_id: game.player1_id, column: 2, suit: '♦', value: '3' },
+          { player_id: game.player1_id, column: 2, suit: '♥', value: '3' },
+          { player_id: game.player1_id, column: 2, suit: '♣', value: 'Q' },
+          { player_id: game.player1_id, column: 2, suit: '♠', value: 'Q' },
+          { player_id: game.player1_id, column: 2, suit: '♠', value: '5' },
+
+          # Column 3: Straight Flush in Hearts (J,10,9,8,7 with wild cards as 10,7)
+          { player_id: game.player1_id, column: 3, suit: '♥', value: 'J' },
+          { player_id: game.player1_id, column: 3, suit: '♥', value: '9' },
+          { player_id: game.player1_id, column: 3, suit: '★', value: 'W1' },
+          { player_id: game.player1_id, column: 3, suit: '♥', value: '8' },
+          { player_id: game.player1_id, column: 3, suit: '★', value: 'W2' }
+        ]
+
+        # Player 1's hand: Two pair (Kings and Eights)
+        game.player1_hand = [
+          { suit: '♣', value: '7' },
+          { suit: '♠', value: '8' },
+          { suit: '♣', value: 'K' },
+          { suit: '♣', value: '8' },
+          { suit: '♠', value: 'K' },
+          { suit: '♥', value: '7' }
+        ]
+
+        service.update_column_scores
+
+        # Verify individual column scores
+        expect(game.column_scores['0']).to eq(200)  # Two pair (Jacks and Fives)
+        expect(game.column_scores['1']).to eq(600)  # Full house (Three 6s over Aces)
+        expect(game.column_scores['2']).to eq(200)  # Two pair (Queens and Threes)
+        expect(game.column_scores['3']).to eq(800)  # Straight flush in Hearts
+        expect(game.column_scores['player1_hand']).to eq(200)  # Two pair (Kings and Eights)
+
+        # Verify total score
+        expect(game.player1_total_score).to eq(2000)  # Sum of all columns and hand (200+600+200+800+200)
+      end
+    end
   end
 end 
