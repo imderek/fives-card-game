@@ -29,7 +29,7 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
   return (
     <div className="board w-full flex flex-col">
       {/* Top board area */}
-      <div className="mb-2 sm:mb-2 px-6 sm:px-0 player-board grid grid-cols-4 gap-3">
+      <div className="px-6 sm:px-0 player-board grid grid-cols-4 gap-3">
         {topColumns.map((column, index) => (
           <BoardColumn
             key={index}
@@ -45,10 +45,14 @@ const GameBoard = ({ cards = [], selectedCard, onPlayCardToColumn, opponentName,
       </div>
 
       {/* Divider */}
-      <div className="mt-0 mb-2 sm:hidden h-px bg-slate-600/60"></div>
+      <div className="my-1.5 flex flex-col gap-1 uppercase">
+        <div className="sm:hidden text-xs text-slate-500">{playerName}</div>
+        <div className="sm:hidden h-px bg-slate-600/60"></div>
+        <div className="sm:hidden text-xs text-slate-500">{opponentName}</div>
+      </div>
 
       {/* Bottom board area */}
-      <div className="mb-2 px-6 sm:px-0 opponent-board grid grid-cols-4 gap-3">
+      <div className="px-6 sm:px-0 opponent-board grid grid-cols-4 gap-3">
         {bottomColumns.map((column, index) => (
           <BoardColumn
             key={index}
