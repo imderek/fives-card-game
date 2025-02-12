@@ -17,12 +17,14 @@ export const useCountUp = (endValue, incrementsPerSecond = 20, onComplete) => {
             
             // Strong ease out that really slows down at the end
             const easeOutCubic = 1 - Math.pow(1 - progress, 4);
-            const nextCount = Math.round(endValue * easeOutCubic / 10) * 10;
+            const nextCount = progress === 1 
+                ? endValue 
+                : Math.min(Math.round(endValue * easeOutCubic / 10) * 10, endValue);
             
             setCount(nextCount);
             
-            // Trigger completion at 80% of the animation
-            if (!hasCompletedCallback && progress > 0.80 && onComplete) {
+            // Only trigger completion when we've reached the final value
+            if (!hasCompletedCallback && nextCount === endValue && onComplete) {
                 hasCompletedCallback = true;
                 onComplete();
             }
