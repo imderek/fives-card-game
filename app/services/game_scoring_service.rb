@@ -21,14 +21,7 @@ class GameScoringService
       current_scores[col.to_s] = score
     end
     
-    # Score hands
-    current_scores["player1_hand"] = @scoring_service.score_hand(@game.player1_hand) if @game.player1_hand.present?
-    current_scores["player2_hand"] = @scoring_service.score_hand(@game.player2_hand) if @game.player2_hand.present?
-    
     @game.update!(column_scores: current_scores)
-    
-    # Calculate final scores after updating column scores
-    calculate_final_scores
   end
 
   def complete_game
@@ -37,7 +30,7 @@ class GameScoringService
     # First, ensure column scores are updated
     update_column_scores
     
-    # Then calculate final scores
+    # Then calculate final scores (which includes scoring hands)
     calculate_final_scores
     
     # Determine winner

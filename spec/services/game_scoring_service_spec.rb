@@ -171,6 +171,7 @@ RSpec.describe GameScoringService do
     context 'with wild cards' do
       it 'correctly scores complex hand with multiple wild cards' do
         game.board_cards = [
+          # Player 1's columns
           # Column 0: Two pair (Jacks and Fives)
           { player_id: game.player1_id, column: 0, suit: '♣', value: '5' },
           { player_id: game.player1_id, column: 0, suit: '♥', value: '5' },
@@ -197,10 +198,39 @@ RSpec.describe GameScoringService do
           { player_id: game.player1_id, column: 3, suit: '♥', value: '9' },
           { player_id: game.player1_id, column: 3, suit: '★', value: 'W1' },
           { player_id: game.player1_id, column: 3, suit: '♥', value: '8' },
-          { player_id: game.player1_id, column: 3, suit: '★', value: 'W2' }
+          { player_id: game.player1_id, column: 3, suit: '★', value: 'W2' },
+
+          # Add player 2's columns (all need 5 cards each)
+          # Column 4
+          { player_id: game.player2_id, column: 4, suit: '♦', value: '2' },
+          { player_id: game.player2_id, column: 4, suit: '♦', value: '3' },
+          { player_id: game.player2_id, column: 4, suit: '♦', value: '4' },
+          { player_id: game.player2_id, column: 4, suit: '♦', value: '5' },
+          { player_id: game.player2_id, column: 4, suit: '♦', value: '6' },
+
+          # Column 5
+          { player_id: game.player2_id, column: 5, suit: '♣', value: '2' },
+          { player_id: game.player2_id, column: 5, suit: '♣', value: '3' },
+          { player_id: game.player2_id, column: 5, suit: '♣', value: '4' },
+          { player_id: game.player2_id, column: 5, suit: '♣', value: '5' },
+          { player_id: game.player2_id, column: 5, suit: '♣', value: '6' },
+
+          # Column 6
+          { player_id: game.player2_id, column: 6, suit: '♥', value: '2' },
+          { player_id: game.player2_id, column: 6, suit: '♥', value: '3' },
+          { player_id: game.player2_id, column: 6, suit: '♥', value: '4' },
+          { player_id: game.player2_id, column: 6, suit: '♥', value: '5' },
+          { player_id: game.player2_id, column: 6, suit: '♥', value: '6' },
+
+          # Column 7
+          { player_id: game.player2_id, column: 7, suit: '♠', value: '2' },
+          { player_id: game.player2_id, column: 7, suit: '♠', value: '3' },
+          { player_id: game.player2_id, column: 7, suit: '♠', value: '4' },
+          { player_id: game.player2_id, column: 7, suit: '♠', value: '5' },
+          { player_id: game.player2_id, column: 7, suit: '♠', value: '6' }
         ]
 
-        # Player 1's hand: Two pair (Kings and Eights)
+        # Player 1's hand
         game.player1_hand = [
           { suit: '♣', value: '7' },
           { suit: '♠', value: '8' },
@@ -210,7 +240,7 @@ RSpec.describe GameScoringService do
           { suit: '♥', value: '7' }
         ]
 
-        service.update_column_scores
+        service.complete_game
 
         # Verify individual column scores
         expect(game.column_scores['0']).to eq(200)  # Two pair (Jacks and Fives)
