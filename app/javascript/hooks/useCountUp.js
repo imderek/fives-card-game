@@ -15,8 +15,8 @@ export const useCountUp = (endValue, incrementsPerSecond = 20, onComplete) => {
         intervalId = setInterval(() => {
             progress = Math.min(progress + (interval / (2000 * durationScale)), 1);
             
-            // Strong ease out that really slows down at the end
-            const easeOutCubic = 1 - Math.pow(1 - progress, 4);
+            // Less aggressive ease out for smoother transition
+            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
             const nextCount = progress === 1 
                 ? endValue 
                 : Math.min(Math.round(endValue * easeOutCubic / 10) * 10, endValue);
