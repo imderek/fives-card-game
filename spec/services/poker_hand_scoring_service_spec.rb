@@ -189,6 +189,30 @@ RSpec.describe PokerHandScoringService do
         result = service.score_hand(cards)
         expect(service.score_hand(cards)).to eq(800)  # Straight flush
       end
+
+      it 'uses wild card to make flush when optimal' do
+        cards = [
+          { suit: '♦', value: 'K' },
+          { suit: '♦', value: '10' },
+          { suit: '♦', value: '2' },
+          { suit: '♦', value: '5' },
+          { suit: '♠', value: '2' },
+          { suit: '★', value: 'W2' }  # Wild card should become a diamond to make a flush
+        ]
+        expect(service.score_hand(cards)).to eq(500)  # Should be a flush
+      end
+
+      it 'uses wild card to make full house when optimal with 6 cards' do
+        cards = [
+          { suit: '♠', value: 'J' },
+          { suit: '♥', value: 'J' },
+          { suit: '♦', value: '10' },
+          { suit: '♣', value: '10' },
+          { suit: '♠', value: '6' },
+          { suit: '★', value: 'W1' }  # Wild card should become J for full house
+        ]
+        expect(service.score_hand(cards)).to eq(600)  # Should be a full house (JJJ over 1010)
+      end
     end
   end
 end 

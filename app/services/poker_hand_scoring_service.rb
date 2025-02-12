@@ -114,6 +114,25 @@ class PokerHandScoringService
   end
 
   def generate_possible_hands(cards)
+    # If we have more than 5 cards, we need to consider all possible 5-card combinations
+    if cards.length > 5
+      wild_indices = cards.each_with_index.select { |card, _| 
+        card[:value].to_s.start_with?('W') && card[:suit] == '★'
+      }.map(&:last)
+      
+      # Get all possible 5-card combinations
+      non_wild_indices = (0...cards.length).to_a - wild_indices
+      possible_combinations = non_wild_indices.combination(5 - wild_indices.length).to_a
+      
+      # For each combination, generate all possible hands with wild cards
+      return possible_combinations.flat_map do |combo_indices|
+        indices_to_use = combo_indices + wild_indices
+        combo_cards = indices_to_use.map { |i| cards[i] }
+        generate_possible_hands(combo_cards)
+      end
+    end
+
+    # Original logic for 5 or fewer cards
     wild_indices = cards.each_with_index.select { |card, _| 
       card[:value].to_s.start_with?('W') && card[:suit] == '★'
     }.map(&:last)
@@ -122,7 +141,7 @@ class PokerHandScoringService
 
     non_wild_cards = cards.reject.with_index { |_, i| wild_indices.include?(i) }
     wild_count = wild_indices.size
-    
+
     # Fast path for 3+ wild cards
     if wild_count >= 3
       # For partial hands, make four of a kind with highest card
