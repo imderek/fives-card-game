@@ -339,13 +339,15 @@ class GamesController < ApplicationController
     
     # If game is completed, broadcast header update to both players
     if @game.completed? && @game.winner_id
-      # Broadcast to winner
-      Turbo::StreamsChannel.broadcast_replace_to(
-        "user_#{@game.winner_id}",
-        target: "header",
-        partial: "shared/header",
-        locals: { current_user: User.find(@game.winner_id) }
-      )
+      # Broadcast to both players
+      [@game.player1_id, @game.player2_id].each do |player_id|
+        Turbo::StreamsChannel.broadcast_replace_to(
+          "user_#{player_id}",
+          target: "header",
+          partial: "shared/header",
+          locals: { current_user: User.find(player_id) }
+        )
+      end
     end
   end
 end
