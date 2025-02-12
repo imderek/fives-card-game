@@ -238,6 +238,18 @@ RSpec.describe PokerHandScoringService do
         ]
         expect(service.score_hand(cards)).to eq(500)  # Should be a heart flush
       end
+
+      it 'finds full house when optimal with multiple pairs and three of a kind' do
+        cards = [
+          { suit: '♠', value: '7' },
+          { suit: '♠', value: '5' },
+          { suit: '♦', value: '7' },
+          { suit: '♦', value: '5' },
+          { suit: '♥', value: '5' },
+          { suit: '♥', value: 'K' }  # This card should be excluded to make the full house
+        ]
+        expect(service.score_hand(cards)).to eq(600)  # Should be a full house (5s over 7s)
+      end
     end
   end
 end 
