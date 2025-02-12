@@ -214,5 +214,19 @@ RSpec.describe PokerHandScoringService do
         expect(service.score_hand(cards)).to eq(600)  # Should be a full house (JJJ over 1010)
       end
     end
+
+    context 'with more than 5 cards' do
+      it 'finds flush when optimal by excluding non-flush card' do
+        cards = [
+          { suit: '♥', value: '3' },
+          { suit: '♥', value: '9' },
+          { suit: '♥', value: 'K' },
+          { suit: '♥', value: '8' },
+          { suit: '♥', value: '6' },
+          { suit: '♦', value: '9' }  # This card should be excluded to make the flush
+        ]
+        expect(service.score_hand(cards)).to eq(500)  # Should be a heart flush
+      end
+    end
   end
 end 
