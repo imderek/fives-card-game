@@ -35,14 +35,14 @@
   <div class="py-2 overflow-y-auto">
       <ul class="space-y-2 font-medium">
          <li>
-            <div class="flex flex-row items-stretch gap-2.5 p-2">
+            <div class="flex flex-row items-stretch gap-2.5 py-2">
                <!-- Play a friend -->
                <%= link_to new_game_path(type: :pvp), 
                    class: "text-[.925rem] overflow-hidden relative flex flex-col justify-center px-2 py-[0.8rem] pt-[1rem] btn btn-primary",
                    data: { turbo_frame: "_top" } do %>
                   <div class="flex justify-center text-lg -space-x-0.5">
-                     <i class="mb-1.5 fa-solid fa-user"></i>
-                     <i class="mb-1.5 fa-regular fa-user"></i>
+                     <i class="mb-1.5 text-[.925rem] fa-solid fa-user"></i>
+                     <i class="mb-1.5 text-[.925rem] fa-regular fa-user"></i>
                   </div>
                   Play PVP
                <% end %>
@@ -51,7 +51,7 @@
                    class: "text-[.925rem] px-2 py-[0.8rem] pt-[1rem] btn btn-secondary",
                    data: { turbo_frame: "_top" } do %>
                   <div class="flex justify-center text-lg -space-x-1">
-                     <i class="mb-1.5 fa-solid fa-play"></i>
+                     <i class="mb-1.5 text-[.925rem] fa-solid fa-play"></i>
                   </div>
                   Play Solo
                <% end %>
