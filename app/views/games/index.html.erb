@@ -169,17 +169,4 @@
       <div id="no_games_message" class="text-slate-500">You haven't played yet.</div>
     <% end %>
   </div>
-
-  <!-- Admin -->
-  <% if current_user.email == "derek" %>
-    <h1 class="mb-2 text-xl font-medium dark:text-white">Admin Tools</h1>
-    <div class="grid grid-cols-2 gap-2 w-full">
-      <%= button_to "Generate Demos", games_path(type: :demo),
-          class: "w-full btn btn-outline text-sm",
-          data: { turbo_confirm: "Are you sure you want to generate demos?" } %>
-      <%= button_to "View Player Stats", players_path,
-          method: :get,
-          class: "w-full btn btn-outline text-sm" %>
-    </div>
-  <% end %>
 </div>

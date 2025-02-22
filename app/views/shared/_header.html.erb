@@ -83,6 +83,23 @@
                 </li>
             </ul>
          </li>
+         <% if current_user.email == "derek" %>
+            <li>
+               <%= link_to players_path,
+                   class: "flex items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group" do %>
+                  <i class="w-6 text-center fa-solid fa-chart-line text-slate-500"></i>
+                  <span class="ms-2.5">Player Stats</span>
+               <% end %>
+            </li>
+            <li>
+               <%= button_to games_path(type: :demo),
+                   class: "flex w-full items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group",
+                   data: { turbo_confirm: "Are you sure you want to generate demos?" } do %>
+                  <i class="w-6 text-center fa-solid fa-wand-magic-sparkles text-slate-500"></i>
+                  <span class="ms-2.5">Generate Demos</span>
+               <% end %>
+            </li>
+         <% end %>
          <li>
             <%= button_to destroy_user_session_path, method: :delete, data: { turbo_frame: "_top" }, class: "flex w-full items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group" do %>
                <i class="w-6 text-center fa-solid fa-right-from-bracket text-slate-500"></i>
