@@ -34,14 +34,30 @@
    </button>
   <div class="py-2 overflow-y-auto">
       <ul class="space-y-2 font-medium">
-         <li class="hidden">
-            <%= link_to new_game_path(type: :pvp), 
-                data: { turbo_frame: "_top" },
-                class: "text-slate-900 border border-amber-500 bg-amber-50 rounded-lg px-3.5 py-3 flex items-center group" do %>
-               <i class="fa-solid fa-plus-circle text-amber-500"></i>
-               <span class="ms-3">New Game</span>
-            <% end %>
+         <li>
+            <div class="flex flex-row items-stretch gap-2.5 p-2">
+               <!-- Play a friend -->
+               <%= link_to new_game_path(type: :pvp), 
+                   class: "text-[.925rem] overflow-hidden relative flex flex-col justify-center px-2 py-[0.8rem] pt-[1rem] btn btn-primary",
+                   data: { turbo_frame: "_top" } do %>
+                  <div class="flex justify-center text-lg -space-x-0.5">
+                     <i class="mb-1.5 fa-solid fa-user"></i>
+                     <i class="mb-1.5 fa-regular fa-user"></i>
+                  </div>
+                  Play PVP
+               <% end %>
+               <!-- Play solo -->
+               <%= link_to new_game_path(type: :bot),
+                   class: "text-[.925rem] px-2 py-[0.8rem] pt-[1rem] btn btn-secondary",
+                   data: { turbo_frame: "_top" } do %>
+                  <div class="flex justify-center text-lg -space-x-1">
+                     <i class="mb-1.5 fa-solid fa-play"></i>
+                  </div>
+                  Play Solo
+               <% end %>
+            </div>
          </li>
+
          <li>
             <%= link_to root_path, 
                 data: { turbo_frame: "_top" },
@@ -86,6 +102,7 @@
          <% if current_user.email == "derek" %>
             <li>
                <%= link_to players_path,
+                   data: { turbo_frame: "_top" },
                    class: "flex items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group" do %>
                   <i class="w-6 text-center fa-solid fa-chart-line text-slate-500"></i>
                   <span class="ms-2.5">Player Stats</span>
@@ -93,8 +110,8 @@
             </li>
             <li>
                <%= button_to games_path(type: :demo),
-                   class: "flex w-full items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group",
-                   data: { turbo_confirm: "Are you sure you want to generate demos?" } do %>
+                   data: { turbo_frame: "_top", turbo_confirm: "Are you sure you want to generate demos?" },
+                   class: "flex w-full items-center p-2 text-slate-900 rounded-lg dark:text-white hover:bg-slate-100 dark:hover:bg-slate-700 group" do %>
                   <i class="w-6 text-center fa-solid fa-wand-magic-sparkles text-slate-500"></i>
                   <span class="ms-2.5">Generate Demos</span>
                <% end %>
