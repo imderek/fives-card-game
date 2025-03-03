@@ -45,36 +45,38 @@ const Timer = () => {
       {currentRep <= NUM_REPS ? (
         <>
           {running && (
-            <>
-              {/* Rep number */}
-              <h2 className="mb-2 text-8xl tracking-tighter font-bold text-white">{currentRep} <span className="text-slate-700">/ {NUM_REPS}</span></h2>
+            <div className="flex flex-col items-center gap-6">
+              {/* Remaining reps */}
+              <h2 className="text-9xl tracking-tighter font-medium text-white">{NUM_REPS - currentRep + 1}</h2>
               {/* Timer */}
-              <div className="p-4 pb-3">
-                <div className="mb-3.5 flex justify-center">
-                    <div className="flex gap-4">
-                    {[...Array(DURATION_PER_SIDE)].map((_, i) => (
-                        <div 
-                          key={i} 
-                          className={`w-6 h-6 rounded-full border-2 border-white ${i < timeLeft ? 'bg-white' : '!border-slate-700'}`}
-                        ></div>
-                    ))}
-                    </div>
-                </div>
-                <div className="text-lg uppercase text-white tracking-[.25rem]">{side}</div>
+              <div className="flex justify-center gap-3">
+                {[...Array(DURATION_PER_SIDE)].map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`
+                        w-12 h-6 rounded-full border-2
+                        ${side === "Left" ? 'border-red-500' : 'border-blue-500'} 
+                        ${i < timeLeft ? (side === "Left" ? 'bg-red-500' : 'bg-blue-500') : (side === "Left" ? '!border-red-500' : '!border-blue-500')}
+                      `}
+                    ></div>
+                ))}
               </div>
-            </>
+              <div className={`text-lg uppercase ${timeLeft === 0 ? 'text-white' : (side === "Left" ? 'text-red-500' : 'text-blue-500')} tracking-[.25rem]`}>
+                {timeLeft === 0 ? 'Switch' : side}
+              </div>
+            </div>
           )}
         </>
       ) : (
         <>
-          <button className="btn btn-primary mt-4" onClick={startTimer}>
-            Restart Timer
+          <button className="btn btn-primary py-5 text-xl rounded-full bg-none border-0 bg-red-500" onClick={startTimer}>
+            Start Again
           </button>
         </>
       )}
       {!running && currentRep <= NUM_REPS && (
-        <button className="btn btn-primary" onClick={startTimer}>
-          Start Timer
+        <button className="btn btn-primary py-5 text-xl rounded-full bg-none border-0 bg-red-500" onClick={startTimer}>
+          Begin
         </button>
       )}
     </div>
