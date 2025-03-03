@@ -5,6 +5,14 @@ import 'flowbite'
 // Add this line to import channels
 import "./channels"
 
+// Import React and related libraries
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+
+// Import your components
+import GameState from './components/GameState'
+import Timer from './components/Timer'  // Make sure this import is at the top level
+
 /*
  * =================
  * Stimulus Setup
@@ -56,10 +64,6 @@ document.addEventListener('turbo:render', () => {
  * React Game Setup
  * =================
  */
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import GameState from './components/GameState'
-
 // Initialize React game component on page load
 document.addEventListener('turbo:load', () => {
   const gameContainer = document.getElementById('react-game-root')
@@ -77,6 +81,42 @@ document.addEventListener("turbo:before-render", (event) => {
     setTimeout(() => event.detail.resume(), 100);
   }
 });
+
+/*
+ * =================
+ * React Timer Setup
+ * =================
+ */
+document.addEventListener('turbo:load', () => {
+  const timerContainer = document.getElementById('react-timer-root')
+  
+  if (timerContainer) {
+    try {
+      const timerDataStr = timerContainer.dataset.timer
+      
+      if (!timerDataStr) {
+        console.warn('Missing timer data attribute')
+        return
+      }
+
+      const timerData = JSON.parse(timerDataStr)
+      
+      const root = createRoot(timerContainer)
+      root.render(
+        React.createElement(Timer, {
+          initialTime: timerData.initialTime,
+          isCountdown: timerData.isCountdown,
+          onTimeEnd: timerData.onTimeEnd
+        })
+      )
+    } catch (error) {
+      console.error('Error initializing Timer component:', error, {
+        container: timerContainer,
+        dataAttributes: timerContainer?.dataset
+      })
+    }
+  }
+})
 
 /*
  * =================
@@ -113,3 +153,4 @@ function initializeGameComponent(container) {
     })
   }
 }
+

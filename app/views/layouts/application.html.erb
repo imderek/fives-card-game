@@ -25,7 +25,7 @@
 
   <body class="bg-[#141822] h-full min-h-screen">
     <%= turbo_frame_tag "header" do %>
-      <%= render "shared/header" %>
+      <%= render "shared/header" unless @skip_header %>
     <% end %>
     <main class="dark w-full min-h-24">
       <%#= render 'shared/flash' %>

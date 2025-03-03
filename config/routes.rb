@@ -42,4 +42,6 @@ Rails.application.routes.draw do
   resources :players, only: [:index]
 
   post '/user_preferences/update', to: 'user_preferences#update'
+
+  get '/timers/new', to: 'timers#new'
 end
