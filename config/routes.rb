@@ -43,5 +43,5 @@ Rails.application.routes.draw do
 
   post '/user_preferences/update', to: 'user_preferences#update'
 
-  get '/timers/new', to: 'timers#new'
+  get '/timer', to: 'timers#new'
 end

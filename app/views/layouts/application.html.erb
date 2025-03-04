@@ -32,7 +32,7 @@
       <%= yield %>
     </main>
 
-    <% if current_user.email == "derek" && false %>
+    <% if current_user&.email == "derek" && false %>
       <div class="fixed bottom-0 z-50 w-full py-4 pb-7 -translate-x-1/2 bg-white border-t border-slate-200 left-1/2 dark:bg-slate-700 dark:border-slate-600">
           <div class="grid h-full max-w-lg grid-cols-4 mx-auto">
               <button data-tooltip-target="tooltip-document" type="button" class="inline-flex flex-col items-center justify-center px-5 hover:bg-slate-50 dark:hover:bg-slate-800 group">
