@@ -69,13 +69,13 @@ const Timer = () => {
         </>
       ) : (
         <>
-          <button className="btn btn-primary py-5 text-xl rounded-full bg-none border-0 bg-red-500" onClick={startTimer}>
+          <button className="btn btn-primary py-5 text-xl rounded-full bg-none border-0 bg-red-500 hover:bg-red-600" onClick={startTimer}>
             Start Again
           </button>
         </>
       )}
       {!running && currentRep <= NUM_REPS && (
-        <button className="btn btn-primary py-5 text-xl rounded-full bg-none border-0 bg-red-500" onClick={startTimer}>
+        <button className="btn btn-primary py-5 text-xl rounded-full bg-none border-0 bg-red-500 hover:bg-red-600" onClick={startTimer}>
           Begin
         </button>
       )}
